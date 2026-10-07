@@ -70,7 +70,7 @@ L.awardsFor=function(S,R,sim){
 /* 점수 = 능력치·시즌 활약·팀 성과(리그/유럽컵)·국제대회·인지도. 가상 경쟁자 30명의 점수와 비교해 순위를 정해요 */
 L.ballonCheck=function(S,R,sc){
   const p=S.p; if(p.ovr<76||R.apps<15||R.youth) return;
-  const lgBonus={EPL:0,LAL:0,BUN:-.5,SEA:-1,L1:-2.5,EPL2:-8,J2:-8,SPL2:-8,LAL2:-8,BUN2:-8,SEA2:-8,FR2:-8,K1:-6,K2:-10,K3:-14,K4:-18,J1:-6,SPL:-5}[R.leagueKey]||-6;
+  const lgBonus={EPL:0,LAL:0,BUN:-.5,SEA:-1,L1:-2.5,EPL2:-8,J2:-8,SPL2:-8,LAL2:-8,BUN2:-8,SEA2:-8,FR2:-8,K1:-9,K2:-12,K3:-15,K4:-18,J1:-9,SPL:-8}[R.leagueKey]||-9;
   const nat=R.natEvents||[]; let natB=0; nat.forEach(n=>{ if(n.skipped) return; natB+=n.t==="wc"?(n.title?6:/준우승|4강/.test(n.stage)?2.5:.6):n.t==="ac"?(n.title?1.5:.4):0; });
   const cup=R.trophies.reduce((a,t)=>a+(/(잉글랜드 1부 리그|스페인 1부 리그|독일 1부 리그|이탈리아 1부 리그) 우승/.test(t)?2.2:/리그 1 우승/.test(t)?1.5:/유럽 클럽컵 우승/.test(t)?3:0),0);
   const prod=p.pos==="FW"?R.goals*.12+R.assists*.05:p.pos==="MF"?R.goals*.1+R.assists*.1:p.pos==="DF"?R.goals*.15+R.cs*.04:R.cs*.12;
@@ -78,6 +78,8 @@ L.ballonCheck=function(S,R,sc){
   const comps=[]; for(let i=0;i<30;i++) comps.push(9.5-i*.3+rnd(-1.1,1.1));
   comps.sort((a,b)=>b-a);
   let rank=1+comps.filter(c=>c>s).length;
+  /* 5대 리그 밖(레전드리그 등)에서 뛰면 월드컵 우승급 성과 없이는 상위 10위 안에 들기 어려워요 */
+  if(lgBonus<=-5&&natB<6&&cup<3) rank=Math.max(rank,10+Math.floor(Math.random()*4));
   if(rank>30) return;
   R.ballon={rank,score:r1(s)}; S.ballon.push({year:R.year,rank,club:R.club.name});
   if(rank<=11&&!R.awards.includes("월드 베스트 11")) R.awards.push("월드 베스트 11");
