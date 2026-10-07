@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0c1c16">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<title>라운지 · K-레전드</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="css/matchday.css">
+<link rel="stylesheet" href="css/arcade.css">
+<style>
+:root{--bg:#0c1c16;--panel:#13291f;--line:rgba(255,255,255,.14);--txt:#f2efe3;--muted:#9fb3a6;--acc:#f2b84b;--me:#1f4a38;--f-head:"Black Han Sans","Noto Sans KR",sans-serif;--f-body:"Noto Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo",sans-serif}
+html[data-theme="dark"]{--bg:#05070f;--panel:#0e1631;--me:#1c2c63;--acc:#19f2a3}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{min-height:100dvh;background:var(--bg);color:var(--txt);font:15px/1.5 var(--f-body);display:flex;flex-direction:column;align-items:center}
+.wrap{width:100%;max-width:640px;display:flex;flex-direction:column;min-height:100dvh}
+header{padding:14px 16px 8px;display:flex;align-items:center;gap:10px;position:sticky;top:0;background:var(--bg);z-index:5;border-bottom:1px solid var(--line)}
+header a.back{min-width:44px;min-height:44px;border-radius:12px;border:1px solid var(--line);color:var(--txt);text-decoration:none;display:grid;place-items:center;font-size:18px}
+h1{font:400 22px var(--f-head);flex:1}h1 small{display:block;font:500 11px var(--f-body);color:var(--muted)}
+.nick{min-height:44px;padding:0 12px;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--txt);font:600 13px var(--f-body)}
+#list{flex:1;padding:12px 16px 110px;display:flex;flex-direction:column;gap:8px}
+.msg{max-width:86%;padding:8px 12px;border-radius:14px;background:var(--panel);border:1px solid var(--line);align-self:flex-start;word-break:break-word}
+.msg.me{align-self:flex-end;background:var(--me)}
+.msg b{font-size:12.5px;color:var(--acc);display:block}
+.msg .rep{float:right;min-width:44px;min-height:44px;margin:-12px -12px -8px 0;background:none;border:0;opacity:.5;font-size:15px;cursor:pointer}.msg .rep:active{opacity:1}
+.msg small{color:var(--muted);font-size:11px;margin-left:6px}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:999px;border:1px solid var(--line);margin-right:4px}
+.tag.bug{color:#ff8a8a}.tag.idea{color:#8ad7ff}
+form{position:fixed;bottom:0;width:100%;max-width:640px;padding:8px 12px calc(10px + env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--line);display:grid;gap:8px}
+.kinds{display:flex;gap:6px}.kinds button{min-height:44px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--muted);font:600 12.5px var(--f-body)}.kinds button.on{background:var(--acc);color:#1a1a1a;border-color:transparent}
+.row{display:flex;gap:8px}
+input.t{flex:1;min-height:46px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--txt);padding:0 12px;font:16px var(--f-body)}
+button.send{min-width:72px;min-height:46px;border-radius:12px;border:0;background:var(--acc);color:#1a1a1a;font:700 15px var(--f-body)}
+.note{color:var(--muted);font-size:12px;text-align:center;padding:6px 16px}
+.err{color:#ff8a8a}
+.gate{padding:14px 16px;line-height:1.7}.glogin{margin-top:8px;min-height:46px;padding:0 20px;border-radius:12px;border:0;background:var(--acc);color:#1a1a1a;font:700 15px var(--f-body)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><a class="back" href="index.html" aria-label="메인으로">←</a><h1>💬 라운지<small>친구들과 실시간으로 이야기해요 · 버그와 아이디어도 남겨 주세요</small></h1><button class="nick" id="nickBtn">닉네임</button></header>
+<div class="note">링크·욕설은 올릴 수 없어요. 서로 존중해 주세요.</div>
+<div id="list"></div>
+<div id="gate" class="note gate" hidden><b>🔐 글을 쓰려면 구글 로그인이 필요해요</b><br>읽기는 누구나 할 수 있어요. 로그인하면 내 닉네임으로 글을 쓸 수 있고, 닉네임은 계정마다 하나예요.<br><button type="button" id="gLogin" class="glogin">구글로 로그인</button></div>
+<form id="f" autocomplete="off">
+ <div class="kinds"><button type="button" data-k="talk" class="on">잡담</button><button type="button" data-k="bug">🐞 버그</button><button type="button" data-k="idea">💡 아이디어</button></div>
+ <div class="row"><input class="t" id="t" maxlength="120" placeholder="메시지를 입력해요 (120자)" enterkeyhint="send"><button class="send" type="submit">보내기</button></div>
+ <div class="note err" id="err" hidden></div>
+</form>
+</div>
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/theme.js"></script>
+<script>
+(function(){
+"use strict";
+var CFG=window.KL_CONFIG||{}, URL_=CFG.SUPABASE_URL+"/rest/v1/life_chat";
+var H={apikey:CFG.SUPABASE_ANON_KEY,Authorization:"Bearer "+CFG.SUPABASE_ANON_KEY,"Content-Type":"application/json"};
+var list=document.getElementById("list"), t=document.getElementById("t"), err=document.getElementById("err"), kind="talk", last=0, seen={}, lastText="", sendAt=0;
+var BAD=["시발","씨발","ㅅㅂ","ㅆㅂ","병신","ㅂㅅ","개새","새끼","지랄","ㅈㄹ","좆","존나","꺼져","닥쳐","미친놈","미친년","섹스","fuck","shit"];
+var A=window.KL_AUTH;
+function nickKey(){ var id=A&&A.id(); return id?("klife-nick-"+id):"klife-nick"; }
+function nick(){ try{ return (localStorage.getItem(nickKey())||"").trim().slice(0,12); }catch(e){ return ""; } }
+function authH(tok){ return {apikey:CFG.SUPABASE_ANON_KEY,Authorization:"Bearer "+tok,"Content-Type":"application/json"}; }
+/* 닉네임은 구글 계정마다 하나예요. 서버(life_nicks)에 user_id 와 함께 저장돼요 */
+async function loadMyNick(){ if(!A||!A.loggedIn()) return ""; var tok=await A.token(); if(!tok) return ""; try{ var r=await fetch(CFG.SUPABASE_URL+"/rest/v1/life_nicks?user_id=eq."+A.id()+"&select=nick",{headers:authH(tok)}); if(r.ok){ var rows=await r.json(); if(rows.length){ try{ localStorage.setItem(nickKey(),rows[0].nick); }catch(e){} return rows[0].nick; } } }catch(e){} return nick(); }
+async function saveNick(n){ var tok=await A.token(); if(!tok) return "login"; var base=CFG.SUPABASE_URL+"/rest/v1/life_nicks";
+  try{ var r=await fetch(base+"?nick=eq."+encodeURIComponent(n)+"&select=user_id",{headers:H}); var rows=r.ok?await r.json():[]; if(rows.length&&rows[0].user_id!==A.id()) return "taken";
+    var mine=await fetch(base+"?user_id=eq."+A.id()+"&select=nick",{headers:authH(tok)}).then(function(x){ return x.json(); }).catch(function(){ return []; });
+    var res=(mine&&mine.length)?await fetch(base+"?user_id=eq."+A.id(),{method:"PATCH",headers:Object.assign({Prefer:"return=minimal"},authH(tok)),body:JSON.stringify({nick:n})}):await fetch(base,{method:"POST",headers:Object.assign({Prefer:"return=minimal"},authH(tok)),body:JSON.stringify({nick:n,user_id:A.id()})});
+    return res.ok?"ok":(res.status===409?"taken":"fail"); }catch(e){ return "fail"; } }
+async function askNick(force){ var n=nick(); if(n&&!force) return n; var v=prompt("라운지에서 쓸 닉네임을 정해 주세요 (최대 12자, 계정마다 하나예요)",n||""); v=(v||"").trim().slice(0,12); if(!v) return n;
+  if(v!==n){ var st=await saveNick(v); if(st==="taken"){ err.textContent="이미 다른 친구가 쓰고 있는 닉네임이에요. 다른 이름을 골라 주세요."; err.hidden=false; return n; } if(st!=="ok"){ err.textContent="닉네임을 저장하지 못했어요. 잠시 뒤 다시 해 주세요."; err.hidden=false; return n; } }
+  err.hidden=true; try{ localStorage.setItem(nickKey(),v); }catch(e){} document.getElementById("nickBtn").textContent=v||"닉네임"; return v; }
+function clean(s){ return s.replace(/\s+/g," ").trim(); }
+function bad(s){ var x=s.toLowerCase().replace(/[\s.\-_*]/g,""); if(/(https?:|www\.|\.com|\.net|\.kr|\.io|kakao|open\.kakao|t\.me)/i.test(s)) return "링크는 올릴 수 없어요."; if(/\d{3}[-\s]?\d{3,4}[-\s]?\d{4}/.test(s)) return "전화번호 같은 개인정보는 올릴 수 없어요."; for(var i=0;i<BAD.length;i++) if(x.indexOf(BAD[i])>=0) return "고운 말을 써 주세요."; return ""; }
+function esc(s){ return String(s).replace(/[&<>"']/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+function ago(d){ var s=(Date.now()-new Date(d).getTime())/1000; return s<60?"방금":s<3600?Math.floor(s/60)+"분 전":s<86400?Math.floor(s/3600)+"시간 전":Math.floor(s/86400)+"일 전"; }
+var HID={}; try{ HID=JSON.parse(localStorage.getItem('klife-hidden')||'{}'); }catch(e){}
+function draw(rows){
+  var me=nick(), atBottom=window.innerHeight+window.scrollY>=document.body.scrollHeight-80, html="";
+  rows.forEach(function(r){ if(r.id!=null&&HID[r.id]) return; var rep=(r.id!=null&&r.nick!==me)?'<button class="rep" data-id="'+r.id+'" aria-label="신고" title="신고">🚩</button>':''; var tag=r.kind==="bug"?'<span class="tag bug">버그</span>':r.kind==="idea"?'<span class="tag idea">아이디어</span>':""; html+='<div class="msg'+(r.nick===me?" me":"")+'"><b>'+esc(r.nick)+'<small>'+ago(r.created_at)+'</small>'+rep+'</b>'+tag+esc(r.msg)+'</div>'; });
+  list.innerHTML=html||'<div class="note">아직 이야기가 없어요. 첫 메시지를 남겨 보세요!</div>';
+  if(atBottom||!last) window.scrollTo(0,document.body.scrollHeight); last=rows.length;
+}
+var all=[], lastTs=null, busy=false;
+function load(){
+  if(!CFG.SUPABASE_URL||busy) return; busy=true;
+  var q=lastTs?(URL_+"?select=id,nick,msg,kind,created_at&created_at=gt."+encodeURIComponent(lastTs)+"&order=created_at.asc&limit=60"):(URL_+"?select=id,nick,msg,kind,created_at&order=created_at.desc&limit=60");
+  fetch(q,{headers:H}).then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); }).then(function(rows){
+    if(!lastTs) rows=rows.reverse(); busy=false; err.hidden=true;
+    if(rows.length){ all=all.concat(rows).slice(-120); lastTs=rows[rows.length-1].created_at; draw(all); } else if(!lastTs){ draw(all); }
+  }).catch(function(e){ busy=false; if(!last){ list.innerHTML='<div class="note err">라운지 서버에 아직 연결되지 않았어요 ('+esc(e.message)+'). 관리자가 표를 만들면 열려요.</div>'; } });
+}
+document.querySelectorAll(".kinds button").forEach(function(b){ b.addEventListener("click",function(){ kind=b.dataset.k; document.querySelectorAll(".kinds button").forEach(function(x){ x.classList.toggle("on",x===b); }); }); });
+document.getElementById("nickBtn").addEventListener("click",function(){ askNick(true); });
+list.addEventListener("click",function(e){ var b=e.target.closest(".rep"); if(!b) return; if(!A||!A.loggedIn()){ gate.hidden=false; return; } var id=b.dataset.id; if(!confirm("이 메시지를 신고할까요? 이 기기에서는 바로 숨겨지고, 3명이 신고하면 모두에게 숨겨져요.")) return; HID[id]=1; try{ localStorage.setItem("klife-hidden",JSON.stringify(HID)); }catch(x){} draw(all); fetch(CFG.SUPABASE_URL+"/rest/v1/life_reports",{method:"POST",headers:Object.assign({Prefer:"return=minimal"},H),body:JSON.stringify({chat_id:+id,reporter:A.id()})}).catch(function(){}); });
+document.getElementById("f").addEventListener("submit",async function(e){
+  e.preventDefault(); if(!A||!A.loggedIn()){ gate.hidden=false; err.textContent="글을 쓰려면 구글 로그인이 필요해요."; err.hidden=false; return; } var n=await askNick(false); if(!n) return; var m=clean(t.value); if(!m) return;
+  var why=bad(m)||bad(n); if(why){ err.textContent=why; err.hidden=false; return; }
+  if(m===lastText){ err.textContent="같은 말을 반복할 수 없어요."; err.hidden=false; return; }
+  if(Date.now()-sendAt<3000){ err.textContent="조금만 천천히 보내 주세요."; err.hidden=false; return; }
+  err.hidden=true; sendAt=Date.now(); lastText=m;
+  A.token().then(function(tok){ if(!tok) throw new Error("로그인이 풀렸어요"); return fetch(URL_,{method:"POST",headers:Object.assign({Prefer:"return=minimal"},authH(tok)),body:JSON.stringify({nick:n,msg:m,kind:kind})}); }).then(function(r){ if(!r.ok) throw new Error(r.status); t.value=""; load(); }).catch(function(x){ err.textContent="보내지 못했어요 ("+x.message+")"; err.hidden=false; });
+});
+var gate=document.getElementById("gate"), form=document.getElementById("f");
+function refreshGate(){ var on=!!(A&&A.loggedIn()); gate.hidden=on; form.style.opacity=on?"1":".55"; document.getElementById("nickBtn").textContent=nick()||"닉네임"; if(on) loadMyNick().then(function(n){ document.getElementById("nickBtn").textContent=n||"닉네임"; }); }
+document.getElementById("gLogin").onclick=function(){ A.login(); };
+if(A){ A.onChange(refreshGate); A.ready.then(refreshGate); }
+refreshGate();
+load(); setInterval(function(){ if(!document.hidden) load(); },8000);
+})();
+</script>
+<script src="js/i18n.js"></script>
+<script src="js/pwa.js"></script>
+</body>
+</html>

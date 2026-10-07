@@ -1,0 +1,355 @@
+/* ===== 감독판 아케이드 테마 (css/mgr-arcade.css) =====
+ * manager.html 전용. 선수판(player.html)과 같은 아케이드 디자인 토큰(css/arcade.css 의 :root 변수)을 써서
+ * 밝은 크림 카드 · 남색 윤곽 · 눌리는 입체 버튼 · 또렷한 남색 글자로 통일해요.
+ * html[data-theme="arcade"] 일 때만 적용돼요. matchday·dark 는 style.css/matchday.css 그대로예요.
+ * 글자 대비 목표: 일반 글자 4.5 이상(WCAG AA). 터치 대상은 44px 이상. */
+html[data-theme="arcade"]{
+  --m-navy:#14305a;--m-cream:#fffdf4;--m-cream2:#fff6d6;--m-sky:#e8f4ff;--m-sky2:#d3e9ff;
+  --m-ink2:#3d5a85;            /* 보조 글자 (크림 위 대비 6.5) */
+  --m-orange-d:#9c4200;        /* 주황 글자 (크림 위 대비 5.3) */
+  --m-green-d:#0f7a3c;--m-red-d:#c4202c;--m-blue-d:#1f5fbf;--m-gold-d:#8a5a00;
+}
+/* 터치 대상 44px: 테마와 상관없이 */
+.btn,.seg button,.inp,.toggle{min-height:44px}
+.btn.small{display:inline-flex;align-items:center;justify-content:center}
+.tabs button{min-height:44px}
+.pos.GK{background:#a15f00}
+.ovrbadge{color:#2b1a00;background:linear-gradient(160deg,#fff2ae,#f0c24a 60%,#dca21f)}
+/* 어두운 배경 장식은 끄고 하늘색+잔디 바닥(arcade.css)만 보이게 */
+html[data-theme="arcade"] .bgfx{display:none}
+html[data-theme="arcade"] body{color:var(--txt);font-weight:500}
+
+/* ---------- 상단 바 ---------- */
+html[data-theme="arcade"] .top{background:linear-gradient(180deg,#1c5cb8,#164a9c);border-bottom:3px solid var(--m-navy)}
+html[data-theme="arcade"] .top-in{padding:8px 12px;gap:8px 10px}
+html[data-theme="arcade"] .top .logo{font-size:22px}
+html[data-theme="arcade"] .top .logo .k{color:#ffd84a;font-size:28px;text-shadow:0 2px 0 var(--m-navy)}
+html[data-theme="arcade"] .top .logo .l{color:#fff;text-shadow:0 2px 0 var(--m-navy)}
+html[data-theme="arcade"] .top .logo b{color:#ffd84a;font-size:28px;text-shadow:0 2px 0 var(--m-navy)}
+html[data-theme="arcade"] .top .season-badge{background:#fff;border:2.5px solid var(--m-navy);clip-path:none;border-radius:999px;padding:4px 14px;box-shadow:0 3px 0 var(--m-navy);color:var(--m-navy)}
+html[data-theme="arcade"] .top .season-badge *{color:var(--m-navy)}
+html[data-theme="arcade"] .top .season-badge b{color:var(--m-orange-d);font-size:20px}
+html[data-theme="arcade"] .top .season-badge .chip{background:var(--m-navy);color:#fff}
+html[data-theme="arcade"] .top .season-badge .chip *{color:#fff}
+html[data-theme="arcade"] .top .best{color:#fff;font-weight:700;text-align:left}
+html[data-theme="arcade"] .top .best strong{color:#ffd84a}
+html[data-theme="arcade"] .top .btn.small,html[data-theme="arcade"] .top .btn.small.ghost{min-height:44px;padding:0 14px;display:inline-flex;align-items:center;justify-content:center;font-size:13px;
+  background:#fff;color:var(--m-navy);border:2.5px solid var(--m-navy);border-radius:14px;box-shadow:0 3px 0 var(--m-navy);clip-path:none;font-weight:700}
+html[data-theme="arcade"] .top .btn.small:active{transform:translateY(2px);box-shadow:0 1px 0 var(--m-navy)}
+html[data-theme="arcade"] .top .btn.small:hover:not(:disabled){filter:none;background:var(--m-cream2)}
+html[data-theme="arcade"] .top-in{flex-wrap:wrap}
+html[data-theme="arcade"] .top .logo{flex:none}
+html[data-theme="arcade"] .top .season-badge{margin-left:auto;flex:none;padding:3px 12px}
+html[data-theme="arcade"] .top .best{flex:1 1 90px;min-width:0;font-size:11.5px;line-height:1.3}
+html[data-theme="arcade"] .top-in .btn.small{flex:1 1 0;min-width:0;white-space:nowrap;padding:0 6px;font-size:12.5px}
+@media (max-width:620px){
+  html[data-theme="arcade"] .top{position:static}
+  html[data-theme="arcade"] body.klhome .top{padding-right:0!important}
+  html[data-theme="arcade"] .top-in{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  html[data-theme="arcade"] .top .logo{grid-column:1/-1}
+  html[data-theme="arcade"] .top .season-badge{grid-column:1/3;margin:0;justify-self:start}
+  html[data-theme="arcade"] .top .best{grid-column:3;font-size:11px}
+  html[data-theme="arcade"] .top-in .btn.small{flex:none}
+}
+
+/* ---------- 패널 · 제목 · 라벨 ---------- */
+html[data-theme="arcade"] .panel{background:var(--m-cream);border:3px solid var(--m-navy);border-radius:20px;box-shadow:0 5px 0 var(--m-navy);color:var(--txt)}
+html[data-theme="arcade"] .panel::before{display:none}
+html[data-theme="arcade"] .panel-h h2,html[data-theme="arcade"] section h2{font-family:var(--f-head);font-weight:400;color:var(--txt);font-size:21px;letter-spacing:0}
+html[data-theme="arcade"] .label{color:var(--m-ink2);font-weight:700}
+html[data-theme="arcade"] .panel-h .label{max-width:100%;text-align:right}
+html[data-theme="arcade"] .hint{color:var(--m-ink2)}
+html[data-theme="arcade"] .muted{color:var(--m-ink2)}
+html[data-theme="arcade"] .sec{color:var(--m-orange-d);display:block}
+html[data-theme="arcade"] .sec::before{display:none}
+html[data-theme="arcade"] .w-sec h3,html[data-theme="arcade"] .attr-col h4{color:var(--m-orange-d)}
+html[data-theme="arcade"] .w-sec{border-top-color:rgba(20,48,90,.25)}
+html[data-theme="arcade"] .toggle{color:var(--txt);min-height:44px;font-weight:700;font-size:14px}
+html[data-theme="arcade"] .toggle input{width:22px;height:22px}
+html[data-theme="arcade"] .inp{background:#fff;border:2.5px solid var(--m-navy);color:var(--txt);border-radius:12px;min-height:44px;font-weight:700;font-size:16px}
+html[data-theme="arcade"] .inp:focus{outline:3px solid var(--acc);outline-offset:1px}
+html[data-theme="arcade"] .inp::placeholder{color:#6b82a6}
+html[data-theme="arcade"] footer{color:var(--m-navy);background:rgba(255,253,244,.88);border:2px solid var(--m-navy);border-radius:14px;padding:12px 14px;line-height:1.6}
+
+/* ---------- 세그먼트(칩) ---------- */
+html[data-theme="arcade"] .seg button{min-height:44px;padding:0 13px;background:#fff;color:var(--m-navy);border:2.5px solid var(--m-navy);border-radius:12px;box-shadow:0 3px 0 var(--m-navy);font:700 13px var(--f-num);letter-spacing:.02em}
+html[data-theme="arcade"] .seg button:hover:not(:disabled){color:var(--m-navy);border-color:var(--m-navy);background:var(--m-cream2)}
+html[data-theme="arcade"] .seg button[aria-pressed="true"]{background:#ffb400;color:#3a2200;border-color:var(--m-navy)}
+html[data-theme="arcade"] .seg button:active:not(:disabled){transform:translateY(2px);box-shadow:0 1px 0 var(--m-navy)}
+html[data-theme="arcade"] .seg button:disabled{opacity:1;background:#e3ebf6;color:#4a5f80;border-color:#7d93b3;box-shadow:0 3px 0 #9fb2cc}
+html[data-theme="arcade"] .seg button[aria-pressed="true"]:disabled{background:#ffd98a;color:#4a3000;border-color:var(--m-navy);box-shadow:0 3px 0 var(--m-navy)}
+html[data-theme="arcade"] .seg{gap:7px}
+
+/* ---------- 버튼 ---------- */
+html[data-theme="arcade"] .btn{clip-path:none;border-radius:14px;min-height:44px;padding:0 18px;display:inline-flex;align-items:center;justify-content:center;
+  background:#e8f4ff;color:var(--m-navy);border:3px solid var(--m-navy);box-shadow:0 4px 0 var(--m-navy);font-weight:800;letter-spacing:0}
+html[data-theme="arcade"] .btn:hover:not(:disabled){filter:none;background:var(--m-sky2)}
+html[data-theme="arcade"] .btn:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 var(--m-navy)}
+html[data-theme="arcade"] .btn.primary{background:linear-gradient(180deg,#ffd84a,#ffb400);color:#3a2200}
+html[data-theme="arcade"] .btn.primary:hover:not(:disabled){background:linear-gradient(180deg,#ffe170,#ffbf1f)}
+html[data-theme="arcade"] .btn.go{background:linear-gradient(180deg,#7fe39a,#2fc462);color:#052a14}
+html[data-theme="arcade"] .btn.go:hover:not(:disabled){background:linear-gradient(180deg,#95eaab,#3fd073)}
+html[data-theme="arcade"] .btn.ghost{background:#e8f4ff;color:var(--m-navy)}
+html[data-theme="arcade"] .btn.small{min-height:44px;padding:0 14px;font-size:13px}
+html[data-theme="arcade"] .btn.big{min-height:52px;font-size:16px;padding:0 24px}
+html[data-theme="arcade"] .btn:disabled{opacity:1;background:#dde7f3;color:#465b7b;border-color:#8ea4c4;box-shadow:0 3px 0 #a9bad2;cursor:not-allowed}
+html[data-theme="arcade"] .btn:focus-visible,html[data-theme="arcade"] .offer:focus-visible,html[data-theme="arcade"] .slot:focus-visible,html[data-theme="arcade"] .bslot:focus-visible,html[data-theme="arcade"] .seg button:focus-visible{outline:3px solid #ff8a1f;outline-offset:2px}
+html[data-theme="arcade"] .btnrow{gap:10px}
+
+/* ---------- 드래프트 릴 ---------- */
+html[data-theme="arcade"] .reel{background:radial-gradient(260px 120px at 50% 0,rgba(255,255,255,.9),transparent 70%),linear-gradient(160deg,#cfe9ff,#fff3c9);border:3px solid var(--m-navy);border-radius:16px;box-shadow:0 3px 0 rgba(20,48,90,.5)}
+html[data-theme="arcade"] .reel::before{background:linear-gradient(110deg,transparent 40%,rgba(255,255,255,.7) 50%,transparent 60%)}
+html[data-theme="arcade"] .reel .club{color:var(--m-navy)}
+html[data-theme="arcade"] .yearL{color:var(--m-orange-d);font-weight:800}
+html[data-theme="arcade"] .eraL{color:var(--m-ink2);font-weight:600}
+html[data-theme="arcade"] .progress i{background:#c3d3e8;border:1px solid rgba(20,48,90,.35);height:8px}
+html[data-theme="arcade"] .progress i.on{background:#ff8a1f}html[data-theme="arcade"] .progress i.bn.on{background:#ffb400}
+html[data-theme="arcade"] .offer-pos{color:var(--m-ink2);font-weight:700;font-size:12px}
+html[data-theme="arcade"] .offer{background:none;border:0;box-shadow:none}
+html[data-theme="arcade"] .offer:hover:not(:disabled){background:none}
+html[data-theme="arcade"] .offer[aria-pressed="true"]{filter:drop-shadow(0 0 0 #fff) drop-shadow(0 0 8px #ff8a1f)}
+html[data-theme="arcade"] .info-btn{width:28px;height:28px;top:-8px;left:-8px;background:#fff;color:var(--m-navy);border:2.5px solid var(--m-navy);box-shadow:0 2px 0 var(--m-navy);font-size:15px}
+html[data-theme="arcade"] .info-btn:hover{background:#ffd84a;color:var(--m-navy)}
+html[data-theme="arcade"] .info-dot{width:22px;height:22px;top:-9px;left:auto;right:-9px;background:#fff;color:var(--m-navy);border:2px solid var(--m-navy);font:800 11px/18px var(--f-num)}
+html[data-theme="arcade"] .info-dot::before,html[data-theme="arcade"] .info-btn::before{content:"";position:absolute;inset:-11px}
+
+/* ---------- 스쿼드 / 피치 ---------- */
+/* 카드 등급색: 아래쪽(이름 글자 자리)까지 밝게 유지해서 글자 대비를 확보 */
+.t-bronze{--fc-bg:linear-gradient(155deg,#f3c79a,#d99a60 58%,#c18248);--fc-ink:#2a1606}
+.t-silver{--fc-bg:linear-gradient(155deg,#fafcff,#cdd5df 58%,#aeb9c7);--fc-ink:#141c28}
+.t-gold{--fc-bg:linear-gradient(155deg,#fff4b8,#f2c64f 55%,#dcaa2d);--fc-ink:#2e1d03}
+html[data-theme="arcade"] .fc-badge{font-size:max(8px,9cqw);padding:1px 4px;border:1.5px solid var(--m-navy)}
+html[data-theme="arcade"] .fc-badge.up{background:#7fe39a;color:#052a14}html[data-theme="arcade"] .fc-badge.down{background:#c4202c;color:#fff}html[data-theme="arcade"] .fc-badge.gray{background:#3d5a85;color:#fff;font-size:max(8px,8cqw)}
+html[data-theme="arcade"] .pitch .fc-pos{font-size:max(8px,11.5cqw);font-weight:700}
+html[data-theme="arcade"] .pitch{border:3px solid var(--m-navy);box-shadow:0 3px 0 rgba(20,48,90,.5);border-radius:14px;background:repeating-linear-gradient(180deg,#2f9a55 0 11.11%,#29904d 11.11% 22.22%)}
+html[data-theme="arcade"] .pitch svg.lines g{stroke:rgba(255,255,255,.85)}
+html[data-theme="arcade"] .slot .fcard{filter:drop-shadow(0 2px 0 rgba(20,48,90,.7))}
+html[data-theme="arcade"] .slot.can{filter:drop-shadow(0 0 8px #ffd84a)}
+html[data-theme="arcade"] .slot.can .fcard.empty{--fc-bg:#ffe27a;--fc-ink:#14305a}
+html[data-theme="arcade"] .fcard.empty{--fc-bg:rgba(255,255,255,.8);--fc-ink:#0e2547;box-shadow:inset 0 0 0 2px rgba(255,255,255,.9)}
+html[data-theme="arcade"] .fcard.mine{box-shadow:inset 0 0 0 3px #ff8a1f}
+html[data-theme="arcade"] .slot .role-chip{overflow:visible;text-overflow:clip;max-width:none;font-size:11px;padding:3px 7px 3px 8px;bottom:-11px;background:#fff;color:var(--m-navy);border:2px solid var(--m-navy);font-weight:800;box-shadow:0 2px 0 var(--m-navy);text-shadow:none}
+html[data-theme="arcade"] .slot .role-chip::before{content:"";position:absolute;inset:-12px -3px}
+html[data-theme="arcade"] .slot .role-chip.set{background:#7fe39a;color:#052a14;border-color:var(--m-navy)}
+html[data-theme="arcade"] .slot .role-chip:hover,html[data-theme="arcade"] .slot .role-chip:focus-visible{background:#ffd84a;border-color:var(--m-navy);color:var(--m-navy)}
+html[data-theme="arcade"] .statbar{gap:12px}
+
+html[data-theme="arcade"] .st{background:#fff;border:2.5px solid var(--m-navy);border-radius:12px;box-shadow:0 2px 0 rgba(20,48,90,.6)}
+html[data-theme="arcade"] .st .k{color:var(--m-ink2);font-weight:700}
+html[data-theme="arcade"] .st b{color:var(--txt)}
+html[data-theme="arcade"] .bench{background:var(--m-sky);border:2.5px solid var(--m-navy);border-radius:14px}
+html[data-theme="arcade"] .benchlab{color:var(--m-navy);font-weight:800}
+html[data-theme="arcade"] .bslot .fcard{filter:drop-shadow(0 2px 0 rgba(20,48,90,.6))}
+html[data-theme="arcade"] .bslot.can{filter:drop-shadow(0 0 7px #ff8a1f)}
+html[data-theme="arcade"] .bslot.target,html[data-theme="arcade"] .slot.target{filter:drop-shadow(0 0 9px #ffb400)}
+html[data-theme="arcade"] .mgr.empty{background:#fff;border:2.5px dashed var(--m-navy);color:var(--m-ink2);border-radius:14px;font-weight:600}
+html[data-theme="arcade"] .mcard{background:linear-gradient(135deg,#fff3c9,#fff);border:3px solid var(--m-navy);border-radius:14px;box-shadow:0 3px 0 var(--m-navy);color:var(--txt)}
+html[data-theme="arcade"] .mcard.pick:hover{filter:none;border-color:var(--m-navy);background:#ffeaa5}
+html[data-theme="arcade"] .mc-lab{background:var(--m-navy);color:#fff}
+html[data-theme="arcade"] .mc-ovr{color:var(--m-orange-d)}
+html[data-theme="arcade"] .mc-note,html[data-theme="arcade"] .mc-fx{color:var(--m-ink2)}
+html[data-theme="arcade"] .tg{background:#fff;border:2px solid var(--m-navy);color:var(--m-navy);font-weight:700}
+
+/* ---------- 겨울 이적 · 스왑 바 ---------- */
+html[data-theme="arcade"] .dv{background:#fff;border:2px solid var(--m-navy);color:var(--txt);font-weight:600}
+html[data-theme="arcade"] .dv.up i{color:var(--m-green-d)}html[data-theme="arcade"] .dv.down i{color:var(--m-red-d)}html[data-theme="arcade"] .dv.flat i{color:var(--m-ink2)}
+html[data-theme="arcade"] .swapbar{background:#fff6d6;border:3px solid var(--m-navy);box-shadow:0 4px 0 var(--m-navy);color:var(--txt)}
+html[data-theme="arcade"] .swapbar span{color:var(--txt)}
+html[data-theme="arcade"] .swaplog{color:var(--m-ink2);font-weight:600}
+
+/* ---------- 표 ---------- */
+html[data-theme="arcade"] .tbl th{color:var(--m-ink2);font-weight:800;border-bottom:2px solid var(--m-navy)}
+html[data-theme="arcade"] .tbl td{border-bottom:1px solid rgba(20,48,90,.22);color:var(--txt)}
+html[data-theme="arcade"] .tbl td.pts{color:var(--m-gold-d)}
+html[data-theme="arcade"] .tbl tr.me td{background:linear-gradient(90deg,#c5f3d3,#e7fbed);color:var(--txt)}
+html[data-theme="arcade"] .tbl tr.link:hover td{background:var(--m-sky)}
+html[data-theme="arcade"] .tbl tr.cut td{border-bottom:2px dashed var(--m-red-d)}
+html[data-theme="arcade"] .tbl td.on{color:var(--m-gold-d);background:#fff0b8}
+html[data-theme="arcade"] .tbl tr.up td{box-shadow:inset 3px 0 0 var(--m-green-d)}
+html[data-theme="arcade"] .tbl tr.po td{box-shadow:inset 3px 0 0 #e09a00}
+html[data-theme="arcade"] .tbl tr.down td{box-shadow:inset 3px 0 0 var(--m-red-d)}
+html[data-theme="arcade"] .tbl td.rt.hi{color:var(--m-green-d)}html[data-theme="arcade"] .tbl td.rt.lo{color:var(--m-red-d)}
+html[data-theme="arcade"] td.plink:hover{color:var(--m-blue-d)}
+html[data-theme="arcade"] .oppsum{color:var(--m-ink2);font-weight:600}
+html[data-theme="arcade"] .promo.relegated,html[data-theme="arcade"] .promo.po_failed{color:var(--m-red-d)}
+html[data-theme="arcade"] .promo.promoted,html[data-theme="arcade"] .promo.po_promoted,html[data-theme="arcade"] .promo.po_stay{color:var(--m-green-d)}
+html[data-theme="arcade"] .pos{color:#fff;border:2px solid var(--m-navy);font-weight:800}
+html[data-theme="arcade"] .pos.GK{background:#a86500}html[data-theme="arcade"] .pos.DF{background:#1f5fbf}html[data-theme="arcade"] .pos.MF{background:#1b7a45}html[data-theme="arcade"] .pos.FW{background:#c2332a}
+.crest{background:linear-gradient(145deg,hsl(var(--h) 60% 28%),hsl(var(--h) 60% 20%));color:#fff;text-shadow:0 1px 0 rgba(0,0,0,.45)}
+html[data-theme="arcade"] .crest{box-shadow:inset 0 0 0 2px #fff,0 0 0 1.5px var(--m-navy)}
+.crest{font-size:calc(var(--s,26px)*.38);line-height:1;letter-spacing:-.04em;text-align:center;word-break:break-all;overflow:hidden;padding:1px;white-space:normal}
+html[data-theme="arcade"] .crest.img{background:none;box-shadow:none;text-shadow:none}
+html[data-theme="arcade"] .chip{background:var(--m-navy);color:#fff}
+html[data-theme="arcade"] .chip.lg1{background:#1b7a45;color:#fff}
+html[data-theme="arcade"] .chip.lg2{background:#a86500;color:#fff}
+html[data-theme="arcade"] .chip.acl{background:#1f5fbf;color:#fff}
+html[data-theme="arcade"] .chip .rt{background:rgba(255,255,255,.25);color:#fff}
+
+/* ---------- 결과: 히어로 · 탭 ---------- */
+html[data-theme="arcade"] .hero{background:radial-gradient(500px 200px at 0 0,#fff,transparent 60%),linear-gradient(135deg,#fff3c9,#d3e9ff);color:var(--txt)}
+html[data-theme="arcade"] .verdict{color:var(--txt)}
+html[data-theme="arcade"] .vsub{color:var(--m-ink2);font-weight:600}
+html[data-theme="arcade"] .hero .kick,html[data-theme="arcade"] .hero .label{color:var(--m-orange-d)}
+html[data-theme="arcade"] .trophy{background:#fff;border:2.5px solid var(--m-navy);opacity:1;color:#4f6486;box-shadow:0 3px 0 rgba(20,48,90,.45)}
+html[data-theme="arcade"] .trophy:not(.won) .tr-i{filter:grayscale(1);opacity:.55}
+html[data-theme="arcade"] .trophy.won{background:linear-gradient(180deg,#ffe27a,#ffc933);color:#3a2200;box-shadow:0 3px 0 var(--m-navy)}
+html[data-theme="arcade"] .tabs{border-bottom:3px solid var(--m-navy);gap:6px;margin-top:18px;padding:0 4px}
+html[data-theme="arcade"] .tabs button{min-height:44px;padding:0 14px;background:var(--m-sky);color:var(--m-navy);border:2.5px solid var(--m-navy);border-bottom:0;border-radius:12px 12px 0 0;margin-bottom:-3px;font-weight:800}
+html[data-theme="arcade"] .tabs button[aria-pressed="true"]{background:var(--m-cream);color:var(--m-navy);border-bottom:3px solid var(--m-cream);box-shadow:inset 0 4px 0 #ff8a1f}
+html[data-theme="arcade"] .tabs button:hover{background:#fff6d6}
+html[data-theme="arcade"] .tabpane{background:var(--m-cream);border:3px solid var(--m-navy);border-top:0;border-radius:0 0 18px 18px;box-shadow:0 5px 0 var(--m-navy);color:var(--txt)}
+html[data-theme="arcade"] .board{background:none;border:0;box-shadow:none;border-radius:0}
+html[data-theme="arcade"] .stat{background:#fff;border:2.5px solid var(--m-navy);border-radius:14px;box-shadow:0 3px 0 rgba(20,48,90,.6)}
+html[data-theme="arcade"] .stat .k{color:var(--m-ink2);font-weight:700}
+html[data-theme="arcade"] .stat .v{color:var(--txt)}
+html[data-theme="arcade"] .comp{background:#fff;border:2.5px solid var(--m-navy);border-radius:14px;color:var(--txt)}
+html[data-theme="arcade"] .comp h4{color:var(--m-orange-d)}
+html[data-theme="arcade"] .stg{background:var(--m-sky);border-left-color:#7d93b3;color:var(--txt);font-weight:600}
+html[data-theme="arcade"] .stg.ok{border-left-color:var(--m-green-d);background:#dff8e6}
+html[data-theme="arcade"] .stg.no{border-left-color:var(--m-red-d);background:#ffe3e3}
+html[data-theme="arcade"] .gtab .g.me{color:var(--m-orange-d)}
+html[data-theme="arcade"] .form i{border:2px solid var(--m-navy);width:14px;height:14px}
+html[data-theme="arcade"] .form i.W{background:#2fc462}html[data-theme="arcade"] .form i.D{background:#cfd8e6}html[data-theme="arcade"] .form i.L{background:#ee3d48}
+html[data-theme="arcade"] .newach{background:#fff6d6;border:3px solid var(--m-navy);color:var(--txt)}
+html[data-theme="arcade"] .newach h4{color:var(--m-orange-d)}
+html[data-theme="arcade"] .derbies{color:var(--m-ink2)}html[data-theme="arcade"] .derbies h4{color:var(--txt)}
+
+/* ---------- 경기 목록 / 경기 로그 ---------- */
+html[data-theme="arcade"] .m{background:#fff;border:2px solid rgba(20,48,90,.45);color:var(--txt);border-radius:10px;min-height:44px}
+html[data-theme="arcade"] .m .r,html[data-theme="arcade"] .m .ha{color:var(--m-ink2);font-weight:700}
+html[data-theme="arcade"] .m .o span{color:var(--m-ink2);font-weight:600}
+html[data-theme="arcade"] .m .o span.cdl{color:var(--m-orange-d)}
+html[data-theme="arcade"] .m.clickable:hover{background:var(--m-sky)}
+html[data-theme="arcade"] .m.open{background:#dff8e6;box-shadow:inset 4px 0 0 var(--m-green-d)}
+html[data-theme="arcade"] .cp{color:#fff;border:1.5px solid var(--m-navy)}
+html[data-theme="arcade"] .cp.lg{background:#1b7a45}html[data-theme="arcade"] .cp.fa{background:#b24a1f}html[data-theme="arcade"] .cp.acl{background:#1f5fbf}html[data-theme="arcade"] .cp.po{background:#7a42c4}
+html[data-theme="arcade"] .m .sc{border:2px solid var(--m-navy)}
+html[data-theme="arcade"] .sc.W{background:#7fe39a;color:#052a14}html[data-theme="arcade"] .sc.D{background:#e1e8f2;color:var(--m-navy)}html[data-theme="arcade"] .sc.L{background:#ff8f98;color:#4a0a10}
+html[data-theme="arcade"] .mlog{background:var(--m-sky);border:2.5px solid var(--m-navy);color:var(--txt)}
+html[data-theme="arcade"] .ml-t,html[data-theme="arcade"] .ml-sn,html[data-theme="arcade"] .dl-t,html[data-theme="arcade"] .dl-g{color:var(--m-ink2);font-weight:700}
+html[data-theme="arcade"] .ml-bar{background:#ee3d48;border:1.5px solid var(--m-navy)}html[data-theme="arcade"] .ml-bar i{background:#2fc462}
+html[data-theme="arcade"] .ml-chips .chip{background:#fff;color:var(--txt);border:1.5px solid var(--m-navy);font-weight:600}
+html[data-theme="arcade"] .ml-chips .chip .rt{background:#dfe9f6;color:var(--m-navy)}
+html[data-theme="arcade"] .ml-chips .chip .rt.hi{background:#1b7a45;color:#fff}html[data-theme="arcade"] .ml-chips .chip .rt.lo{background:#c4202c;color:#fff}
+html[data-theme="arcade"] .chip .mom{background:#ffd84a;color:#14305a}
+html[data-theme="arcade"] .tl{color:var(--txt)}
+html[data-theme="arcade"] .tl .tl-m{background:#fff;color:var(--m-navy);border:1.5px solid var(--m-navy)}
+html[data-theme="arcade"] .tl.k-mark{background:#fff;color:var(--m-ink2);font-weight:700}
+html[data-theme="arcade"] .tl.k-goal.s-me{background:linear-gradient(90deg,#c5f3d3,transparent)}
+html[data-theme="arcade"] .tl.k-goal.s-opp{background:linear-gradient(270deg,#ffd0d4,transparent)}
+html[data-theme="arcade"] .tl.k-red{color:var(--m-red-d)}html[data-theme="arcade"] .tl.k-injury{color:var(--m-orange-d)}
+html[data-theme="arcade"] .tl.k-save,html[data-theme="arcade"] .tl.k-miss,html[data-theme="arcade"] .tl.k-post,html[data-theme="arcade"] .tl.k-chance{color:var(--m-ink2)}
+html[data-theme="arcade"] .mf-line{opacity:1;color:var(--txt)}
+html[data-theme="arcade"] .duel,html[data-theme="arcade"] .duel-side,html[data-theme="arcade"] .duel-leg{background:#fff;border:2px solid var(--m-navy);color:var(--txt)}
+html[data-theme="arcade"] .duel-ovr{color:var(--m-gold-d)}html[data-theme="arcade"] .duel-vs{color:var(--m-orange-d)}
+html[data-theme="arcade"] .duel-final.win{background:#dff8e6;border:2.5px solid var(--m-green-d)}html[data-theme="arcade"] .duel-final.lose{background:#ffe3e3;border:2.5px solid var(--m-red-d)}
+html[data-theme="arcade"] .duel-leg.clickable:hover,html[data-theme="arcade"] .duel-leg.open{background:var(--m-sky)}
+html[data-theme="arcade"] .duel-side small{color:var(--m-ink2)}
+
+/* ---------- 어워드 / 선수 / 팬 ---------- */
+html[data-theme="arcade"] .aw-t{color:var(--m-orange-d);font-weight:800}
+html[data-theme="arcade"] .aw-l{color:var(--m-ink2);font-weight:700}
+html[data-theme="arcade"] .award .fcard,html[data-theme="arcade"] .offer .fcard{filter:drop-shadow(0 3px 0 rgba(20,48,90,.55))}
+html[data-theme="arcade"] .sbar{background:#cfe0f3;border:1.5px solid var(--m-navy)}html[data-theme="arcade"] .sbar i{background:#2fc462}html[data-theme="arcade"] .sbar i.low{background:#ee3d48}
+html[data-theme="arcade"] .rep-bar{background:#cfe0f3;border:1.5px solid var(--m-navy);height:10px}
+html[data-theme="arcade"] .rep-bar i{background:#2b79e0}html[data-theme="arcade"] .rep-bar i.hi{background:#2fc462}html[data-theme="arcade"] .rep-bar i.lo{background:#ee3d48}
+html[data-theme="arcade"] .rep-row{color:var(--txt);font-weight:700}
+html[data-theme="arcade"] .fan-post{background:#fff;border:2px solid var(--m-navy);border-left-width:6px;color:var(--txt)}
+html[data-theme="arcade"] .fan-post.tp{border-left-color:#2fc462}html[data-theme="arcade"] .fan-post.tn{border-left-color:#ee3d48}html[data-theme="arcade"] .fan-post.tz{border-left-color:#7d93b3}
+html[data-theme="arcade"] .fan-who{opacity:1;color:var(--m-ink2);font-weight:700}
+html[data-theme="arcade"] .fans-goal.ok{color:var(--m-green-d)}html[data-theme="arcade"] .fans-goal.bad{color:var(--m-red-d)}
+html[data-theme="arcade"] .share img{border:3px solid var(--m-navy)}
+
+/* ---------- 업적 · 배지 ---------- */
+html[data-theme="arcade"] .badge{background:#fff;border:2.5px solid var(--m-navy);color:var(--txt);box-shadow:0 3px 0 rgba(20,48,90,.55)}
+html[data-theme="arcade"] .badge small{color:var(--m-ink2);font-weight:600}
+html[data-theme="arcade"] .badge.bronze{background:linear-gradient(160deg,#ffe0bf,#fff)}
+html[data-theme="arcade"] .badge.silver{background:linear-gradient(160deg,#e4ebf5,#fff)}
+html[data-theme="arcade"] .badge.gold{background:linear-gradient(160deg,#ffe58a,#fff)}
+html[data-theme="arcade"] .badge.locked{filter:grayscale(1);opacity:.62;background:#eef3fa}
+
+/* ---------- 친구 기록 ---------- */
+html[data-theme="arcade"] .lbrow{background:#fff;border:2px solid rgba(20,48,90,.5);color:var(--txt);min-height:44px}
+html[data-theme="arcade"] .lbn{color:var(--m-ink2)}html[data-theme="arcade"] .lbw small,html[data-theme="arcade"] .lbr,html[data-theme="arcade"] .lba small{color:var(--m-ink2);font-weight:600}
+html[data-theme="arcade"] .lbp{color:var(--m-gold-d)}
+
+/* ---------- 모달 ---------- */
+html[data-theme="arcade"] .modal{background:rgba(20,48,90,.62);backdrop-filter:none}
+html[data-theme="arcade"] .m-box{background:var(--m-cream);border:3px solid var(--m-navy);border-radius:20px;box-shadow:0 6px 0 var(--m-navy);color:var(--txt)}
+html[data-theme="arcade"] .m-x{width:44px;height:44px;top:8px;right:8px;background:#fff;color:var(--m-navy);border:2.5px solid var(--m-navy);box-shadow:0 3px 0 var(--m-navy);font-size:18px;font-weight:800;z-index:5}
+html[data-theme="arcade"] .m-info h3{color:var(--txt)}
+html[data-theme="arcade"] .m-line{color:var(--m-ink2);font-weight:600}
+html[data-theme="arcade"] .m-warn{color:var(--m-orange-d);font-weight:700}
+html[data-theme="arcade"] .m-note{color:var(--m-blue-d);font-weight:600}
+html[data-theme="arcade"] .a-l{color:var(--m-ink2);font-weight:600}
+html[data-theme="arcade"] .a-bar{background:#cfe0f3;border:1px solid rgba(20,48,90,.5);height:7px}
+html[data-theme="arcade"] .attr.t-s .a-bar i{background:#1b9ad6}html[data-theme="arcade"] .attr.t-s .a-v{color:#0b6fa3}
+html[data-theme="arcade"] .attr.t-a .a-bar i{background:#2fc462}html[data-theme="arcade"] .attr.t-a .a-v{color:var(--m-green-d)}
+html[data-theme="arcade"] .attr.t-b .a-bar i{background:#e0b400}html[data-theme="arcade"] .attr.t-b .a-v{color:var(--m-gold-d)}
+html[data-theme="arcade"] .attr.t-c .a-bar i{background:#8d9bc4}html[data-theme="arcade"] .attr.t-c .a-v{color:#4a5b82}
+html[data-theme="arcade"] .attr.t-d .a-bar i{background:#ff7b5c}html[data-theme="arcade"] .attr.t-d .a-v{color:var(--m-red-d)}
+html[data-theme="arcade"] .m-lite .ml-i{border-bottom:1px dashed rgba(20,48,90,.35)}
+html[data-theme="arcade"] .m-lite b.s{color:var(--m-gold-d)}html[data-theme="arcade"] .m-lite b.a{color:var(--m-green-d)}html[data-theme="arcade"] .m-lite b.b{color:var(--m-blue-d)}html[data-theme="arcade"] .m-lite b.c{color:#4a5b82}html[data-theme="arcade"] .m-lite b.d{color:var(--m-red-d)}
+html[data-theme="arcade"] .role-row{background:#fff;border:2.5px solid var(--m-navy);color:var(--txt);min-height:44px;box-shadow:0 3px 0 rgba(20,48,90,.55)}
+html[data-theme="arcade"] .role-row:hover{border-color:var(--m-navy);background:var(--m-cream2)}
+html[data-theme="arcade"] .role-row.on{border-color:var(--m-navy);background:#dff8e6}
+html[data-theme="arcade"] .role-desc{opacity:1;color:var(--m-ink2)}
+html[data-theme="arcade"] .role-tags i{background:var(--m-sky);color:var(--m-navy);border:1px solid rgba(20,48,90,.4);font-weight:700}
+html[data-theme="arcade"] .role-tags i.warn{background:#ffe0a8;color:#6b3a00}
+html[data-theme="arcade"] .role-note .ok{color:var(--m-green-d)}html[data-theme="arcade"] .role-note .bad{color:var(--m-orange-d)}
+html[data-theme="arcade"] .role-rec{background:#fff0b8;color:#5a3a00;font-weight:600;border:1.5px solid var(--m-navy)}
+html[data-theme="arcade"] .cap-row{background:#fff;border:2.5px solid var(--m-navy);border-radius:14px;color:var(--txt);padding:10px;gap:6px 8px;
+  grid-template-columns:repeat(6,minmax(0,1fr));align-items:center;box-shadow:0 3px 0 rgba(20,48,90,.5)}
+html[data-theme="arcade"] .cap-row .cap-pos{grid-column:1;grid-row:1/span 2;justify-self:start;align-self:center;display:inline-block;min-width:38px;text-align:center;font:800 12px var(--f-num);color:#fff;background:#1f5fbf;border:2px solid var(--m-navy);border-radius:6px;padding:3px 6px}
+html[data-theme="arcade"] .cap-row .cap-pos.GK{background:#a86500}html[data-theme="arcade"] .cap-row .cap-pos.DF{background:#1f5fbf}html[data-theme="arcade"] .cap-row .cap-pos.MF{background:#1b7a45}html[data-theme="arcade"] .cap-row .cap-pos.FW{background:#c2332a}
+html[data-theme="arcade"] .cap-row b{grid-column:2/7;grid-row:1;font-size:16px;min-width:0}
+html[data-theme="arcade"] .cap-row small{grid-column:2/5;grid-row:2}
+html[data-theme="arcade"] .cap-row em{grid-column:5/7;grid-row:2;text-align:right;font-weight:700}
+html[data-theme="arcade"] .cap-row .btn{grid-row:3;padding:0 6px}
+html[data-theme="arcade"] .cap-row .btn:nth-of-type(1){grid-column:1/4}
+html[data-theme="arcade"] .cap-row .btn:nth-of-type(2){grid-column:4/7}
+html[data-theme="arcade"] .cap-row.on{background:#fff0b8}
+html[data-theme="arcade"] .cap-row .btn.on,html[data-theme="arcade"] .cap-row .btn[aria-pressed="true"]{background:#ffb400;color:#3a2200}
+html[data-theme="arcade"] .cap-row small{opacity:1;color:var(--m-ink2)}html[data-theme="arcade"] .cap-row em{color:var(--m-blue-d)}
+html[data-theme="arcade"] .cap-sum{color:var(--m-gold-d)}
+html[data-theme="arcade"] .cap-badge{border-color:var(--m-navy)}
+html[data-theme="arcade"] .contract .c-kicker{color:var(--m-blue-d)}
+html[data-theme="arcade"] .c-pad{border:3px solid var(--m-navy);background:#fff}
+html[data-theme="arcade"] .contract .btn.go.big,html[data-theme="arcade"] .m-box > .btn.go.big{width:100%}
+html[data-theme="arcade"] .c-cap{opacity:1;color:var(--m-ink2);font-weight:600}
+html[data-theme="arcade"] .press-who{opacity:1;color:var(--m-ink2);font-weight:700}
+html[data-theme="arcade"] .press-a{background:#fff;border:2.5px solid var(--m-navy);color:var(--txt);min-height:44px;font-weight:600;box-shadow:0 3px 0 rgba(20,48,90,.55)}
+html[data-theme="arcade"] .press-a:hover{background:#fff6d6;border-color:var(--m-navy)}
+html[data-theme="arcade"] .press-a:active{transform:translateY(2px);box-shadow:0 1px 0 var(--m-navy)}
+html[data-theme="arcade"] .save-row{background:#fff;border:2.5px solid var(--m-navy);color:var(--txt)}
+html[data-theme="arcade"] .save-info small{opacity:1;color:var(--m-ink2)}
+html[data-theme="arcade"] .inv-row{background:#fff;border:2.5px solid var(--m-navy);color:var(--txt);box-shadow:0 3px 0 rgba(20,48,90,.55)}
+html[data-theme="arcade"] .inv-info small{color:var(--m-ink2);font-weight:600}
+html[data-theme="arcade"] .inv-log .opp{color:var(--m-ink2)}
+html[data-theme="arcade"] .lineup-pos{opacity:1}
+
+/* ---------- 입력 · 알림 ---------- */
+html[data-theme="arcade"] select,html[data-theme="arcade"] textarea,html[data-theme="arcade"] input[type=text],html[data-theme="arcade"] input[type=number]{min-height:44px;font-size:16px}
+html[data-theme="arcade"] input[type=checkbox]{accent-color:#ff8a1f}
+
+/* ---------- 가로 모드 · 좁은 화면 ---------- */
+html[data-theme="arcade"] .matches{max-height:none}
+html[data-theme="arcade"] .pane-plr .tbl th:first-child,html[data-theme="arcade"] .pane-plr .tbl td:first-child{position:sticky;left:0;z-index:1;background:var(--m-cream);box-shadow:2px 0 0 rgba(20,48,90,.25)}
+@media (max-width:620px){
+  html[data-theme="arcade"] .lbrow{grid-template-columns:26px minmax(0,1fr) auto;row-gap:6px}
+  html[data-theme="arcade"] .lba{grid-column:1/-1;flex-direction:row;align-items:center;justify-content:flex-end;gap:8px}
+  html[data-theme="arcade"] .lba small{margin-right:auto}
+}
+@media (max-width:520px){
+  html[data-theme="arcade"] .tbl th,html[data-theme="arcade"] .tbl td{padding:7px 5px}
+  html[data-theme="arcade"] .top-in{padding:8px 10px}
+  html[data-theme="arcade"] .wrap{padding:12px 12px 60px}
+  html[data-theme="arcade"] .panel{padding:14px 12px}
+  html[data-theme="arcade"] .inp{width:100%}
+  html[data-theme="arcade"] .field{flex:1 1 140px}
+}
+@media (orientation:landscape) and (max-height:480px){
+  html[data-theme="arcade"] .top{position:static}
+  html[data-theme="arcade"] .modal{padding:8px}
+  html[data-theme="arcade"] .m-box{max-height:96vh}
+}

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0c1c16">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<title>슈팅 연습 · K-레전드</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="css/life.css">
+<link rel="stylesheet" href="css/matchday.css">
+<link rel="stylesheet" href="css/arcade.css">
+<style>
+body{min-height:100dvh;display:flex;justify-content:center}
+.pwrap{width:100%;max-width:520px;padding:14px 16px 40px;display:grid;gap:12px;align-content:start}
+.ptop{display:flex;align-items:center;gap:10px}.ptop a{min-width:44px;min-height:44px;border-radius:12px;border:1px solid var(--line,rgba(255,255,255,.2));display:grid;place-items:center;text-decoration:none;color:inherit;font-size:18px}
+.ptop h1{font:400 22px "Black Han Sans","Noto Sans KR",sans-serif;flex:1}
+.pcard{border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:14px;background:rgba(255,255,255,.05);display:grid;gap:8px}
+.score{display:flex;gap:6px;justify-content:center;font-size:24px}
+.pbtn{min-height:52px;border-radius:14px;border:0;background:#f2b84b;color:#1a1a1a;font:700 16px "Noto Sans KR",sans-serif;cursor:pointer}
+.pbtn.ghost{background:transparent;color:inherit;border:1px solid rgba(255,255,255,.25)}
+.muted{opacity:.7;font-size:13px}.c{text-align:center}
+html[data-theme="arcade"] .pcard{background:#fffdf4;border:3px solid #14305a;box-shadow:0 5px 0 #14305a;color:#14305a}
+html[data-theme="arcade"] .pbtn{background:linear-gradient(180deg,#ffd84a,#ffb400);color:#3a2200;border:3px solid #14305a;box-shadow:0 5px 0 #14305a;font-weight:900}
+html[data-theme="arcade"] .pbtn:active{transform:translateY(4px);box-shadow:0 1px 0 #14305a}
+html[data-theme="arcade"] .pbtn.ghost{background:#e8f4ff;color:#14305a}
+html[data-theme="arcade"] .ptop h1,html[data-theme="arcade"] .ptop a{color:#14305a}html[data-theme="arcade"] .ptop a{background:#fff;border:2.5px solid #14305a;box-shadow:0 3px 0 #14305a}
+html[data-theme="arcade"] .muted{color:#5a7396}html[data-theme="arcade"] select{background:#fff;color:#14305a;border:2px solid #14305a;border-radius:8px}
+</style>
+</head>
+<body>
+<div class="pwrap">
+ <div class="ptop"><a href="index.html" aria-label="메인으로">←</a><h1>🥅 슈팅 연습</h1></div>
+ <div class="pcard" id="menu">
+  <p class="muted">5번씩 차서 몇 골을 넣는지 겨뤄요. 최고 기록은 이 기기에 저장돼요.</p>
+  <button class="pbtn" data-m="pk">⚽ 페널티킥 연습 (승부차기 포함) <span class="muted" id="bpk"></span></button>
+  <button class="pbtn" data-m="hd">🦘 코너킥 헤딩 연습 <span class="muted" id="bhd"></span></button>
+  <button class="pbtn" data-m="fk">🎯 프리킥 연습 <span class="muted" id="bfk"></span></button>
+  <label class="muted">실력 <select id="lvl"><option value="45">초보</option><option value="65" selected>보통</option><option value="85">고수</option></select> (골키퍼·벽 난이도는 같고, 침착함 보정만 달라요)</label>
+ </div>
+ <div class="pcard" id="game" hidden>
+  <div class="score" id="sc"></div>
+  <div id="host"></div>
+  <p class="muted c" id="info"></p>
+ </div>
+ <div class="pcard" id="end" hidden><h2 class="c" id="endt"></h2><p class="muted c" id="endm"></p><button class="pbtn" id="again">다시 하기</button><button class="pbtn ghost" id="tomenu">메뉴로</button></div>
+</div>
+<script>window.LIFE=window.LIFE||{};</script>
+<script src="js/theme.js"></script>
+<script src="js/life/mini.js"></script>
+<script>
+(function(){
+"use strict";
+var L=window.LIFE, $=function(i){return document.getElementById(i);}, mode="pk", n=0, goals=0, res=[];
+var KEY={pk:"kl-prac-pk",fk:"kl-prac-fk",so:"kl-prac-so",hd:"kl-prac-hd"}; function TOTAL(){ return mode==="so"?1:5; }
+function best(m){ try{ return +localStorage.getItem(KEY[m])||0; }catch(e){ return 0; } }
+function saveBest(m,v){ try{ if(v>best(m)) localStorage.setItem(KEY[m],v); }catch(e){} }
+function labels(){ $("bpk").textContent="최고 "+best("pk")+"/5"; $("bfk").textContent="최고 "+best("fk")+"/5"; $("bhd").textContent="최고 "+best("hd")+"/5"; if($("bso")) $("bso").textContent="통산 "+best("so")+"승"; }
+function sc(){ $("sc").innerHTML=[0,1,2,3,4].map(function(i){ return res[i]===undefined?"⚪":res[i]?"⚽":"❌"; }).slice(0,TOTAL()).join(" "); }
+function next(){
+  if(n>=TOTAL()){ var b=best(mode); if(mode==="so"){ try{ localStorage.setItem(KEY.so,b+goals); }catch(e){} } else saveBest(mode,goals); $("game").hidden=true; $("end").hidden=false; if(mode==="so"){ $("endt").textContent=goals?"승부차기 승리!":"승부차기 패배"; $("endm").textContent="통산 "+best("so")+"승"; } else { $("endt").textContent=goals+" / 5"; $("endm").textContent=goals>b?"🎉 최고 기록 갱신!":"최고 기록 "+b+"/5"; } labels(); return; }
+  $("info").textContent=(n+1)+"번째 킥";
+  $("host").innerHTML=L.miniHtml(mode); sc();
+  var S={p:{stats:{composure:+$("lvl").value,finishing:+$("lvl").value}}};
+  L.miniBind($("host").firstChild,mode,S,function(ok){ res[n]=ok; if(ok) goals++; n++; next(); });
+}
+function start(m){ mode=m; n=0; goals=0; res=[]; $("menu").hidden=true; $("end").hidden=true; $("game").hidden=false; next(); }
+document.querySelectorAll("[data-m]").forEach(function(b){ b.addEventListener("click",function(){ start(b.dataset.m); }); });
+$("again").addEventListener("click",function(){ start(mode); });
+$("tomenu").addEventListener("click",function(){ $("end").hidden=true; $("menu").hidden=false; });
+labels();
+})();
+</script>
+<script src="js/i18n.js"></script>
+<script src="js/pwa.js"></script>
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#05070f">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<title>K-레전드 | 대한민국 축구의 전설을 만들어라</title>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="K-레전드">
+<meta property="og:title" content="K-레전드 | 대한민국 축구의 전설을 만들어라">
+<meta property="og:description" content="중학교 유소년부터 은퇴까지, 한 선수의 인생을 키우는 축구 커리어 시뮬레이션. 훈련·이적·국가대표·황금공까지 당신의 선택으로 전설을 만드세요.">
+<meta property="og:url" content="https://klegendgame.com/">
+<meta property="og:image" content="https://klegendgame.com/img/og.jpg">
+<meta property="og:image:width" content="800"><meta property="og:image:height" content="420">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="K-레전드 | 대한민국 축구의 전설을 만들어라"><meta name="twitter:description" content="중학교 유소년부터 은퇴까지, 한 선수의 인생을 키우는 축구 커리어 시뮬레이션. 훈련·이적·국가대표·황금공까지 당신의 선택으로 전설을 만드세요."><meta name="twitter:image" content="https://klegendgame.com/img/og.jpg">
+<link rel="canonical" href="https://klegendgame.com/">
+<meta name="description" content="중학교 유소년부터 은퇴까지, 한 선수의 인생을 키우는 축구 커리어 시뮬레이션. 훈련·이적·국가대표·황금공까지 당신의 선택으로 전설을 만드세요.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Oswald:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@600;700;800&display=swap">
+<style>
+:root{--bg0:#05070f;--panel:#0e1631;--panel2:#142046;--line:rgba(120,150,255,.18);--txt:#eaf0ff;--muted:#8d9bc4;--acc:#19f2a3;--acc-ink:#04281b;--acc2:#27d7ff;--gold:#ffcf4a;
+ --f-head:"Black Han Sans","Noto Sans KR",system-ui,sans-serif;--f-num:"Oswald","Noto Sans KR",system-ui,sans-serif;--f-body:"Noto Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color-scheme:dark}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{background:var(--bg0)}
+body{min-height:100dvh;color:var(--txt);font:15px/1.55 var(--f-body);display:flex;justify-content:center;
+ background:radial-gradient(900px 520px at 85% -8%,rgba(60,90,255,.28),transparent 60%),radial-gradient(700px 420px at -8% 12%,rgba(25,242,163,.14),transparent 60%),linear-gradient(180deg,#070c1c,#05070f 40%);background-attachment:fixed;
+ padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+main{width:100%;max-width:480px;padding:22px 16px 40px;display:grid;gap:14px;align-content:start}
+.wrap{width:100%;max-width:480px;display:grid;grid-template-areas:"m" "j" "h"}
+.wrap>main{grid-area:m}.wrap>#jerCol{grid-area:j;padding:0 16px}.wrap>#hofCol{grid-area:h}
+.col{display:grid;gap:14px;align-content:start}
+@media(min-width:900px){body{justify-content:center}.wrap{max-width:1020px;grid-template-columns:480px 1fr;grid-template-areas:"m h" "j h";gap:20px 28px;padding:22px 16px 40px;align-items:start}.wrap>main{padding:0;max-width:none}.wrap>#jerCol,.wrap>#hofCol{padding:0}}
+@media(min-width:1280px){.wrap{max-width:1500px;grid-template-columns:1fr 480px 1fr;grid-template-areas:"j m h";gap:28px}}
+.hof{display:grid;gap:12px}
+.hof h2{font-family:var(--f-head);font-weight:400;font-size:22px;display:flex;align-items:center;gap:8px}
+.hof h2 small{font:600 11px var(--f-num);letter-spacing:.14em;color:var(--gold)}
+.board{border-radius:20px;padding:14px;background:linear-gradient(160deg,rgba(255,207,74,.10),rgba(14,22,49,.9) 40%);border:1px solid rgba(255,207,74,.28);display:grid;gap:10px;position:relative;overflow:hidden}
+.board.p{background:linear-gradient(160deg,rgba(39,215,255,.10),rgba(14,22,49,.9) 40%);border-color:rgba(39,215,255,.28)}
+.board .bt{display:flex;justify-content:space-between;align-items:baseline}
+.board .bt b{font-family:var(--f-head);font-weight:400;font-size:17px}
+.board .bt small{color:var(--muted);font-size:11.5px}
+.rk{width:100%;text-align:left;color:inherit;font:inherit;cursor:pointer;display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.rk .no{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font:700 19px var(--f-num);color:#1a1300}
+.rk.r1{background:linear-gradient(90deg,rgba(255,207,74,.22),rgba(255,255,255,.03));border-color:rgba(255,207,74,.6);box-shadow:0 0 22px rgba(255,207,74,.18)}
+.rk.r1 .no{background:linear-gradient(135deg,#ffe38a,#e0a82a)}
+.rk.r2 .no{background:linear-gradient(135deg,#f2f5ff,#aab4cf)}
+.rk.r3 .no{background:linear-gradient(135deg,#f0c19a,#c07a3b)}
+.rk .who{min-width:0}.rk .who b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rk .who small{display:block;color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rk .sc{text-align:right;font:700 20px var(--f-num);color:var(--gold)}
+.rk .sc small{display:block;font:500 11px var(--f-body);color:var(--muted)}
+.rk.r1 .who b{font-size:17px}
+.empty{color:var(--muted);font-size:13px;padding:6px 2px}
+/* ===== 영구결번 전시관 ===== */
+.jersey{position:relative;overflow:hidden;border-radius:22px;padding:18px 14px 16px;display:grid;gap:12px;
+ background:radial-gradient(520px 300px at 50% -6%,rgba(255,214,120,.22),transparent 62%),linear-gradient(180deg,#1b1530 0%,#120f24 55%,#0a0816 100%);
+ border:1px solid rgba(255,207,74,.55);box-shadow:0 0 0 3px rgba(255,207,74,.10),0 0 38px rgba(255,190,60,.22),inset 0 0 40px rgba(255,200,90,.07)}
+.jersey::before{content:"";position:absolute;inset:0;pointer-events:none;background:conic-gradient(from 200deg at 50% -12%,transparent 0 62deg,rgba(255,225,150,.16) 70deg,transparent 80deg 100deg,rgba(255,225,150,.12) 108deg,transparent 118deg 360deg);animation:beam 7s ease-in-out infinite alternate}
+.jersey::after{content:"";position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(255,236,170,.95) 1.3px,transparent 2px),radial-gradient(circle,rgba(255,255,255,.8) 1px,transparent 1.6px),radial-gradient(circle,rgba(255,200,90,.7) 1.6px,transparent 2.4px);background-size:57px 71px,39px 53px,83px 97px;background-position:0 0,13px 21px,31px 8px;opacity:.55;animation:tw 4.5s linear infinite}
+@keyframes beam{from{transform:rotate(-3deg);opacity:.75}to{transform:rotate(3deg);opacity:1}}
+@keyframes tw{0%{background-position:0 0,13px 21px,31px 8px;opacity:.35}50%{opacity:.75}100%{background-position:0 71px,13px 74px,31px 105px;opacity:.35}}
+.jersey>*{position:relative;z-index:1}
+.jersey .bt{display:grid;justify-items:center;text-align:center;gap:2px}
+.jersey .bt b{font:400 22px var(--f-head);letter-spacing:.04em;background:linear-gradient(90deg,#ffe9a8,#ffcf4a 40%,#fff3c4 55%,#ffcf4a 70%,#ffe9a8);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine2 3.2s linear infinite}
+.jersey .bt small{color:#e9d8a6;font-size:11.5px;letter-spacing:.2em}
+@keyframes shine2{to{background-position:-200% 0}}
+.jstat{display:flex;gap:16px;justify-content:center;color:var(--muted);font-size:12.5px}.jstat b{color:var(--gold);font:700 20px var(--f-num);text-shadow:0 0 12px rgba(255,200,60,.6)}
+.jwall{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 10px;padding-top:6px}
+.jw{position:relative;color:inherit;font:inherit;cursor:pointer;display:grid;justify-items:center;gap:3px;padding:26px 6px 10px;border-radius:16px;overflow:hidden;
+ background:radial-gradient(130px 130px at 50% 38%,rgba(255,214,120,.20),transparent 70%),linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015));
+ border:1px solid rgba(255,207,74,.35);box-shadow:inset 0 0 22px rgba(255,200,90,.08),0 8px 18px rgba(0,0,0,.35);transition:transform .2s,box-shadow .2s}
+.jw::before{content:"";position:absolute;left:50%;top:0;width:2px;height:20px;background:linear-gradient(#ffe9a8,rgba(255,207,74,.2));transform:translateX(-50%)}
+.jw::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.22),transparent);transform:skewX(-18deg);animation:glint 5.5s ease-in-out infinite}
+.jw:nth-child(2n)::after{animation-delay:1.4s}.jw:nth-child(3n)::after{animation-delay:2.8s}
+@keyframes glint{0%,70%{left:-60%}100%{left:140%}}
+.jw:hover{transform:translateY(-3px);box-shadow:inset 0 0 26px rgba(255,200,90,.14),0 12px 24px rgba(0,0,0,.45),0 0 22px rgba(255,200,90,.3)}
+.jw svg{width:100%;max-width:150px;height:auto;filter:drop-shadow(0 8px 14px rgba(0,0,0,.55)) drop-shadow(0 0 10px rgba(255,214,120,.25));transform-origin:50% 0;animation:sway 3.4s ease-in-out infinite}
+.jw:nth-child(2n) svg{animation-delay:-1.4s}.jw:nth-child(3n) svg{animation-delay:-2.6s}
+@keyframes sway{0%,100%{transform:rotate(-5deg) translateX(-2px)}50%{transform:rotate(5deg) translateX(2px)}}
+.jw.mid{padding-top:30px}.jw.mid svg{max-width:120px}.jw.mid .plaque b{font-size:13px}.jw.mid .plaque small{font-size:10.5px}
+.jminis{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr);gap:8px 6px;padding-top:4px}
+.jmini{color:inherit;font:inherit;cursor:pointer;display:grid;justify-items:center;gap:1px;padding:6px 2px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,207,74,.22);min-height:44px}
+.jmini svg{width:100%;max-width:52px;height:auto;transform-origin:50% 0;animation:sway 3s ease-in-out infinite}.jmini:nth-child(2n) svg{animation-delay:-1.1s}.jmini:nth-child(3n) svg{animation-delay:-2.2s}.jmini b{font-size:11px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.jmini small{font-size:9.5px;color:var(--muted);max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.jmore{grid-column:1/-1;text-align:center;color:var(--muted);font-size:12px;margin:0}
+.jw.big{grid-column:1/-1;padding-top:30px;border-color:rgba(255,207,74,.8);box-shadow:inset 0 0 30px rgba(255,200,90,.16),0 10px 24px rgba(0,0,0,.45),0 0 30px rgba(255,190,60,.32)}
+.jw.big svg{max-width:190px}
+.jw .new{position:absolute;right:8px;top:8px;font:700 10px var(--f-num);letter-spacing:.12em;padding:2px 8px;border-radius:999px;background:linear-gradient(90deg,#ffcf4a,#ff9d2e);color:#3a2300;box-shadow:0 0 10px rgba(255,190,60,.6);z-index:2}
+.plaque{display:grid;justify-items:center;gap:1px;width:100%;margin-top:2px;padding:6px 8px;border-radius:10px;background:linear-gradient(180deg,#e9c46a,#b88a20);color:#2a1a00;box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 2px 6px rgba(0,0,0,.4)}
+.plaque b{font-size:14px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#2a1a00}
+.plaque .pq{font-style:normal;font-size:11px;line-height:1.35;color:#3a2600;text-align:center;margin-top:3px;padding-top:3px;border-top:1px solid rgba(74,48,0,.3);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.plaque small{font-size:11px;color:#4a3000;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(prefers-reduced-motion:reduce){.jersey::before,.jersey::after,.jw::after,.jw svg,.jmini svg,.jersey .bt b{animation:none}}
+.jc{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;align-items:center;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.jc .n{grid-row:span 2;font:700 26px var(--f-num);color:#ffd1d1;min-width:34px;text-align:center;text-shadow:0 0 14px rgba(255,90,90,.55)}
+.jc b{font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.jc small{color:var(--muted);font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.recgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rec{color:inherit;font:inherit;text-align:left;cursor:pointer;display:grid;gap:1px;padding:9px 10px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.rec small{color:var(--muted);font-size:11.5px}.rec b{font:700 20px var(--f-num);color:var(--gold)}.rec span{font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:560px){.recgrid{grid-template-columns:1fr 1fr}}
+.jstat{display:flex;gap:14px;color:var(--muted);font-size:12.5px}.jstat b{color:var(--gold);font:700 18px var(--f-num)}
+
+.brand{display:flex;align-items:baseline;gap:6px;font-family:var(--f-head);font-size:30px;line-height:1}
+.brand .k{color:var(--acc);font-size:38px}.brand b{font-weight:400;color:var(--gold);font-size:38px}
+.sub{color:var(--muted);font-size:13.5px;margin-top:-6px}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mode{position:relative;display:grid;gap:2px;padding:14px 14px 12px;border-radius:16px;text-decoration:none;color:#04281b;min-height:92px;align-content:end;overflow:hidden}
+.mode.m{background:linear-gradient(135deg,var(--acc),#12c987)}.mode.p{background:linear-gradient(135deg,var(--acc2),#2f9bff);color:#041c2b}
+.mode small{font:700 10.5px var(--f-num);letter-spacing:.14em;opacity:.7}.mode b{font:400 20px/1.15 var(--f-head)}
+.mode i{position:absolute;right:12px;top:10px;font-style:normal;font-weight:900;font-size:20px}
+.mode .save{font-size:11.5px;color:inherit;opacity:.85;min-height:0;font-weight:700}
+.plink{display:flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--txt);text-decoration:none;font-weight:700;font-size:14px}
+.newdot{font:700 10.5px var(--f-num);letter-spacing:.1em;padding:2px 7px;border-radius:999px;background:#ff4d6d;color:#fff}
+.modeinfo{color:var(--muted);font-size:12.5px;margin-top:-4px}.modeinfo b{color:var(--txt)}
+.card{display:grid;gap:10px;padding:18px 16px;border-radius:20px;text-decoration:none;color:inherit;background:linear-gradient(135deg,var(--panel2),var(--panel));border:1px solid var(--line);position:relative;overflow:hidden;min-height:150px}
+.card::after{content:"";position:absolute;right:-30px;top:-30px;width:140px;height:140px;border-radius:50%;opacity:.18}
+.card.m::after{background:var(--acc)}.card.p::after{background:var(--acc2)}
+.card small{color:var(--acc);font-family:var(--f-num);letter-spacing:.14em;font-weight:600}
+.card h2{font-family:var(--f-head);font-weight:400;font-size:26px;line-height:1.2}
+.card p{color:var(--muted);font-size:13.5px}
+.card .go{margin-top:4px;display:flex;justify-content:space-between;align-items:center;min-height:50px;padding:0 18px;border-radius:14px;background:linear-gradient(90deg,var(--acc),#12c987);color:var(--acc-ink);font-weight:900}
+.card.p .go{background:linear-gradient(90deg,var(--acc2),#2f9bff)}
+.save{font-size:12.5px;color:var(--gold);min-height:18px}
+.soon{padding:12px 14px;border-radius:14px;border:1px dashed var(--line);color:var(--muted);font-size:12.5px}
+@media(max-width:560px){.jersey{padding:14px 10px}.jwall{grid-template-columns:repeat(2,1fr);gap:12px 8px}.jw svg{max-width:112px}.jw.big svg{max-width:150px}.hof h2{font-size:19px}.board{padding:12px}.rk{padding:8px 10px}.rk .who small{white-space:normal}}
+footer{color:var(--muted);font-size:12px;text-align:center;line-height:1.7;margin-top:6px}
+body{word-break:keep-all;overflow-wrap:break-word;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+.livefeed{display:grid;gap:6px;margin-top:8px}.lf{display:flex;gap:6px;align-items:baseline;font-size:12.5px;padding:7px 10px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--line)}.lf small{margin-left:auto;color:var(--muted);white-space:nowrap}.lf b{white-space:nowrap}
+.acct{margin:10px 0 2px;padding:12px 14px;border-radius:16px;background:#fffdf3;border:3px solid #14305a;box-shadow:0 4px 0 #14305a;color:#14305a;display:flex;align-items:center;gap:12px}.acct b{font-size:15px}.acct small{display:block;font-size:12.5px;color:#4a6288;line-height:1.45;margin-top:2px}.acct .gbtn{flex:none;min-height:46px;padding:0 16px;border-radius:12px;border:3px solid #14305a;background:#ffd84a;font:800 15px "Noto Sans KR",sans-serif;color:#14305a;box-shadow:0 3px 0 #14305a;cursor:pointer}.acct .gbtn:active{transform:translateY(2px);box-shadow:0 1px 0 #14305a}.acct .gbtn.ghost{background:#e8f4ff}
+.menugrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.mbtn{display:grid;justify-items:center;align-content:center;gap:2px;min-height:96px;padding:12px 6px;border-radius:16px;text-decoration:none;color:var(--txt);background:rgba(255,255,255,.05);border:1px solid var(--line);text-align:center;transition:transform .12s,background .2s}
+.mbtn i{font-style:normal;font-size:24px;line-height:1}.mbtn b{font-size:14px;margin-top:4px}.mbtn small{font-size:11px;color:var(--muted)}
+.mbtn:active{transform:scale(.97)}
+.about{display:grid;gap:4px;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid var(--line)}
+.about h3{font-size:14px;margin-top:8px;color:var(--acc)}.about h3:first-child{margin-top:0}
+.about p{font-size:13.5px;line-height:1.7;color:var(--muted)}
+/* 감독판은 디버깅이 끝날 때까지 화면에서만 숨겨 둬요. 다시 보이려면 <body class="show-mgr"> 로 바꾸세요 (파일은 그대로 있어요) */
+#pwaBtn[hidden]{display:none!important}
+body:not(.show-mgr) .mgr-only{display:none!important}
+body:not(.show-mgr) .modes{grid-template-columns:1fr!important}.sub{padding-right:54px}
+</style>
+<link rel="stylesheet" href="css/matchday.css">
+<link rel="stylesheet" href="css/arcade.css">
+</head>
+<body class="show-mgr">
+<div class="wrap">
+<main>
+  <div class="brand"><span class="k">K</span>LEGEND<b class="mgr-only">38</b></div>
+  <div class="arc-hero" aria-hidden="true"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice">
+   <defs><filter id="ah-grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="1.1 .5" numOctaves="2" seed="5"/><feColorMatrix values="0 0 0 0 .02 0 0 0 0 .24 0 0 0 0 .05 0 0 0 1.2 -.4"/></filter><linearGradient id="ah-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2f93ff"/><stop offset="1" stop-color="#b9e2ff"/></linearGradient>
+   <linearGradient id="ah-grass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4fcf6a"/><stop offset="1" stop-color="#2f9f4a"/></linearGradient></defs>
+   <rect width="400" height="200" fill="url(#ah-sky)"/>
+   <circle cx="332" cy="46" r="26" fill="#ffe27a" opacity=".95"/><circle cx="332" cy="46" r="38" fill="#ffe27a" opacity=".25"/>
+   <g class="cloud" fill="#fff" opacity=".95"><ellipse cx="70" cy="40" rx="30" ry="12"/><ellipse cx="92" cy="32" rx="22" ry="12"/><ellipse cx="52" cy="34" rx="16" ry="9"/></g>
+   <g class="cloud c2" fill="#fff" opacity=".9"><ellipse cx="230" cy="62" rx="26" ry="10"/><ellipse cx="248" cy="55" rx="18" ry="10"/></g>
+   <!-- 관중석 -->
+   <path d="M0 112 Q200 70 400 112 L400 140 L0 140Z" fill="#274f9a"/><path d="M0 124 Q200 86 400 124 L400 140 L0 140Z" fill="#335fb4"/>
+   <g fill="#ffd84a" opacity=".9"><circle cx="40" cy="110" r="2"/><circle cx="90" cy="102" r="2"/><circle cx="150" cy="98" r="2"/><circle cx="210" cy="96" r="2"/><circle cx="270" cy="99" r="2"/><circle cx="330" cy="104" r="2"/><circle cx="370" cy="110" r="2"/></g>
+   <g fill="#ff6b5e" opacity=".9"><circle cx="60" cy="116" r="2"/><circle cx="120" cy="108" r="2"/><circle cx="180" cy="104" r="2"/><circle cx="240" cy="104" r="2"/><circle cx="300" cy="108" r="2"/><circle cx="350" cy="116" r="2"/></g>
+   <!-- 조명탑 -->
+   <g><rect x="22" y="40" width="5" height="80" fill="#14305a"/><rect x="8" y="26" width="34" height="18" rx="3" fill="#14305a"/><g fill="#fff6c8"><circle cx="16" cy="35" r="3"/><circle cx="25" cy="35" r="3"/><circle cx="34" cy="35" r="3"/></g>
+   <rect x="373" y="40" width="5" height="80" fill="#14305a"/><rect x="358" y="26" width="34" height="18" rx="3" fill="#14305a"/><g fill="#fff6c8"><circle cx="366" cy="35" r="3"/><circle cx="375" cy="35" r="3"/><circle cx="384" cy="35" r="3"/></g></g>
+   <!-- 전광판 -->
+   <rect x="150" y="76" width="100" height="26" rx="4" fill="#0b1e3b" stroke="#14305a" stroke-width="3"/><text x="200" y="94" text-anchor="middle" font-family="Oswald,sans-serif" font-size="14" font-weight="700" fill="#ffd84a" letter-spacing="2">KICK OFF</text>
+   <!-- 잔디와 줄무늬 -->
+   <rect y="136" width="400" height="64" fill="url(#ah-grass)"/>
+   <g fill="#000" opacity=".07"><rect x="0" y="136" width="50" height="64"/><rect x="100" y="136" width="50" height="64"/><rect x="200" y="136" width="50" height="64"/><rect x="300" y="136" width="50" height="64"/></g><rect y="136" width="400" height="64" filter="url(#ah-grain)" opacity=".5"/>
+   <g fill="#fff" opacity=".13"><path d="M0 150 L400 150 L400 162 L0 162Z"/><path d="M0 176 L400 176 L400 190 L0 190Z"/></g>
+   <path d="M20 200 L140 136 L260 136 L380 200" fill="none" stroke="#fff" stroke-width="3" opacity=".7"/><ellipse cx="200" cy="172" rx="38" ry="12" fill="none" stroke="#fff" stroke-width="3" opacity=".7"/>
+   <!-- 공 -->
+   <g class="ball"><circle cx="200" cy="164" r="13" fill="#fff" stroke="#14305a" stroke-width="3"/><polygon points="200,156 206,161 204,168 196,168 194,161" fill="#14305a"/></g>
+   </svg></div>
+  <p class="sub">대한민국 축구의 전설을 만들어라</p>
+  <div id="acct" class="acct" hidden></div>
+  <div class="modes">
+    <a class="mode m mgr-only" href="manager.html"><small>MANAGER</small><b>감독판 플레이</b><span class="save" id="saveM"></span><i>→</i></a>
+    <a class="mode p" href="player.html"><small>K-LIFE</small><b>나의 축구 인생은?</b><span class="save" id="saveP"></span><i>→</i></a>
+  </div>
+  <div class="menugrid">
+    <a class="mbtn" href="player.html#go=quiz"><i>⚽</i><b>축구 퀴즈</b><small>미니게임</small></a>
+    <a class="mbtn" href="practice.html"><i>🥅</i><b>슈팅 연습</b><small>프리킥 · 페널티킥</small></a>
+    <a class="mbtn" href="lounge.html"><i>💬</i><b>라운지</b><small>친구들과 채팅 · 제보</small></a>
+    <a class="mbtn" href="patch-notes.html"><i>📰</i><b>패치노트</b><small>업데이트 내역 <span class="newdot" id="pnNew" hidden>NEW</span></small></a>
+    <a class="mbtn" href="player.html#go=settings"><i>⚙</i><b>설정</b><small>구단 이름 · 로고 · 테마</small></a>
+    <a class="mbtn" href="javascript:void(0)" id="pwaBtn" hidden><i>📲</i><b>앱으로 설치</b><small>홈 화면에 추가</small></a>
+  </div>
+  <section class="about">
+    <h3>게임 설명</h3>
+    <p>K-레전드는 레전드리그를 좋아하는 친구들이 만든 팬 게임이에요.<br>공개 기록을 바탕으로 한 추정 능력치로 승부해요.</p>
+    <h3 class="mgr-only">감독판</h3>
+    <p class="mgr-only">역대 레전드리그 레전드 카드를 모아 베스트 11을 짜요.<br>레전드리그1 · 전국컵 · 아시아 클럽컵 38경기에 도전해요.</p>
+    <h3>선수판</h3>
+    <p>중학교 유소년부터 은퇴까지 한 선수의 인생을 키워요.<br>황금공와 영구결번, 은퇴 후 감독·구단주 길까지 이어져요.</p>
+  </section>
+  <div class="soon"><b>업데이트 예정</b><br>· 선수판: 5부 이하 지역 리그, 더 많은 중요 경기 미니게임, 후속 이야기 더 늘리기<br>· 감독판: 감독 커리어 이야기 더 늘리기, 가져온 선수의 후일담<br></div>
+  <div id="support" class="soon" style="display:none"></div>
+  <footer><p id="opLine" class="muted" style="font-size:12px;margin-bottom:6px"></p><a href="terms.html" class="lnk" style="display:inline-block;min-height:44px;line-height:44px;margin-right:14px">이용약관</a><a href="privacy.html" class="lnk" style="display:inline-block;min-height:44px;line-height:44px;margin-right:14px">개인정보 처리방침</a><a href="#" id="langBtn" class="lnk" data-noi18n style="display:inline-block;min-height:44px;line-height:44px;margin-right:14px" onclick="KL_I18N&&KL_I18N.toggle();return false">🌐 English / 한국어</a><a href="#" id="themeBtn" class="lnk" style="display:inline-block;min-height:44px;line-height:44px">🎨 화면 테마 바꾸기</a><br>팬 프로젝트 · 선수 능력치는 공개 기록을 바탕으로 한 추정치예요.<br>모바일에서 가장 잘 동작해요.</footer>
+</main>
+<aside class="col" id="jerCol">
+  <section class="jersey"><div class="bt"><b>영구결번 전시관</b><small>HALL OF RETIRED NUMBERS</small></div><div class="jstat" id="jStat"></div><div class="jwall" id="jGrid"><p class="empty">불러오는 중…</p></div></section>
+</aside>
+<aside class="col hof" id="hofCol" style="padding:22px 16px 0 16px">
+  <h2>🏆 명예의 전당 <small>HALL OF FAME</small></h2>
+  <section class="board mgr-only"><div class="bt"><b>감독판 TOP 3</b><small>어려움 난이도 · 시즌 승점 기준</small></div><div id="hofM"><p class="empty">불러오는 중…</p></div></section>
+  <section class="board p"><div class="bt"><b>선수판 TOP 3</b><small>커리어 점수 기준</small></div><div id="hofP"><p class="empty">불러오는 중…</p></div></section>
+  <section class="board"><div class="bt"><b>📊 서버 기록실</b><small>친구들 전체 합계</small></div><div class="jstat" id="srvStat" style="flex-wrap:wrap"><span class="empty">불러오는 중…</span></div></section>
+  <section class="board" id="liveBoard" style="display:none"><div class="bt"><b>🔴 지금 K-레전드는</b><small>실시간 활동</small></div><div class="jstat" id="liveStat" style="flex-wrap:wrap"></div><div id="liveFeed" class="livefeed"></div></section>
+  <section class="board p"><div class="bt"><b>👑 서버 최고 기록</b><small>누가 1위인지 눌러서 보기</small></div><div class="recgrid" id="srvRec"><p class="empty">불러오는 중…</p></div></section>
+  <p class="empty">친구들의 기록이 서버에서 바로 올라와요. 은퇴한 선수나 끝낸 시즌을 등록하면 여기에 이름을 올릴 수 있어요.</p>
+</aside>
+</div>
+<script src="js/theme.js"></script>
+<script src="js/guard.js"></script>
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/patchnotes.js"></script>
+<script src="js/audio-manifest.js"></script>
+<script src="js/bgm.js"></script>
+<script src="js/kits.js"></script>
+<script src="js/hofview.js"></script>
+<script>
+(function(){ try{ var s=localStorage.getItem("kl-patch-seen"); if(window.KL_PATCH_LATEST&&s!==window.KL_PATCH_LATEST) document.getElementById("pnNew").hidden=false; }catch(e){} })();
+(function(){
+  function rd(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
+  var m=rd("kl38-saves"), p=rd("klife-save");
+  var el=document.getElementById("saveM"); if(m&&(Array.isArray(m)?m.length:Object.keys(m).length)) el.textContent="저장된 감독 기록이 있어요";
+  var ep=document.getElementById("saveP"); if(p&&p.p&&!p.retired) ep.textContent="이어하기 · "+p.p.name+" ("+(p.year-p.p.born)+"세, "+(p.club?p.club.name:"")+")";
+})();
+(function(){
+  var C=window.KL_CONFIG||{}; var esc=function(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
+  /* 실시간 활동: life_live 표가 있으면 오늘 집계와 최근 소식을 보여 줘요(없으면 숨겨요) */
+  function liveLoad(){
+    var d=new Date(); d.setHours(0,0,0,0);
+    get("life_live?select=kind,who,txt,created_at&created_at=gte."+encodeURIComponent(d.toISOString())+"&order=created_at.desc&limit=500").then(function(rows){
+      var n={season:0,new:0,retire:0}, who={}, cut=Date.now()-10*60*1000;
+      rows.forEach(function(r){ n[r.kind]=(n[r.kind]||0)+1; if(new Date(r.created_at).getTime()>=cut) who[r.who]=1; });
+      document.getElementById("liveBoard").style.display="";
+      document.getElementById("liveStat").innerHTML='<span><b>'+Object.keys(who).length+'</b> 지금 플레이 중</span><span><b>'+n.season+'</b> 오늘 치른 시즌</span><span><b>'+n["new"]+'</b> 오늘 새 선수</span><span><b>'+n.retire+'</b> 오늘 은퇴</span>';
+      document.getElementById("liveFeed").innerHTML=rows.slice(0,6).map(function(r){ var m=Math.max(0,Math.round((Date.now()-new Date(r.created_at).getTime())/60000)); return '<div class="lf"><b>'+esc(r.who)+'</b> '+esc(r.txt)+'<small>'+(m<1?"방금":m<60?m+"분 전":Math.round(m/60)+"시간 전")+'</small></div>'; }).join("")||'<p class="empty">아직 오늘 활동이 없어요.</p>';
+    }).catch(function(){});
+  }
+  function get(path){ return fetch(C.SUPABASE_URL+"/rest/v1/"+path,{headers:{apikey:C.SUPABASE_ANON_KEY,Authorization:"Bearer "+C.SUPABASE_ANON_KEY}}).then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); }); }
+  function rows(list,fn,emptyMsg){ if(!list.length) return '<p class="empty">'+emptyMsg+'</p>'; return list.map(function(x,i){ var o=fn(x); return '<button type="button" class="rk r'+(i+1)+'" data-i="'+i+'"><span class="no">'+(i+1)+'</span><div class="who"><b>'+esc(o.t)+'</b><small>'+esc(o.s)+'</small></div><div class="sc">'+esc(o.v)+'<small>'+esc(o.u)+'</small></div></button>'; }).join(""); }
+  var jg=document.getElementById("jGrid"), js=document.getElementById("jStat");
+  document.addEventListener("click",function(e){ var rb=e.target.closest(".rec"); if(rb&&window.KLHofView){ get("life_hof?id=eq."+rb.getAttribute("data-rid")+"&select=*").then(function(r){ if(r[0]) KLHofView.player(r[0]); }); return; } var jb=e.target.closest(".jw,.jmini"); if(jb&&window.KLHofView){ var jr=jRows[+jb.getAttribute("data-ri")]; if(jr) KLHofView.player(jr); return; } var b=e.target.closest(".rk"); if(!b||!window.KLHofView) return; var box=b.parentNode.id; var i=+b.getAttribute("data-i"); if(box==="hofM"&&mRows[i]) KLHofView.manager(mRows[i]); else if(box==="hofP"&&pRows[i]) KLHofView.player(pRows[i]); });
+  function hue(s){ var x=0; for(var i=0;i<s.length;i++) x=(x*31+s.charCodeAt(i))%360; return x; }
+  function quote(i){ try{ var q=window.KLHofView.tributeQ(jRows[i.ri]); return '<em class="pq">“'+esc(q[0])+'”</em>'; }catch(e){ return ''; } }
+  function shirt(n,club){ return window.KL_shirt?window.KL_shirt(n,club):""; }
+  function jersey(){
+    function q(sel){ return get("life_hof?select="+sel+"&jersey=gt.0&order=created_at.desc&limit=60"); }
+    q("*").then(function(l){
+      var items=[]; jRows=l; l.forEach(function(x,ri){ if(x.jerseys&&x.jerseys.length) x.jerseys.forEach(function(j){ items.push({n:j.number,club:j.club,name:x.name,by:x.nickname,ri:ri,pk:x.peak||0,sc:x.score||0}); }); else items.push({n:"★",club:x.club,name:x.name,by:x.nickname,ri:ri,pk:x.peak||0,sc:x.score||0}); });
+      items.sort(function(a,b){ return (b.sc-a.sc)||(b.pk-a.pk); });
+      if(!items.length){ jg.innerHTML='<p class="empty">아직 영구결번이 나오지 않았어요. 한 구단에서 오래, 압도적으로 활약해 보세요.</p>'; js.innerHTML=""; return; }
+      var clubs={}; items.forEach(function(i){ clubs[i.club]=1; });
+      js.innerHTML='<span><b>'+items.length+'</b> 개 영구결번</span><span><b>'+Object.keys(clubs).length+'</b> 개 구단</span>';
+      function big(i,k){ return '<button type="button" class="jw'+(k===0?' big':' mid')+'" data-ri="'+i.ri+'"><span class="new">'+(k===0?'👑 1위':(k+1)+'위')+' · 업적 '+i.sc+'</span>'+shirt(i.n,i.club)+'<span class="plaque"><b>'+esc(i.name)+'</b><small>'+esc(i.club)+' · '+(i.n==="★"?'영구결번':'NO.'+esc(i.n)+' 영구결번')+'</small>'+(k===0?quote(i):'')+'</span></button>'; }
+      function mini(i){ return '<button type="button" class="jmini" data-ri="'+i.ri+'">'+shirt(i.n,i.club)+'<b>'+esc(i.name)+'</b><small>'+esc(i.club)+'</small></button>'; }
+      var rest=items.slice(3), shown=rest.slice(0,24);
+      jg.innerHTML=items.slice(0,3).map(big).join("")+(rest.length?'<div class="jminis">'+shown.map(mini).join("")+'</div>':'')+(rest.length>24?'<p class="jmore">외 '+(rest.length-24)+'개 더 있어요</p>':'');
+    }).catch(function(){ jg.innerHTML='<p class="empty">기록을 불러오지 못했어요.</p>'; });
+  }
+  jersey(); liveLoad(); setInterval(liveLoad,25000);
+  var CATS=[["pv","시즌 최고 몸값","억"],["psal","시즌 최고 연봉","억"],["earned","통산 수입","억"],["goals","최다 득점","골"],["assists","최다 도움","도움"],["apps","최다 출전","경기"],["caps","최다 대표팀 출전","경기"],["trophies","최다 우승","회"],["awards","최다 개인 수상","회"],["ballon","최다 황금공","회"],["wc","최다 월드컵 우승","회"],["peak","최고 능력치","OVR"],["score","최고 커리어 점수","점"],["cs","최다 무실점","경기"],["jersey","최다 영구결번","개"],["years","최장 커리어","시즌"]];
+  var recRows=[];
+  get("life_hof?select=id,name,nickname,pos,club,years,apps,goals,assists,caps,trophies,awards,ballon,wc,peak,score,cs,jersey,pv,psal,earned&limit=1000").catch(function(){ return get("life_hof?select=id,name,nickname,pos,club,years,apps,goals,assists,caps,trophies,awards,ballon,wc,peak,score,cs,jersey&limit=1000"); }).then(function(l){
+    recRows=l; document.getElementById("srvRec").innerHTML=CATS.map(function(c,i){ var best=null; l.forEach(function(x){ if((x[c[0]]||0)>(best?best[c[0]]||0:0)) best=x; }); if(!best) return ""; return '<button type="button" class="rec" data-rid="'+best.id+'"><small>'+c[1]+'</small><b>'+(best[c[0]]||0)+' <small>'+c[2]+'</small></b><span>'+esc(best.name)+' · '+esc(best.nickname)+'</span></button>'; }).join("")||'<p class="empty">아직 기록이 없어요.</p>';
+  }).catch(function(){ document.getElementById("srvRec").innerHTML='<p class="empty">기록을 불러오지 못했어요.</p>'; });
+  get("life_hof?select=goals,assists,ballon,wc,caps,jersey&limit=1000").then(function(l){
+    var s={n:l.length,g:0,a:0,b:0,w:0,j:0}; l.forEach(function(x){ s.g+=x.goals||0; s.a+=x.assists||0; s.b+=x.ballon||0; s.w+=x.wc||0; s.j+=x.jersey||0; });
+    document.getElementById("srvStat").innerHTML='<span><b>'+s.n+'</b> 명 은퇴</span><span><b>'+s.g+'</b> 골</span><span><b>'+s.a+'</b> 도움</span><span><b>'+s.b+'</b> 황금공</span><span><b>'+s.w+'</b> 월드컵 우승</span>';
+  }).catch(function(){ document.getElementById("srvStat").innerHTML='<span class="empty">집계를 불러오지 못했어요.</span>'; });
+  var m=document.getElementById("hofM"), p=document.getElementById("hofP");
+  if(!C.SUPABASE_URL){ m.innerHTML=p.innerHTML='<p class="empty">서버 설정이 없어요.</p>'; return; }
+  var mRows=[], pRows=[], jRows=[];
+  get("results?select=nickname,team_name,manager,w,d,l,pts,gf,ga,rank,form,xi,diff,season,team&diff=eq.hard&order=pts.desc,gf.desc&limit=3").then(function(l){
+    mRows=l; m.innerHTML=rows(l,function(x){ return {t:x.nickname+" · "+x.team_name,s:x.w+"승 "+x.d+"무 "+x.l+"패 · "+x.rank+"위 · "+x.form+(x.manager?" · 감독 "+x.manager:"")+(x.team&&x.team.ver?" · v"+x.team.ver:""),v:x.pts,u:"승점"}; },"아직 어려움 난이도 기록이 없어요. 어려움으로 시즌을 마치고 첫 기록을 올려 보세요!"); }).catch(function(){ m.innerHTML='<p class="empty">기록을 불러오지 못했어요.</p>'; });
+  function loadP(sel){ return get("life_hof?select="+sel+"&order=score.desc&limit=3"); }
+  loadP("*").then(function(l){
+    pRows=l; p.innerHTML=rows(l,function(x){ return {t:x.name+" · "+x.nickname,s:x.pos+" · "+x.club+" · "+x.years+"년 · "+x.goals+"골 "+x.assists+"도움"+(x.ballon?" · 황금공 "+x.ballon+"회":"")+(x.wc?" · 월드컵 우승":"")+(x.jersey?" · 영구결번":"")+(x.detail&&x.detail.ver?" · v"+(x.detail.ver.end||x.detail.ver.start):""),v:x.score,u:x.grade+" 등급"}; },"아직 은퇴한 선수가 없어요. 첫 레전드가 되어 보세요!"); }).catch(function(){ p.innerHTML='<p class="empty">기록을 불러오지 못했어요.</p>'; });
+})();
+</script>
+<script>(function(){ var A=window.KL_AUTH, box=document.getElementById("acct"); if(!A||!box) return;
+  function esc(t){ return String(t).replace(/[&<>"]/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+  function draw(){ var u=A.user(); box.hidden=false;
+    if(!u){ box.innerHTML='<div style="flex:1"><b>🔐 로그인하면 더 편해요 (선택)</b><small>어느 기기에서나 이어서 하고, 라운지에서 친구들과 이야기할 수 있어요. 로그인 없이도 아래 버튼으로 바로 플레이할 수 있어요. 이메일은 다른 사람에게 보여 주지 않아요.</small></div><button class="gbtn" id="gLogin" type="button">구글 로그인</button>'; document.getElementById("gLogin").onclick=function(){ A.login(); }; }
+    else { var nk=""; try{ nk=localStorage.getItem("klife-nick-"+u.id)||""; }catch(e){} box.innerHTML='<div style="flex:1"><b>✓ '+esc(nk||u.name||u.email)+'님, 어서 와요</b><small>저장이 내 계정에 백업되고, 라운지에서 글을 쓸 수 있어요.</small></div><button class="gbtn ghost" id="gOut" type="button">로그아웃</button>'; document.getElementById("gOut").onclick=function(){ A.logout(); }; } }
+  A.onChange(draw); A.ready.then(draw); draw(); })();</script>
+<script>(function(){ var s=window.KL_SUPPORT; if(!s||(!s.link&&!s.account)) return; var d=document.getElementById("support"); if(!d) return; function e(t){ return String(t).replace(/[&<>"]/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); } d.style.display="block"; d.innerHTML="<b>개발자 응원하기</b><br>"+e(s.text||"재밌게 즐기셨다면 개발을 응원해 주세요. 후원은 선택이며, 게임 혜택은 따로 없어요.")+(s.link?'<br><a class="lnk" target="_blank" rel="noopener" href="'+e(s.link)+'">후원 링크 열기</a>':"")+(s.account?"<br>"+e(s.account):""); })();</script>
+<script>(function(){var b=document.getElementById("themeBtn");if(b)b.addEventListener("click",function(e){e.preventDefault();if(window.KL_THEME)KL_THEME.toggle();});})();</script>
+<script src="js/virtual_map.js"></script><script src="js/josa.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/pwa.js"></script>
+<script>(function(){var o=window.KL_OPERATOR||{},p=document.getElementById("opLine");if(!p)return;var t=[];if(o.name)t.push("만든이 "+o.name);if(o.email)t.push("문의 "+o.email);if(t.length)p.textContent=t.join(" · ");else p.style.display="none";})();</script></body>
+</html>

@@ -1,0 +1,66 @@
+/* K-라이프 추가 이벤트 4 (js/life/events4.js) — 이벤트 300개 채우기용 짧은 이야기 모음 */
+(function(){
+"use strict";
+const L=window.LIFE; if(!L||!L.EVC) return;
+const {young,teen,univ,pro,minor}=L.EVC; const {ri,clamp}=L;
+const R=(label,p,win,lose,ok,no)=>({label,p,win,lose,ok,no});
+const Z=(label,win,ok)=>({label,safe:true,win,ok});
+const E=(id,w,when,title,body,opts)=>L.EVPOOL.push({id,w,when,title,body,opts});
+const age=S=>L.age(S);
+E("z1_windy",1,minor,"강풍 속의 경기","운동장에 모래바람이 불어요. 공이 제멋대로 떠다녀요.",[R("낮은 패스 위주로 푼다",65,{trust:2,stat:1},{morale:-2},"바람을 이겨 냈어요.","공이 자꾸 밀려났어요."),Z("바람을 등지고 롱볼을 쓴다",{morale:2},"유리한 쪽을 활용했어요.")]);
+E("z2_firstgoal",1,young,"첫 공식전 골","공식 대회에서 첫 골을 넣을 기회가 왔어요.",[R("침착하게 마무리한다",60,{morale:7,fame:2},{morale:-4},"골망이 출렁였어요!","슈팅이 빗나갔어요."),Z("동료에게 도움을 준다",{trust:3,morale:3},"동료가 골을 넣었어요.")]);
+E("z3_coachcry",1,minor,"코치님의 눈물","오랜 팀 코치님이 올해로 팀을 떠난다고 해요.",[Z("작별 편지를 쓴다",{morale:5,trust:2},"코치님이 오래 간직하겠다고 했어요."),R("영상 편지를 만든다",70,{morale:6,fame:1},{morale:1},"모두가 눈물을 흘렸어요.","편집이 어색했어요.")]);
+E("z4_trial",1,teen,"해외 테스트 소문","유럽 팀 테스트 이야기가 돌아요. 소문일지도 몰라요.",[R("소문에 기대지 않고 훈련한다",75,{stat:1,trust:2},{cond:-3},"결과가 따라왔어요.","괜히 기대만 했어요."),Z("에이전트에게 알아봐 달라고 한다",{fame:1},"정보를 모았어요.")]);
+E("z5_winter",1,minor,"겨울 전지훈련","추운 겨울, 남쪽으로 전지훈련을 떠나요.",[R("새벽 러닝에 참여한다",70,{stat:1,cond:-3},{cond:-5},"체력이 확 올랐어요.","감기에 걸렸어요."),Z("정해진 일정만 소화한다",{cond:2},"무리 없이 마쳤어요.")]);
+E("z6_birthday",1,young,"생일 선물","생일에 친구들이 새 양말을 선물했어요.",[Z("고맙게 받는다",{morale:5},"훈련에 신고 가기로 했어요.")]);
+E("z7_homesick",1,teen,"합숙소의 밤","합숙소에서 처음 맞는 긴 밤이에요. 집이 그리워요.",[R("가족에게 전화한다",85,{morale:6},{morale:2},"마음이 풀렸어요.","통화가 짧게 끊겼어요."),Z("룸메이트와 이야기한다",{morale:3,trust:1},"서로 위로가 됐어요.")]);
+E("z8_prank",1,teen,"선배의 장난","선배가 수건을 몰래 숨겨 놨어요.",[R("웃으며 맞받아친다",65,{trust:2,morale:3},{morale:-2},"분위기가 훈훈해졌어요.","선배가 기분 나빠했어요."),Z("조용히 찾는다",{trust:1},"넘어갔어요.")]);
+E("z9_study",1,univ,"전공 수업과 훈련","수업 과제와 새벽 훈련이 겹쳐요.",[R("시간표를 촘촘히 짠다",60,{trust:2,morale:2},{cond:-6},"균형을 맞췄어요.","피로가 쌓였어요."),Z("한 가지에 집중한다",{trust:1},"우선순위를 정했어요.")]);
+E("z10_pro1",1,pro,"새 시즌 포스터","구단 포스터에 당신 얼굴이 크게 실렸어요.",[R("사진을 SNS에 올린다",80,{fame:3,morale:3},{fame:0},"팬들이 환호했어요.","사진이 어색하다는 말이 나왔어요."),Z("조용히 지나친다",{trust:1},"겸손하게 넘겼어요.")]);
+E("z11_pro2",1,pro,"동계 훈련 캠프","따뜻한 곳에서 팀이 단합을 다져요.",[R("레크리에이션을 주도한다",70,{trust:3,morale:4},{cond:-2},"분위기가 최고였어요.","너무 신나서 무리했어요."),Z("훈련 일정에 충실한다",{stat:0,trust:2},"묵묵히 임했어요.")]);
+E("z12_pro3",1,pro,"감독의 휴가","감독이 갑자기 휴가를 떠나 코치가 대신 지휘해요.",[R("코치의 전술을 적극 소화한다",65,{trust:3},{trust:-2},"새로운 방식에 잘 적응했어요.","어색하게 헤맸어요."),Z("기존 방식을 유지한다",{trust:1},"안정적으로 갔어요.")]);
+E("z13_pro4",1,pro,"유니폼 교환","경기 후 상대 스타가 유니폼 교환을 요청했어요.",[R("기꺼이 교환한다",90,{fame:3,morale:4},{morale:0},"소중한 기념품이 생겼어요.","사이즈가 맞지 않았어요."),Z("정중히 사양한다",{rep:0},"아껴 두기로 했어요.")]);
+E("z14_pro5",1,pro,"원정 응원 가족","원정 경기에 가족이 응원을 왔어요.",[R("골 세리머니를 가족에게 바친다",45,{morale:8,fame:2},{morale:-1},"관중석에서 눈물이 터졌어요.","기회를 못 살렸어요."),Z("경기 후 함께 식사한다",{morale:5},"소박한 행복이에요.")]);
+E("z15_pro6",1,pro,"구단 신입 환영","새 선수들이 합류했어요. 선배로서 안내를 맡았어요.",[R("숙소와 맛집까지 안내한다",85,{trust:3,morale:3},{cond:-1},"든든한 선배로 통했어요.","너무 신경 썼더니 피곤하네요."),Z("기본만 알려 준다",{trust:1},"필요한 만큼만 도왔어요.")]);
+E("z16_pro7",1,pro,"리그 휴식기","A매치 휴식기라 일주일을 쉬어요.",[R("해외 여행을 떠난다",75,{morale:7,cond:4,funds:-.1},{cond:-3},"몸과 마음이 충전됐어요.","여행지에서 감기에 걸렸어요."),Z("집에서 푹 쉰다",{cond:6},"충분히 회복했어요.")]);
+E("z17_pro8",1,pro,"라이벌 팬들의 야유","원정 경기에서 상대 팬들의 야유가 거세요.",[R("미소로 응수한다",55,{fame:3,morale:3},{morale:-4},"오히려 집중력이 올랐어요.","마음이 흔들렸어요."),Z("이어폰을 낀 듯 집중한다",{trust:2},"소음을 차단했어요.")]);
+E("z18_pro9",1,pro,"구단 SNS 챌린지","구단 SNS에서 챌린지를 하자고 제안해요.",[R("가장 먼저 참여한다",80,{fame:3,morale:3},{fame:-1},"조회수가 폭발했어요.","어색한 동작이 밈이 됐어요."),Z("동료의 영상을 응원한다",{trust:1},"조용히 응원했어요.")]);
+E("z19_pro10",1,pro,"유니폼 디자인 투표","새 시즌 유니폼 디자인을 선수들이 투표해요.",[R("친구들을 설득해 내 취향으로 간다",50,{trust:1,morale:3},{trust:-1},"내 디자인이 채택됐어요.","다른 디자인이 선택됐어요."),Z("자유롭게 투표한다",{morale:1},"모두 만족한 결과였어요.")]);
+E("z20_pro11",1,pro,"긴 이동 후 경기","긴 비행 후 바로 경기가 있어요.",[R("기내에서 푹 잔다",65,{cond:4},{cond:-5},"컨디션이 좋았어요.","시차 때문에 힘들었어요."),Z("도착 후 가볍게 몸을 푼다",{cond:2},"무난히 적응했어요.")]);
+E("z21_pro12",1,pro,"경기 전 루틴","경기 전 매번 똑같은 노래를 들어요.",[R("그 노래를 크게 튼다",70,{morale:5},{morale:-1},"집중력이 올라갔어요.","동료들이 시끄럽다고 해요."),Z("이어폰으로 혼자 듣는다",{morale:3},"루틴을 지켜요.")]);
+E("z22_pro13",1,pro,"유망주 칭찬 한마디","유망주가 '선배를 보고 축구를 시작했다'고 말해요.",[Z("뿌듯한 마음으로 격려한다",{morale:6,rep:2},"훈훈한 순간이었어요.")]);
+E("z23_pro14",1,pro,"삼겹살 회식","팀 회식으로 삼겹살집에 갔어요.",[R("고기를 굽는 담당을 맡는다",85,{trust:2,morale:3},{morale:0},"모두가 맛있게 먹었어요.","굽다가 태웠어요."),Z("분위기만 즐긴다",{morale:2},"즐거운 저녁이었어요.")]);
+E("z24_pro15",1,pro,"시즌 목표 설정","시즌 시작 전 개인 목표를 적어 보래요.",[R("높은 목표를 적는다",60,{morale:3,stat:0},{morale:-2},"의욕이 불타올랐어요.","부담감이 커졌어요."),Z("현실적인 목표를 적는다",{trust:2},"차근차근 가요.")]);
+E("z25_pro16",1,pro,"야간 경기 조명","야간 경기 조명이 눈부셔요.",[R("선글라스를 쓰고 몸을 푼다",50,{morale:2},{morale:-1},"눈이 적응됐어요.","오히려 어색했어요."),Z("조명에 천천히 적응한다",{cond:1},"차분히 적응했어요.")]);
+/* ---- J1리그 · 사우디 프로리그 ---- */
+const j1=S=>pro(S)&&S.club&&S.club.lg==="J1", spl=S=>pro(S)&&S.club&&S.club.lg==="SPL";
+E("j1_sakura",2,j1,"벚꽃 흩날리는 개막전","J1 개막전 날, 구장 옆 벚꽃이 흩날려요. 응원단 북소리가 경기장을 울려요.",[Z("북소리에 맞춰 입장한다",{morale:6,fame:1},"이 리그만의 분위기에 마음이 뛰었어요."),R("관중석을 향해 허리 숙여 인사한다",80,{fame:3,rep:2,morale:3},{morale:0},"일본 팬들이 따뜻하게 박수를 보냈어요.","어색한 인사가 되어 버렸어요.")]);
+E("j1_interview",2,j1,"일본어 인터뷰","현지 기자가 일본어로 질문을 던져요. 통역이 잠깐 자리를 비웠어요.",[R("서툰 일본어로 직접 답한다",55,{fame:4,rep:3,morale:3},{fame:-1,morale:-2},"진심이 전해졌어요.","발음 때문에 약간 웃음이 터졌어요."),Z("통역이 올 때까지 기다린다",{trust:1},"차분하게 넘겼어요.")]);
+E("j1_ramen",1,j1,"원정지의 라멘","원정 후 동료들이 현지 라멘집에 가자고 해요.",[R("함께 가서 즐긴다",85,{morale:5,trust:2},{cond:-1},"입맛에 딱 맞았어요.","국물이 너무 짜서 속이 불편했어요."),Z("숙소에서 영양식을 먹는다",{cond:3},"컨디션을 챙겼어요.")]);
+E("j1_derby",2,j1,"J1 더비 열기","같은 지역 라이벌과의 맞대결 준비로 도시 전체가 들떠 있어요.",[R("팬 이벤트에 참석한다",75,{fame:4,morale:4},{cond:-3},"서포터즈가 환호했어요.","일정이 빡빡해 지쳤어요."),Z("경기 준비에 집중한다",{trust:2},"조용히 컨디션을 올렸어요.")]);
+E("j1_typhoon",1,j1,"태풍 접근","태풍 때문에 경기 일정이 흔들리고 있어요.",[R("실내 훈련으로 감각을 유지한다",70,{stat:0,cond:2,trust:1},{cond:-3},"재정비의 기회가 됐어요.","리듬이 깨졌어요."),Z("휴식으로 돌린다",{cond:5},"충분히 쉬었어요.")]);
+E("spl_oil",2,spl,"황금빛 제안","구단 임원이 계약 연장 시 큰 보너스를 약속해요.",[R("조건을 꼼꼼히 따진다",60,{funds:.5,trust:2},{trust:-3},"유리한 조건이 붙었어요.","협상이 길어져 분위기가 어색해졌어요."),Z("흔쾌히 수락한다",{funds:.3,rep:-1},"빠르게 마무리했어요.")]);
+E("spl_heat",2,spl,"사막의 열기","한낮 기온이 45도에 육박해요. 야간 경기도 습해요.",[R("수분 관리를 철저히 한다",70,{cond:3,trust:2},{cond:-5},"끝까지 버텼어요.","탈수 증세가 왔어요."),Z("몸 풀기를 줄인다",{cond:1},"체력을 아꼈어요.")]);
+E("spl_ramadan",1,spl,"라마단 기간 일정","라마단 기간이라 훈련 시간이 밤으로 옮겨졌어요.",[R("새 생활 리듬에 맞춘다",65,{trust:3,cond:-1},{cond:-5},"금세 적응했어요.","잠이 부족해요."),Z("개인 시간에 컨디션을 챙긴다",{cond:3},"무난하게 적응했어요.")]);
+E("spl_starsquad",2,spl,"스타 군단의 라커룸","월드클래스 스타들이 가득한 라커룸이에요. 눈이 휘둥그레져요.",[R("먼저 다가가 조언을 구한다",75,{stat:1,rep:2,trust:2},{morale:-1},"배울 게 정말 많았어요.","분위기에 위축됐어요."),Z("묵묵히 제 몫을 한다",{trust:2},"실력으로 인정받았어요.")]);
+E("spl_stadium",1,spl,"새 구장 개장","화려한 신축 구장 개장식이 열려요. 관중은 아직 많지 않아요.",[R("경기 후 팬들에게 다가간다",70,{fame:3,morale:3},{morale:0},"팬들이 반갑게 맞았어요.","행사가 짧게 끝났어요."),Z("경기에만 집중한다",{trust:1},"묵묵히 뛰었어요.")]);
+E("spl_camel",1,spl,"사막 체험","구단이 선수단 단합을 위해 사막 투어를 준비했어요.",[R("적극 참여한다",85,{morale:6,trust:2},{cond:-2},"잊지 못할 추억이 생겼어요.","모래바람에 하루가 힘들었어요."),Z("호텔에서 쉰다",{cond:4},"체력을 아꼈어요.")]);
+/* ---- 어릴 때 단기 유학 (한 번) ---- */
+L.STUDY={
+ brazil:{name:"브라질",icon:"🇧🇷",desc:"삼바 리듬의 드리블과 창의성",stat:{FW:"dribble",MF:"dribble",DF:"pace",GK:"reflex"},sub:"기술·자유로움"},
+ spain:{name:"스페인",icon:"🇪🇸",desc:"점유와 패스 축구의 본고장",stat:{FW:"composure",MF:"passing",DF:"building",GK:"kicking"},sub:"패스·빌드업"},
+ germany:{name:"독일",icon:"🇩🇪",desc:"체력과 조직력의 나라",stat:{FW:"physical",MF:"stamina",DF:"physical",GK:"command"},sub:"체력·피지컬"},
+ italy:{name:"이탈리아",icon:"🇮🇹",desc:"수비와 전술의 나라",stat:{FW:"composure",MF:"defending",DF:"defending",GK:"handling"},sub:"수비·전술"},
+ argentina:{name:"아르헨티나",icon:"🇦🇷",desc:"승부욕과 결정력의 나라",stat:{FW:"finishing",MF:"vision",DF:"tackle",GK:"saving"},sub:"결정력·승부욕"}
+};
+L.studyAbroad=function(S,key){ const d=L.STUDY[key]; if(!d) return null; const p=S.p, pos=p.pos, k1=d.stat[pos]; const names=Object.fromEntries(L.POSDEF[pos].stats);
+  const others=L.POSDEF[pos].stats.map(s=>s[0]).filter(k=>k!==k1); const k2=others[Math.floor(Math.random()*others.length)];
+  const g1=ri(3,5), g2=ri(1,2); p.stats[k1]=clamp(p.stats[k1]+g1,10,99); p.stats[k2]=clamp(p.stats[k2]+g2,10,99); p.ovr=L.ovrOf(p); p.peak=Math.max(p.peak,p.ovr);
+  (S.studies=S.studies||[]).push({year:S.year,key,name:d.name}); S.studied=true; L.addMoment(S,"유학","유학",d.name+" 유학으로 "+names[k1]+" +"+g1+" 성장했어요."); L.feedAdd(S,S.year+" 유학",d.name+" 유학 — "+names[k1]+" +"+g1+" · "+names[k2]+" +"+g2,1);
+  if(L.logStyle) L.logStyle(S,d.name+" 유학 ("+names[k1]+" +"+g1+")"); return {k1,g1,k2,g2,names}; };
+L.EVPOOL.push({id:"study_abroad",w:3.2,when:S=>minor(S)&&S.stage==="youth"&&!S.abroadYouth&&!S.studied&&L.age(S)>=14&&L.age(S)<=17,title:"해외 단기 유학 제안",body:"지도자가 '여름 한 철 해외 축구 강국에서 배워 오면 크게 클 것'이라며 유학을 추천해요. 나라마다 배울 수 있는 게 달라요.",
+ dynamic:(S,base)=>{ const keys=Object.keys(L.STUDY).sort(()=>Math.random()-.5).slice(0,3); const names=Object.fromEntries(L.POSDEF[S.p.pos].stats); const poor=S.family&&S.family.pts<=4;
+   const opts=keys.map(k=>{ const d=L.STUDY[k]; const o=R(d.icon+" "+d.name+" 유학 · "+names[d.stat[S.p.pos]]+" 집중",poor?55:85,{fam:poor?0:-2,morale:4,cond:-2},{fam:0,morale:-3},d.name+"에서 값진 시간을 보냈어요. ("+d.desc+")","비자·일정 문제로 이번에는 가지 못했어요."); o.act="study:"+k; o.costNote=poor?"(가정 형편이 빠듯해 장학생 선발에 도전해요 · 비용 없음, 성공 확률 낮음)":"(유학 비용: 가정 지원 포인트 −2)"; return o; });
+   opts.push(Z("한국에서 계속 훈련한다",{trust:2,morale:1},"익숙한 곳에서 한 단계 더 올라서기로 했어요."));
+   return Object.assign({},base,{opts}); }});
+})();

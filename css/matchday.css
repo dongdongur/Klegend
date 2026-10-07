@@ -1,0 +1,123 @@
+/* ===== 매치데이 테마 (css/matchday.css) =====
+ * 디자인 기준
+ *  - 분위기: 야간 경기장 · 잔디 · 전광판. 세련된 레트로(70~80년대 프로그램북의 서체와 색감 + 현대적인 여백과 부드러운 면).
+ *  - 색: 깊은 잔디색 바탕(#0d1f19) + 따뜻한 아이보리 글자(#f3ecd8) + 전광판 앰버(#f0bd4f) 하나를 주인공으로. 보조는 차분한 민트·살구·하늘.
+ *    네온색과 순백/순흑은 쓰지 않아요. 글자 대비는 AA 이상, 큰 면에는 채도를 낮춰 눈이 편해요.
+ *  - 모양: 모서리는 부드럽게(카드 18px, 버튼 14px), 윤곽선은 얇게(1px 분필선), 그림자는 부드럽게. 투박한 굵은 테두리·엇갈린 그림자는 쓰지 않아요.
+ *  - 글꼴: 제목은 고전적인 세리프(Noto Serif KR), 숫자는 전광판 느낌의 Oswald, 본문은 Noto Sans KR. 로고만 Black Han Sans.
+ *  - 움직임: 천천히 떠오르고(220~420ms), 누르면 살짝 눌려요. 큰 순간은 영상처럼(시네마틱 연출).
+ * html[data-theme="matchday"] 일 때 적용돼요(기본). 설정에서 '야간판(기존 어두운 화면)'으로 바꿀 수 있어요. */
+html[data-theme="matchday"]{
+  --bg0:#0c1c16;--bg1:#102620;--panel:#15302a;--panel2:#1b3b33;--line:rgba(238,226,190,.15);--line2:rgba(238,226,190,.07);
+  --txt:#f3ecd8;--muted:#a9b8a8;--acc:#f0bd4f;--acc-ink:#2a1d04;--acc2:#86d7c0;--gold:#f0bd4f;--red:#ec6a55;--blue:#8fb8e8;
+  --f-head:"Noto Serif KR","Nanum Myeongjo",serif;--f-num:"Oswald","Noto Sans KR",system-ui,sans-serif;
+  --f-body:"Noto Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --shadow:0 10px 28px rgba(0,0,0,.28);--r:18px;color-scheme:dark}
+html[data-theme="matchday"] html,html[data-theme="matchday"]{background:var(--bg0)}
+html[data-theme="matchday"] body{
+  background-color:#0c1c16;
+  background-image:
+    radial-gradient(900px 420px at 50% -120px,rgba(255,236,170,.10),transparent 70%),
+    repeating-linear-gradient(90deg,rgba(255,255,255,.018) 0 56px,rgba(0,0,0,0) 56px 112px),
+    linear-gradient(180deg,#0f2720,#0b1914 60%);
+  background-attachment:fixed;font-size:15.5px;line-height:1.6;color:var(--txt);letter-spacing:.005em}
+html[data-theme="matchday"] ::selection{background:rgba(240,189,79,.35)}
+/* 제목 */
+html[data-theme="matchday"] h1,html[data-theme="matchday"] h2{font-family:var(--f-head);font-weight:800;letter-spacing:-.01em;color:var(--txt)}
+html[data-theme="matchday"] h1{font-size:28px}html[data-theme="matchday"] h2{font-size:22px}
+html[data-theme="matchday"] h3{font-family:var(--f-head);font-weight:700;color:var(--txt)}
+html[data-theme="matchday"] .sec{font-family:var(--f-head);font-weight:800;font-size:17px;color:var(--txt);letter-spacing:-.005em;display:flex;align-items:center;gap:8px}
+html[data-theme="matchday"] .sec::before{content:"";width:4px;height:16px;border-radius:2px;background:var(--acc);flex:none}
+html[data-theme="matchday"] .kick{color:var(--acc);font-weight:700;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase}
+html[data-theme="matchday"] .muted,html[data-theme="matchday"] small{color:var(--muted)}
+/* 카드 */
+html[data-theme="matchday"] .card,html[data-theme="matchday"] .board,html[data-theme="matchday"] .sheet,html[data-theme="matchday"] .hero{
+  background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.008)),var(--panel);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.05)}
+html[data-theme="matchday"] .card.flat{background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,0)),var(--panel);box-shadow:0 6px 18px rgba(0,0,0,.2)}
+html[data-theme="matchday"] .hero{background:radial-gradient(500px 220px at 85% -20%,rgba(240,189,79,.16),transparent 70%),linear-gradient(160deg,#1c4136,#112a23);border-color:rgba(240,189,79,.28)}
+html[data-theme="matchday"] .stat,html[data-theme="matchday"] .opt,html[data-theme="matchday"] .offer,html[data-theme="matchday"] .rec,html[data-theme="matchday"] .rk,html[data-theme="matchday"] .setrow{
+  background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:14px;box-shadow:none;transition:background .2s,border-color .2s,transform .12s}
+html[data-theme="matchday"] .opt:hover,html[data-theme="matchday"] .offer:hover{background:rgba(240,189,79,.07);border-color:rgba(240,189,79,.4)}
+html[data-theme="matchday"] .opt:active,html[data-theme="matchday"] .offer:active{transform:scale(.985)}
+html[data-theme="matchday"] .opt.on,html[data-theme="matchday"] .offer.pick{border-color:var(--acc);background:rgba(240,189,79,.1)}
+html[data-theme="matchday"] .stat b{color:var(--txt)}
+/* 버튼 */
+html[data-theme="matchday"] .big{background:linear-gradient(180deg,#f7ce70,#e7ac3a);color:var(--acc-ink);border-radius:14px;font-weight:800;letter-spacing:.01em;
+  box-shadow:0 4px 0 #9b6d12,0 14px 26px rgba(240,189,79,.22);transition:transform .12s,box-shadow .12s;border:0}
+html[data-theme="matchday"] .big:active{transform:translateY(3px);box-shadow:0 1px 0 #9b6d12,0 6px 14px rgba(240,189,79,.18)}
+html[data-theme="matchday"] .big:disabled{background:#1d3a31;color:var(--muted);box-shadow:none;border:1px solid var(--line)}
+html[data-theme="matchday"] .big.alt,html[data-theme="matchday"] .big.needs{background:rgba(255,255,255,.06);color:var(--txt);border:1px solid var(--line);box-shadow:none}
+html[data-theme="matchday"] .big.needs{color:var(--acc);border-color:rgba(240,189,79,.55);animation:mdPulse 1.8s ease-in-out infinite}
+@keyframes mdPulse{50%{box-shadow:0 0 0 6px rgba(240,189,79,.12)}}
+html[data-theme="matchday"] .wide,html[data-theme="matchday"] .ghost{background:rgba(255,255,255,.05);color:var(--txt);border:1px solid var(--line);border-radius:12px;box-shadow:none;font-weight:600}
+html[data-theme="matchday"] .wide:hover,html[data-theme="matchday"] .ghost:hover{border-color:rgba(240,189,79,.5)}
+html[data-theme="matchday"] .chips button,html[data-theme="matchday"] .chip{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:999px;color:var(--txt)}
+html[data-theme="matchday"] .chips button.on,html[data-theme="matchday"] .chip.on{background:rgba(240,189,79,.16);border-color:var(--acc);color:var(--acc)}
+html[data-theme="matchday"] .pill,html[data-theme="matchday"] .tag{background:rgba(255,255,255,.07);color:var(--txt);border:1px solid var(--line2);border-radius:999px}
+html[data-theme="matchday"] .pill.gold,html[data-theme="matchday"] .tag.g{background:rgba(240,189,79,.14);color:var(--gold);border-color:rgba(240,189,79,.32)}
+html[data-theme="matchday"] .pill.acc{background:rgba(134,215,192,.14);color:var(--acc2)}
+html[data-theme="matchday"] .pill.red{background:rgba(236,106,85,.14);color:var(--red)}
+/* 상단·하단 */
+html[data-theme="matchday"] .top{background:rgba(12,28,22,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+html[data-theme="matchday"] .ibtn{background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--txt);border-radius:12px}
+html[data-theme="matchday"] .ovr b{color:var(--acc);font-family:var(--f-num)}
+html[data-theme="matchday"] .nav{background:rgba(11,24,19,.9);backdrop-filter:blur(16px);border-top:1px solid var(--line)}
+html[data-theme="matchday"] .nav button{color:var(--muted);position:relative;transition:color .2s}
+html[data-theme="matchday"] .nav button.on{color:var(--acc)}
+html[data-theme="matchday"] .nav button.on::after{content:"";position:absolute;top:0;left:30%;right:30%;height:3px;border-radius:0 0 3px 3px;background:var(--acc)}
+html[data-theme="matchday"] .cta{background:linear-gradient(180deg,transparent,rgba(11,24,19,.7) 55%)}
+/* 막대·진행 */
+html[data-theme="matchday"] .bar{background:rgba(255,255,255,.08)}
+html[data-theme="matchday"] .bar i{background:linear-gradient(90deg,#c79a3c,var(--acc))}
+html[data-theme="matchday"] .bar.warn i{background:linear-gradient(90deg,#d98450,var(--red))}
+html[data-theme="matchday"] .tl div{background:rgba(255,255,255,.04);border:1px solid var(--line2);border-radius:12px}
+html[data-theme="matchday"] .tl div.done{background:rgba(134,215,192,.08);border-color:rgba(134,215,192,.3)}html[data-theme="matchday"] .tl div.done b{color:var(--acc2)}
+html[data-theme="matchday"] .tl div.now{background:rgba(240,189,79,.12);border-color:var(--acc)}html[data-theme="matchday"] .tl div.now b{color:var(--acc)}
+/* 안내·입력 */
+html[data-theme="matchday"] .note{background:rgba(240,189,79,.08);border:1px solid rgba(240,189,79,.28);border-radius:12px;color:var(--txt)}
+html[data-theme="matchday"] .note.good{background:rgba(134,215,192,.09);border-color:rgba(134,215,192,.32)}
+html[data-theme="matchday"] .note.warn{background:rgba(236,106,85,.09);border-color:rgba(236,106,85,.34)}
+html[data-theme="matchday"] input,html[data-theme="matchday"] select,html[data-theme="matchday"] textarea{background:rgba(0,0,0,.22);color:var(--txt);border:1px solid var(--line);border-radius:12px}
+html[data-theme="matchday"] input:focus,html[data-theme="matchday"] select:focus{outline:2px solid rgba(240,189,79,.5);outline-offset:1px}
+html[data-theme="matchday"] .ov{background:rgba(5,12,9,.66);backdrop-filter:blur(4px)}
+html[data-theme="matchday"] .xclose,html[data-theme="matchday"] .backbar button{background:rgba(20,44,37,.95);color:var(--txt);border:1px solid var(--line);box-shadow:0 4px 12px rgba(0,0,0,.35)}
+html[data-theme="matchday"] .backbar{background:linear-gradient(180deg,rgba(12,28,22,.96),rgba(12,28,22,.7))}
+html[data-theme="matchday"] .backbar b{font-family:var(--f-head);font-weight:800;color:var(--txt)}
+html[data-theme="matchday"] .toast{background:#f3ecd8;color:#1b1710;border-radius:12px}
+html[data-theme="matchday"] .emb{border:1px solid var(--line);box-shadow:0 3px 8px rgba(0,0,0,.3)}
+html[data-theme="matchday"] .sns{background:rgba(255,255,255,.04);border:1px solid var(--line);border-left:3px solid var(--line);border-radius:12px}
+html[data-theme="matchday"] .sns.up{border-left-color:var(--acc2)}html[data-theme="matchday"] .sns.dn{border-left-color:var(--red)}
+html[data-theme="matchday"] .sns b{color:var(--acc2)}
+html[data-theme="matchday"] .tribute{background:linear-gradient(135deg,rgba(240,189,79,.13),rgba(240,189,79,.03));border:1px solid rgba(240,189,79,.38);border-radius:16px;box-shadow:none;font-family:var(--f-head);font-weight:700}
+html[data-theme="matchday"] .srctag{background:rgba(240,189,79,.12);border-color:rgba(240,189,79,.32);color:var(--gold)}
+html[data-theme="matchday"] .outlook{color:var(--acc2)}html[data-theme="matchday"] .outlook.up{color:var(--acc2)}html[data-theme="matchday"] .outlook.dn{color:var(--red)}
+/* 등장 모션 */
+@media(prefers-reduced-motion:no-preference){
+  html[data-theme="matchday"] .card,html[data-theme="matchday"] .hero{animation:mdUp .42s cubic-bezier(.2,.7,.2,1) both}
+  html[data-theme="matchday"] .card:nth-child(2){animation-delay:.04s}html[data-theme="matchday"] .card:nth-child(3){animation-delay:.08s}html[data-theme="matchday"] .card:nth-child(4){animation-delay:.12s}
+  @keyframes mdUp{from{opacity:0;transform:translateY(10px)}}
+}
+/* ===== 메인 메뉴(index.html) ===== */
+html[data-theme="matchday"] .brand{color:var(--txt)}
+html[data-theme="matchday"] .brand .k{color:var(--acc)}html[data-theme="matchday"] .brand b{color:var(--txt)}
+html[data-theme="matchday"] .mode{border-radius:20px;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.12);transition:transform .15s}
+html[data-theme="matchday"] .mode:active{transform:scale(.98)}
+html[data-theme="matchday"] .mode.m{background:radial-gradient(240px 120px at 90% 0%,rgba(255,255,255,.14),transparent 70%),linear-gradient(145deg,#b6402f,#7d2a22);color:#fff3df}
+html[data-theme="matchday"] .mode.p{background:radial-gradient(240px 120px at 90% 0%,rgba(255,255,255,.14),transparent 70%),linear-gradient(145deg,#2f6f5e,#1a4036);color:#e9f6ee}
+html[data-theme="matchday"] .mode small{color:rgba(255,240,215,.8);opacity:1}
+html[data-theme="matchday"] .plink{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:14px;color:var(--txt)}
+html[data-theme="matchday"] .soon{border:1px dashed rgba(240,189,79,.4);background:rgba(240,189,79,.05);color:var(--muted);border-radius:14px}
+html[data-theme="matchday"] .modeinfo{color:var(--muted)}html[data-theme="matchday"] .modeinfo b{color:var(--txt)}
+html[data-theme="matchday"] .hof h2 small{color:var(--acc)}
+html[data-theme="matchday"] .board{border-color:rgba(240,189,79,.22)}
+html[data-theme="matchday"] .board.p{border-color:rgba(134,215,192,.25)}
+html[data-theme="matchday"] .board .bt b{font-family:var(--f-head);font-weight:800}
+html[data-theme="matchday"] .rk.r1{background:linear-gradient(90deg,rgba(240,189,79,.2),rgba(255,255,255,.03));border-color:rgba(240,189,79,.55)}
+html[data-theme="matchday"] .rk .sc,html[data-theme="matchday"] .rec b,html[data-theme="matchday"] .jstat b{color:var(--acc)}
+html[data-theme="matchday"] .wrap>main::before{content:"MATCHDAY PROGRAMME  ·  K-LEGEND";display:block;font:600 11px var(--f-num);letter-spacing:.28em;color:var(--acc);opacity:.85;margin-bottom:2px}
+html[data-theme="matchday"] #klBgm{background:rgba(20,44,37,.9)!important;border:1px solid var(--line)!important}
+html[data-theme="matchday"] footer{color:var(--muted)}
+html[data-theme="matchday"] .lf{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px}
+/* 패치노트 */
+html[data-theme="matchday"] .back{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:12px;color:var(--txt)}

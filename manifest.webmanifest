@@ -1,0 +1,17 @@
+{
+  "name": "K-레전드",
+  "short_name": "K-레전드",
+  "description": "대한민국 축구의 전설을 만들어라",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#8ccbff",
+  "theme_color": "#2f93ff",
+  "lang": "ko",
+  "icons": [
+    { "src": "img/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "img/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "img/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

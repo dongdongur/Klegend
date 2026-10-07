@@ -1,0 +1,21 @@
+/* 영어 사전 보충 2 (감독판 상단 버튼·시대 선택·설치 버튼 등, 페이지 본문 점검에서 발견) */
+window.KL_I18N_EN_XI={
+"메인 메뉴":"Main menu",
+"선수 키우기":"Player mode",
+"블라인드 (능력치 숨김)":"Blind (hide ratings)",
+"스핀":"Spin",
+"감독 뽑기":"Draw manager",
+"후보 뽑기":"Draw bench",
+"스핀을 눌러 다음 팀을 뽑으세요.":"Press Spin to draw the next team.",
+"스핀을 눌러 다음 포지션을 뽑으세요.":"Press Spin to draw the next position.",
+"스핀을 눌러 선수를 뽑으세요.":"Press Spin to draw a player.",
+"과(와) 함께 첫 시즌을 시작합니다.":" — your first season together begins.",
+"the Asian football federation 유럽 클럽컵 엘리트에도 출전해요.":"You also play in the Asian Club Cup Elite.",
+"the Asian football federation 유럽 클럽컵 투에도 출전해요.":"You also play in the Asian Club Cup Two.",
+"앱으로 설치":"Install app",
+"홈 화면에 추가":"Add to home screen",
+"#년대":"#s",
+"#년~":"# onward",
+"· 선수판: #부 이하 지역 리그, 더 많은 중요 경기 미니게임, 영어 번역 다듬기":"· Player mode: lower regional leagues, more big-match minigames, polishing the English",
+"· 감독판: 감독 커리어 이야기 더 늘리기, 선수판 가져오기":"· Manager mode: more manager-career stories, importing your player",
+};

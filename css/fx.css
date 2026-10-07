@@ -1,0 +1,52 @@
+/* 시네마틱 연출 (css/fx.css) — js/fx.js 와 함께 써요 */
+.fx{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;overflow:hidden;color:#f3ecd8;cursor:pointer;
+  background:radial-gradient(700px 420px at 50% 42%,rgba(255,255,255,.07),transparent 70%),linear-gradient(180deg,#05100c,#0a1d16 55%,#05100c);animation:fxIn .5s ease both}
+.fx.out{animation:fxOut .42s ease forwards}
+@keyframes fxIn{from{opacity:0}}@keyframes fxOut{to{opacity:0}}
+.fx-bar{position:absolute;left:0;right:0;height:12vh;background:#000;z-index:3}
+.fx-bar.t{top:0;animation:barT .8s cubic-bezier(.2,.7,.2,1) both}.fx-bar.b{bottom:0;animation:barB .8s cubic-bezier(.2,.7,.2,1) both}
+@keyframes barT{from{transform:translateY(-100%)}}@keyframes barB{from{transform:translateY(100%)}}
+.fx-beam{position:absolute;inset:-20%;z-index:1;pointer-events:none;background:conic-gradient(from 180deg at 50% -10%,transparent 0 160deg,color-mix(in srgb,var(--ac) 38%,transparent) 172deg,transparent 184deg 360deg);transform-origin:50% 0;animation:beam 3.6s ease-in-out .5s both}
+@keyframes beam{0%{transform:rotate(-38deg);opacity:0}25%{opacity:1}60%{transform:rotate(28deg);opacity:.9}100%{transform:rotate(0deg);opacity:.55}}
+.fx-flash{position:absolute;inset:0;z-index:4;background:#fff;opacity:0;pointer-events:none;animation:flash 1.1s ease .35s both}
+@keyframes flash{0%{opacity:0}8%{opacity:.85}18%{opacity:.05}28%{opacity:.5}55%{opacity:0}100%{opacity:0}}
+.fx-conf{position:absolute;inset:0;z-index:2;pointer-events:none}
+.fx-card{position:relative;z-index:5;text-align:center;padding:0 24px;max-width:520px}
+.fx-icon{font-size:62px;line-height:1;filter:drop-shadow(0 8px 24px color-mix(in srgb,var(--ac) 60%,transparent));animation:icon 1s cubic-bezier(.2,1.4,.3,1) .7s both}
+@keyframes icon{from{opacity:0;transform:scale(.2) rotate(-25deg)}}
+.fx-kick{margin-top:14px;font:600 12px "Oswald","Noto Sans KR",sans-serif;letter-spacing:.34em;color:var(--ac);text-transform:uppercase;animation:up .7s ease .9s both}
+.fx-title{margin:10px 0 0;font:800 clamp(30px,8.5vw,48px)/1.25 "Noto Serif KR",serif;letter-spacing:-.01em;color:#fff6dc;text-shadow:0 4px 30px color-mix(in srgb,var(--ac) 55%,transparent)}
+.fx-title .lt{display:inline-block;animation:lt .55s cubic-bezier(.2,.8,.2,1) both;background:linear-gradient(180deg,#fffbe8,var(--ac));-webkit-background-clip:text;background-clip:text;color:transparent}
+.fx-title .sp{display:inline-block;width:.3em}
+@keyframes lt{from{opacity:0;transform:translateY(22px) scale(.85);filter:blur(6px)}}
+.fx-sub{margin:14px auto 0;color:#d6ceb4;font-size:15.5px;line-height:1.6;max-width:30em;animation:up .8s ease 2s both}
+.fx-lines{list-style:none;margin:18px auto 0;padding:0;display:grid;gap:6px;max-width:26em}
+.fx-lines li{padding:8px 14px;border-radius:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);font-size:14px;animation:up .6s ease both}
+@keyframes up{from{opacity:0;transform:translateY(14px)}}
+.fx-skip{position:absolute;right:14px;bottom:calc(13vh + 10px);z-index:6;min-height:44px;padding:0 16px;border-radius:999px;background:rgba(0,0,0,.45);color:#f3ecd8;border:1px solid rgba(255,255,255,.25);font:600 13px "Noto Sans KR",sans-serif;cursor:pointer}
+.fx.calm .fx-beam,.fx.calm .fx-flash,.fx.calm .fx-bar{animation:none}.fx.calm .fx-title .lt,.fx.calm .fx-icon,.fx.calm .fx-kick,.fx.calm .fx-sub,.fx.calm .fx-lines li{animation:none;opacity:1}
+body.fx-on{overflow:hidden}
+
+/* 이적 연출: 비행기 · 경기장 입장 · 계약 도장 */
+.fx-scene{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.sc-flight{background:linear-gradient(180deg,#0b2447 0%,#2a5d9a 55%,#9ec8ff 100%)}
+.sc-flight .cl{position:absolute;font-style:normal;font-size:64px;opacity:.85;animation:cloud 9s linear infinite}.sc-flight .c1{top:18%;left:-20%}.sc-flight .c2{top:48%;left:-30%;animation-duration:12s;font-size:84px}.sc-flight .c3{top:72%;left:-25%;animation-duration:7s;font-size:52px}
+@keyframes cloud{to{transform:translateX(140vw)}}
+.sc-flight .plane{position:absolute;font-style:normal;font-size:72px;left:-15%;top:62%;animation:plane 5s cubic-bezier(.4,.1,.3,1) .4s forwards;filter:drop-shadow(0 10px 18px rgba(0,0,0,.4))}
+@keyframes plane{to{left:95%;top:12%;transform:rotate(-14deg) scale(.7)}}
+.sc-flight .route{position:absolute;left:5%;top:60%;width:90%;height:0;border-top:3px dashed rgba(255,255,255,.55);transform:rotate(-14deg);transform-origin:left center;animation:up 1s ease .6s both}
+.sc-arrive{background:radial-gradient(circle at 50% 55%,#4a3a12 0%,#241a06 38%,#05100c 80%)}
+.sc-arrive .tunnel{position:absolute;left:50%;top:55%;width:40px;height:40px;margin:-20px;border-radius:50%;background:#fff7d6;box-shadow:0 0 120px 60px #f0bd4f;animation:tunnel 3.2s ease-out .3s forwards}
+@keyframes tunnel{to{transform:scale(22);opacity:.0}}
+.sc-arrive .crowd{position:absolute;left:0;right:0;bottom:12vh;text-align:center;font-style:normal;font-size:44px;letter-spacing:4px;animation:crowd 1.2s ease-in-out 2.2s infinite alternate;opacity:0;animation-fill-mode:both}
+@keyframes crowd{from{opacity:.9;transform:translateY(8px)}to{opacity:.9;transform:translateY(-8px)}}
+.sc-arrive .cam{position:absolute;font-style:normal;font-size:26px;opacity:0;animation:camf .5s steps(2) 2.4s infinite}.sc-arrive .c1{left:12%;top:30%}.sc-arrive .c2{right:14%;top:42%;animation-delay:2.8s}.sc-arrive .c3{left:30%;top:20%;animation-delay:3.1s}
+@keyframes camf{0%,70%{opacity:0}80%{opacity:1;filter:brightness(3)}100%{opacity:0}}
+.fx-stamp{position:fixed;inset:0;z-index:100000;display:grid;place-items:center;background:rgba(2,6,4,.7);animation:fxIn .25s ease both}.fx-stamp.out{animation:fxOut .32s ease forwards}
+.fx-stamp .paper{position:relative;width:min(86vw,360px);aspect-ratio:3/4;background:#f6f0dd;color:#3a3220;border-radius:6px;padding:26px 22px;box-shadow:0 18px 50px rgba(0,0,0,.5);display:grid;align-content:start;gap:14px;animation:paperIn .45s cubic-bezier(.2,.9,.3,1) both}
+.fx-stamp .paper b{font:800 22px "Noto Serif KR",serif;letter-spacing:.3em;text-align:center}.fx-stamp .ln{display:block;height:8px;border-radius:4px;background:rgba(58,50,32,.18)}.fx-stamp .ln.s{width:60%}
+.fx-stamp .seal{position:absolute;right:16%;bottom:14%;width:128px;height:128px;border-radius:50%;border:5px solid #c0342b;color:#c0342b;display:grid;place-items:center;text-align:center;font:800 17px/1.25 "Noto Serif KR",serif;padding:10px;opacity:0;transform:scale(2.6) rotate(-24deg);mix-blend-mode:multiply}
+.fx-stamp.hit .seal{animation:slam .38s cubic-bezier(.2,1.6,.4,1) forwards}.fx-stamp.hit .paper{animation:shake .32s ease .05s}
+@keyframes paperIn{from{opacity:0;transform:translateY(40px) rotate(2deg)}}@keyframes slam{0%{opacity:0;transform:scale(2.6) rotate(-24deg)}60%{opacity:1;transform:scale(.92) rotate(-12deg)}100%{opacity:.92;transform:scale(1) rotate(-12deg)}}@keyframes shake{25%{transform:translate(-5px,3px)}50%{transform:translate(5px,-3px)}75%{transform:translate(-2px,2px)}}
+
+.fx.mapfx .fx-scene{z-index:0}.fx-map{position:absolute;inset:0;width:100%;height:100%}.fx.mapfx .fx-card{align-self:start;margin-top:calc(12vh + 8px);text-shadow:0 2px 14px rgba(0,0,0,.8)}.fx.mapfx .fx-icon{display:none}.fx.mapfx .fx-lines li{background:rgba(5,20,40,.6)}.fx.mapfx .fx-beam,.fx.mapfx .fx-flash{display:none}

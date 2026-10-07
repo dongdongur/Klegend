@@ -1,0 +1,23 @@
+/* 내 선수 가져오기 (js/mgr_import.js) — 감독판 전용. 터치 대상 44px 이상 */
+.imp-panel .hint{margin:4px 0 10px;line-height:1.5}
+.imp-card{border:2.5px solid var(--m-navy,#14305a);border-radius:14px;background:linear-gradient(180deg,#fff6d6,#fffdf4);padding:10px 12px;margin:6px 0 10px}
+.imp-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.imp-name{font-size:18px;color:var(--m-navy,#14305a)}
+.imp-pill{font-size:12px;font-weight:700;background:var(--m-navy,#14305a);color:#fff;border-radius:999px;padding:3px 10px}
+.imp-sub{margin:4px 0 0;font-size:13px;color:var(--m-ink2,#3d5a85);line-height:1.45}
+.imp-fx{margin:0 0 8px;padding-left:18px;font-size:13px;line-height:1.6;color:var(--txt,#14305a)}
+.imp-pend{border:2.5px dashed var(--m-orange-d,#9c4200);border-radius:14px;padding:10px 12px;margin:0 0 12px}
+.imp-pend>b{color:var(--m-orange-d,#9c4200);font-size:14px}
+.imp-pend .btn{width:100%;margin-top:6px}
+.imp-in{display:block;width:100%;box-sizing:border-box;min-height:88px;padding:10px 12px;font:600 13px/1.4 ui-monospace,Consolas,monospace;word-break:break-all;resize:vertical;
+  background:#fff;color:var(--txt,#14305a);border:2.5px solid var(--m-navy,#14305a);border-radius:12px}
+.imp-in:focus{outline:3px solid var(--acc,#2fc462);outline-offset:1px}
+.imp-row{display:flex;gap:8px;margin-top:8px}
+.imp-row .btn{flex:1 1 0;min-height:44px}
+.imp-msg{margin:8px 0 0;font-size:13px;line-height:1.5;min-height:1px}
+.imp-msg.bad{color:var(--m-red-d,#c4202c);font-weight:700}
+/* 전설 카드: 금빛 테두리와 '전설' 표시 */
+.fcard:has(.fc-badge.legend){box-shadow:0 0 0 2px #f0c24a,0 0 12px rgba(240,194,74,.75)}
+.fc-badge.legend{background:linear-gradient(160deg,#fff2ae,#f0c24a);color:#3a2200;border:1.5px solid #8a5a00}
+/* 작은 후보 카드에서 '전설' 표시가 잘리지 않게 */
+.fc-badge.legend{white-space:nowrap;right:1cqw;top:1cqw;font-size:max(8px,8cqw);padding:0 3px;letter-spacing:-.02em}
