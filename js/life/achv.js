@@ -101,7 +101,8 @@ const LIST=[
 ];
 L.ACH=LIST;
 /* 영어 사전을 스스로 등록해요(이름·설명) */
-{ const D={}; LIST.forEach(a=>{ D[a.ko]=a.en; D[a.dko]=a.den; }); Object.assign(D,{"업적":"Achievements","성취":"Records","낭만":"Stories","도전":"Challenges","업적 달성":"ACHIEVEMENT UNLOCKED","달성한 업적":"Unlocked","아직 달성하지 못했어요":"Not unlocked yet","한 번 달성하면 다음 인생에도 계속 남아요.":"Once unlocked, it stays for every future career.","새 업적을 달성했어요":"You unlocked a new achievement"}); window.KL_I18N_EN_ACH=D; }
+{ const NUM=s=>String(s).replace(/[0-9][0-9,]*(?:.[0-9]+)?/g,"#"), nd=o=>{ const r={}; Object.keys(o).forEach(k=>{ r[NUM(k)]=NUM(o[k]); }); return r; };
+const D={}; LIST.forEach(a=>{ D[a.ko]=a.en; D[a.dko]=a.den; }); Object.assign(D,{"업적":"Achievements","성취":"Records","낭만":"Stories","도전":"Challenges","업적 달성":"ACHIEVEMENT UNLOCKED","달성한 업적":"Unlocked","아직 달성하지 못했어요":"Not unlocked yet","한 번 달성하면 다음 인생에도 계속 남아요.":"Once unlocked, it stays for every future career.","새 업적을 달성했어요":"You unlocked a new achievement"}); window.KL_I18N_EN_ACH=nd(D); }
 const rd=()=>{ try{ return JSON.parse(localStorage.getItem(KEY)||"{}")||{}; }catch(e){ return {}; } };
 const wr=o=>{ try{ localStorage.setItem(KEY,JSON.stringify(o)); }catch(e){} };
 L.achSaved=rd;

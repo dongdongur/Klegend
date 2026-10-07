@@ -16,7 +16,7 @@ L.rollEvent=function(S,out){
     if(S.military==="serving") return ev;
     if(ev&&(NEXT.test(ev.id)||FIRST.test(ev.id)||ev.story)) return ev;
     const nx=open(S,NEXT), fr=nx.length?[]:open(S,FIRST);
-    const cand=nx.length&&Math.random()<(ev?.55:.45)?nx:(fr.length&&Math.random()<.1?fr:null);
+    const cand=nx.length&&Math.random()<(ev?0.55:0.45)?nx:(fr.length&&Math.random()<.1?fr:null);
     if(!cand||!cand.length) return ev;
     if(ev){ if((S.evHist||[]).length>h0||(S.evHist||[]).length===40) (S.evHist||[]).pop(); if((S.evSeen||[]).length>n0) S.evSeen.pop(); }
     const e=cand[Math.floor(Math.random()*cand.length)];

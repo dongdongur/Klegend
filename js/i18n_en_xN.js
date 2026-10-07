@@ -37,6 +37,7 @@ window.KL_I18N_EN_XN={
 "은퇴한 선수 #명 만들기":"Retire # players",
 "올림머리":"Top knot",
 "머리를 위로 묶었어요.":"Hair tied up high.",
+"한 선수로 대표팀 #경기 뛰기":"Play # national team matches with one player",
 "꽁지머리":"Ponytail",
 "뒤로 묶은 머리가 흔들려요.":"The tied-back hair swings.",
 "한 선수로 통산 #골 넣기":"Score # career goals with one player",
@@ -194,7 +195,7 @@ window.KL_I18N_EN_XN={
 "프로 스카우터가 찾아왔어요":"A pro scout came to see you",
 "대학 리그에서 눈에 띄는 활약을 하자 프로 구단 스카우터가 경기장에 와서 기다리고 있었어요. 졸업까지 기다리지 않고 지금 입단하자는 제안이에요.":"After standing out in the university league, a pro scout is waiting at the ground. The offer is to turn pro now instead of waiting for graduation.",
 "대학을 중퇴하고 프로 입단 협상에 나선다":"Leave university and negotiate a pro contract",
-"계약서가 오가는 순간이 왔어요. 이제 프로의 세계예요.":"The contract is on the table. Welcome to the pro world.",
+"이번 시즌을 마치면 프로 구단과 입단 협상에 나서요. 이제 프로의 세계가 눈앞이에요.":"Once this season ends you will negotiate with the pro club. The pro world is right in front of you.","대학을 중퇴하고 프로 구단의 부름에 응하기로 했어요.":"You decided to leave university and answer the pro club's call.",
 "졸업까지 마치고 정식 드래프트에 나선다":"Finish university and enter the regular draft",
 "학업과 훈련을 모두 챙기기로 했어요. 몸값은 더 오를지도 몰라요.":"You will keep up both studies and training. Your price might even rise.",
 "코너킥! 공을 보낼 곳을 먼저 골라요":"Corner kick! First choose where to send the ball",
@@ -278,5 +279,11 @@ window.KL_I18N_EN_XN={
 "대학을 중퇴하고 프로 구단의 부름에 응했어요.":"You left university and answered a pro club's call.",
 "초록 창":"Green window",
 "세트 / ":"Set / ",
-"몸이 따라 주지 못했어요":"Your body couldn't keep up"
+"몸이 따라 주지 못했어요":"Your body couldn't keep up",
+"기록 경쟁 더 늘리기(지역·친구 순위)":"More record competition (regional and friends rankings)",
+"하이라이트 장면 종류 더 늘리기":"More highlight scenes",
+"이어지는 이야기 더 늘리기":"More chained stories",
+"꾸미기 항목 더 늘리기(유니폼·액자·엠블럼)":"More style items (kits, frames, emblems)",
+"감독판 이야기·칭호 더 늘리기":"More manager stories and titles",
+"업데이트 예정":"Coming soon"
 };

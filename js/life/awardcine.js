@@ -35,7 +35,8 @@ L.awardCines=function(S,R){
     out.push({kind:"paper",kicker:a,title:head,sub:club+" · "+(stat||rate||R.leagueName||""),lines:body,photoHtml:photo,cap:name,paper:paperMeta(R)}); } }
   return out.slice(0,2);
 };
-window.KL_I18N_EN_AWC={
+window.KL_I18N_EN_AWC=(()=>{ const NUM=s=>String(s).replace(/[0-9][0-9,]*(?:.[0-9]+)?/g,"#"), nd=o=>{ const r={}; Object.keys(o).forEach(k=>{ r[NUM(k)]=NUM(o[k]); }); return r; };
+return nd({
  "황금 신예":"Golden Buy","신예 트로피":"Copa Trophy","유망주 부문 수상":"Rising star award","수상 소식":"Award news","일간 풋볼 타임즈":"Daily Football Times","주간 그라운드":"Weekly Ground","스포츠 매일":"Sports Daily","풋볼 투데이":"Football Today","단독":"EXCLUSIVE","화제":"BUZZ","주목":"NOTED",
  "유럽 무대에서 가장 빛난 21세 이하 선수로 뽑혔어요.":"Chosen as the brightest under-21 player on the European stage.",
  "'될성부른 떡잎'":"'A bud with promise'","눈에 띄는 어린 재능":"A young talent who stands out","유망주 부문 영예":"Rising star honour","영예":"honour","올해의 축구 꿈나무":"Football's young dreamer of the year","학교 운동장이 키운":"Raised on a school pitch",
@@ -49,5 +50,5 @@ window.KL_I18N_EN_AWC={
  "\"수비수들과 함께 만든 기록\"이라고 말했다.":"\"A record made together with the defenders,\" he said.",
  "\"팬들의 응원이 큰 힘이었다\"는 소감이 이어졌다.":"\"The fans' support was a great strength,\" he added.",
  "올 시즌 최고의 해결사":"this season's best finisher","올 시즌 활약":"this season's form","올해의 주인공":"the hero of the year","한 시즌의 얼굴":"the face of the season","리그를 평정한":"who conquered the league","골문 앞의 지배자":"master of the penalty area","철벽의 한 해":"a year as a wall","골문을 지킨":"who guarded the goal","득점 레이스 정상에":"tops the scoring race"
-};
+}); })();
 })();

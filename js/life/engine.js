@@ -868,7 +868,7 @@ L.nextYear=function(S){
   afterMil(S); L.syncClubLeague(S); if(L.coachNextYear) L.coachNextYear(S); S.contractYears=Math.max(0,S.contractYears-1);
   S.cond=clamp(S.cond+25,0,100); S.morale=clamp(S.morale*.9+7,0,100);
   if(S.stage==="youth"){ const ag=age(S); if(ag>YOUTH_END){ S.stage="pro"; S.phase="draft"; S.offers=L.draftOffers(S); return; } if(S.club&&S.club.lg==="YOUTH") S.club.name=L.youthTeamName(S.club.short,ag); }
-  if(S.stage==="univ"&&age(S)>=UNIV_DRAFT){ S.stage="pro"; S.phase="draft"; S.offers=L.draftOffers(S); return; }
+  if(S.stage==="univ"&&(age(S)>=UNIV_DRAFT||S.earlyPro)){ S.earlyPro=false; S.stage="pro"; S.phase="draft"; S.offers=L.draftOffers(S); return; }
   S.phase="prep";
 };
 /* 오랫동안 벤치에만 앉은 선수는 구단이 계약을 해지(방출)하기도 해요. 방출된 선수는 자기 수준에 맞는 아래 리그(K2·K3·K4)에서 다시 시작해요 */

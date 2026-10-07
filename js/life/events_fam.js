@@ -35,7 +35,7 @@ E("f_dinner",1.6,S=>kid(S)&&["mid","tight","poor"].includes(fid(S)),"부모님�
   Z("내일 아침 일찍 개인 훈련을 한다",{stat:1,cond:-2},"작은 다짐이 발끝에 실렸어요.")]);
 /* 대학에서 잘하면 프로 구단이 먼저 찾아와요(조기 입단) */
 E("u_scout",3,S=>S.stage==="univ"&&L.age(S)>=20&&(S.p.ovr>=60||S.p.pot>=84)&&!(S.evSeen||[]).includes("u_scout"),"프로 스카우터가 찾아왔어요","대학 리그에서 눈에 띄는 활약을 하자 프로 구단 스카우터가 경기장에 와서 기다리고 있었어요. 졸업까지 기다리지 않고 지금 입단하자는 제안이에요.",
- [Object.assign(Z("대학을 중퇴하고 프로 입단 협상에 나선다",{fame:3,morale:8},"계약서가 오가는 순간이 왔어요. 이제 프로의 세계예요."),{act:"univEarly"}),
+ [Object.assign(Z("대학을 중퇴하고 프로 입단 협상에 나선다",{fame:3,morale:8},"이번 시즌을 마치면 프로 구단과 입단 협상에 나서요. 이제 프로의 세계가 눈앞이에요."),{act:"univEarly"}),
   Z("졸업까지 마치고 정식 드래프트에 나선다",{morale:2,trust:2},"학업과 훈련을 모두 챙기기로 했어요. 몸값은 더 오를지도 몰라요.")]);
 const proF=S=>S.stage==="pro"&&S.family&&["tight","poor"].includes(fid(S));
 E("f_remit",2.2,S=>proF(S)&&S.funds>=.5&&!(S.evSeen||[]).includes("f_remit"),"가족에게 보내는 첫 월급",

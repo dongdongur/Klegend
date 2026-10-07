@@ -109,7 +109,6 @@ window.KL_I18N_EN_XG={
 "함께 연습하자고 제안":"Suggest practicing together",
 "의외로 좋은 파트너가 됐어요.":"You turned out to be surprisingly good partners.",
 "무시한다":"Ignore it",
-"혼자 조용히 훈련했어요.":"You trained quietly on your own.",
 "벽에 부딪히다":"Hitting a Wall",
 "며칠째 실력이 제자리예요. 영상 속 자신이 너무 느려 보여요.":"Your level hasn't moved for days. The you in the video looks painfully slow.",
 "밤새 영상을 분석한다":"Analyze the footage all night",
@@ -247,7 +246,6 @@ window.KL_I18N_EN_XG={
 "아쉬워요.":"So close.",
 "다음 문제":"Next question","결과 보기":"See results",
 "🎭 가상 이름 사용 중 (눌러서 실제 이름으로 — 개발용)":"🎭 Using fictional names (tap for real names — dev only)",
-"🎭 가상 이름으로 보기 (런던 거너스 등)":"🎭 View with fictional names (London Gunners, etc.)",
 "레전드리그는 내부 기록 때문에 이름은 바꿀 수 없고 로고만 바꿀 수 있어요.":"Legend League club names can't be changed because of internal records; you can only change the logo.",
 "로고 지우기":"Remove logo",
 "직전에 끝낸 구간을 한 번 더 돌릴 수 있는 권이에요. 지금은 무료예요. 나중에 앱에서는 묶음(#장·#장·#장)으로 판매할 수 있게 준비해 뒀어요.":"A ticket that lets you replay the stage you just finished. It's free for now. We've prepared it so it could be sold later in the app as bundles (#, # or # tickets).",
@@ -302,6 +300,7 @@ window.KL_I18N_EN_XG={
 "🏅 대회 MVP(골든볼)로 선정!":"🏅 Named tournament MVP (Golden Ball)!",
 "🎖 체육요원으로 편입됐어요!":"🎖 You've been enrolled as sports-service personnel!",
 "지금까지 소집을":"So far you've declined call-ups",
+"번 거부했어요. #번이 되면 '대표팀 기피자'로 낙인찍혀요.":"time(s). At # you'll be branded a 'national team dodger'.",
 "에서는":"At",
 "번이 다른 선수의 영구결번이라 쓸 수 없어요.":"is another player's retired number and can't be used.",
 "에서 원래 번호를 다시 쓸 수 있어요.":" — you can wear your original number again.",
@@ -352,7 +351,6 @@ window.KL_I18N_EN_XG={
 "에서 시즌을 보냈어요":" — spent the season there",
 "에서 시즌을 마쳤어요.":" — finished the season.",
 "축구를 할 가능성이 높습니다.' (분석이 틀릴 수도 있어요)":"football.' (The analysis may be wrong.)",
-"보유 자산 #억(최소 #억 필요). 어느 구단의 주인이 될까요? 인수가는 실제 구단 가치를 단순화한 값이에요.":"Assets on hand: #00M KRW (minimum #00M KRW needed). Which club will you own? Prices are simplified from real club values.",
 /* ---- 코치(coach.js) 이름 ---- */
 "상철":"Sangcheol","정수":"Jeongsu","동호":"Dongho","태영":"Taeyoung","민규":"Mingyu","성호":"Seongho","재원":"Jaewon","기영":"Giyoung","진우":"Jinwoo","승현":"Seunghyun",
 /* ---- 더비·에필로그·이벤트 조각 ---- */
@@ -381,7 +379,6 @@ window.KL_I18N_EN_XG={
 "비호감 이미지":"Unlikable image",
 "억을 받았어요 (재능 개발·트레이너에 쓸 수 있어요)":" received (usable for talent development & trainers)",
 "시즌 말 인기":"Fame at season end",
-"#부에서 정상에 오른":"Topped division #",
 /* ---- 세부 능력치 설명 ---- */
 "골문 앞에서 침착하게 밀어 넣는 힘":"Calmly slotting the ball home in front of goal",
 "박스 밖에서 때리는 한 방":"A thunderous strike from outside the box",
@@ -468,7 +465,6 @@ window.KL_I18N_EN_XG={
 "솔직히 요즘 리그에서 제일 보기 재밌는 선수 {n}임":"Honestly, {n} is the most fun player to watch in the league right now",
 "폼 떨어진 거 {n}도 알 거임. 근데 이 정도면 로테이션 고민해야 함":"{n} must know the form has dipped. But at this point, rotation has to be considered",
 "수비 안정감 보면 {n}이 빠진 경기는 불안해서 못 봄":"Seeing how solid the defense is, I can't watch games without {n}, too nerve-racking",
-"{a}도움… 이 정도면 공격 패스는 {n}이 설계한 거나 마찬가지":"{a} assists... the attack's passing was practically designed by {n}",
 "해외 팬: '어디서 이런 선수가 나왔나' — {n}, 전 세계 축구팬의 화제":"Overseas fan: 'Where did this player come from?' — {n} is the talk of football fans worldwide",
 "유럽 매체들은 {n}의 시즌을 '올해의 발견'이라 평가했다":"European media called {n}'s season 'the discovery of the year'",
 "해외 전문가들은 {n}의 결승 퍼포먼스를 '시즌 최고의 장면'으로 꼽았다":"Overseas pundits named {n}'s final performance 'the moment of the season'",

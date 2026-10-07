@@ -56,7 +56,6 @@ window.KL_I18N_EN_XJ={
 "부주장 두 명이 훈련 방식을 두고 의견이 갈렸어요. 선수들도 편이 나뉘는 분위기예요.":"Two vice-captains disagree over the training approach. The players are starting to take sides.",
 "두 사람을 불러 역할을 나눠 준다":"Call both in and split their roles",
 "서로의 역할을 인정하며 오히려 가까워졌어요.":"They accepted each other's roles and even grew closer.",
-"어느 쪽 편도 들지 않는다는 비판이 나왔어요.":"Some criticized you for not taking either side.",
 "주장에게 정리를 맡긴다":"Leave it to the captain to sort out",
 "주장이 조용히 중재해 불씨를 껐어요.":"The captain mediated quietly and put out the spark.",
 "지난 시즌 #위의 성과에 구단주가 보너스를 약속했어요. 어디에 쓸지는 감독의 의견을 따르겠대요.":"After last season's rank-# finish, the owner promised a bonus. They will follow the manager's view on how to spend it.",

@@ -20,7 +20,6 @@ window.KL_I18N_EN_XF={
 "고맙게 배운다":"Gratefully accept",
 "공짜지만 값진 레슨이었어요.":"The lessons were free, but they were worth a lot.",
 "일정이 안 맞아 몇 번 못 갔어요.":"The schedule didn't work out, so you missed a few sessions.",
-"혼자 벽치기 훈련을 한다":"Do wall-passing drills alone",
 "묵묵히 몸을 만들었어요.":"You quietly built up your body.",
 "장학 제안이 들어왔어요":"A scholarship offer came in",
 "근처 사립 학교가 축구부 장학생으로 받아 주겠대요. 등록금과 합숙비를 줄여 줘요.":"A nearby private school will take you in as a football scholarship student. It cuts your tuition and dorm fees.",

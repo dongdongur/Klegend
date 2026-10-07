@@ -135,7 +135,7 @@ function homeView(){
    <div class="grid2"><button class="wide" data-act="quiz">⚽ 축구 상식 퀴즈</button><button class="wide" data-act="settings">⚙ 설정 · 구단 이름과 로고</button></div>
    ${CS()?`<button class="wide" data-act="cosgo">🎨 꾸미기 · 도트 선수·액자·은퇴 카드</button>`:""}
    <a class="wide" href="patch-notes.html" style="display:grid;place-items:center;text-decoration:none">📰 패치노트${(()=>{ try{ return window.KL_PATCH_LATEST&&localStorage.getItem("kl-patch-seen")!==window.KL_PATCH_LATEST?" 🔴 NEW":""; }catch(e){ return ""; } })()}</a>
-   <section class="card flat"><h3 class="sec">업데이트 예정</h3><p class="muted">· 기록 경쟁 더 늘리기(지역·친구 순위)<br>· 하이라이트 장면 종류 더 늘리기<br>· 이어지는 이야기 더 늘리기<br>· 꾸미기 항목 더 늘리기(유니폼·액자·엠블럼)<br>· 감독판 이야기 늘리기, 선수판 가져오기</p></section>
+   <section class="card flat"><h3 class="sec">업데이트 예정</h3><p class="muted">· 기록 경쟁 더 늘리기(지역·친구 순위)<br>· 하이라이트 장면 종류 더 늘리기<br>· 이어지는 이야기 더 늘리기<br>· 꾸미기 항목 더 늘리기(유니폼·액자·엠블럼)<br>· 감독판 이야기·칭호 더 늘리기</p></section>
    <p class="muted c"><a class="lnk" href="index.html">게임 선택 메뉴로</a>${S?` · <button class="lnk" data-act="wipe">저장 삭제</button>`:""}</p></main>`;
 }
 
@@ -661,7 +661,7 @@ function accountCard(){
   if(!u) return `<div class="card flat" style="gap:6px"><b>☁ 구글로 로그인하면 기기를 바꿔도 이어서 해요</b><small class="muted">로그인은 선택이에요. 진행 중인 인생이 내 계정에 백업돼요.</small><button class="big" data-act="login"><span>구글로 로그인</span><b>→</b></button>${cloudMsg?`<p class="note">${esc(cloudMsg)}</p>`:""}</div>`;
   return `<div class="card flat" style="gap:6px"><b>☁ ${esc(u.name||u.email)}</b><small class="muted">${esc(u.email||"")} · 로그인됨</small><div class="grid2"><button class="wide" data-act="cloudup">지금 저장</button><button class="wide" data-act="clouddown">불러오기</button></div><button class="wide" data-act="logout">로그아웃</button>${cloudMsg?`<p class="note">${esc(cloudMsg)}</p>`:""}</div>`;
 }
-function cloudPayload(){ try{ return {save:JSON.parse(localStorage.getItem("klife-save")||"null"),dex:JSON.parse(localStorage.getItem("klife-dex")||"null"),hof:JSON.parse(localStorage.getItem("klife-hof")||"null"),cos:rd("klife-cos"),at:new Date().toISOString()}; }catch(e){ return {}; } }
+function cloudPayload(){ try{ return {save:JSON.parse(localStorage.getItem("klife-save")||"null"),dex:JSON.parse(localStorage.getItem("klife-dex")||"null"),hof:JSON.parse(localStorage.getItem("klife-hof")||"null"),cos:rd("klife-cos"),ach:rd("klife-ach"),wk:rd("klife-weekly"),at:new Date().toISOString()}; }catch(e){ return {}; } }
 function settingsView(){
   if(setMain==="cos"&&CS()) return cosPage();
   const C=KL_CUSTOM.get(), cl=setClubs(setTab);
@@ -1033,7 +1033,7 @@ function runNext(){
   const sg=S.sim.segs[S.sim.seg];
   L.setPlan(S,Object.assign({},plan,{alloc:Object.assign({},plan.alloc)}));
   snapTake();
-  runLoading(L.seasonLabel(S)+" 시즌",sg.label+" 진행 중",[sg.months+" 일정 확인","훈련·트레이닝","리그 경기 진행","컵 대회·대표팀 소집","기록 집계"],()=>{ const out=L.playSegment(S); afterSegment(out); });
+  runLoading(L.seasonLabel(S)+" 시즌",sg.label+" 진행 중",[sg.months+" 일정 확인","훈련·트레이닝","리그 경기 진행","컵 대회·대표팀 소집","기록 집계"],()=>{ if(!S.sim){ render(); return; } const out=L.playSegment(S); afterSegment(out); });
 }
 function finishSeason(){
   runLoading(S.year+" 시즌","시즌 결산 중",["최종 순위 확정","개인 기록 집계","수상 후보 평가","재능 평가·성장 반영"],()=>{
@@ -1250,7 +1250,7 @@ document.addEventListener("click",e=>{
     case "login": KL_AUTH.login(); break;
     case "logout": KL_AUTH.logout(); cloudMsg="로그아웃했어요."; render(); break;
     case "cloudup": cloudMsg="저장하는 중…"; render(); KL_AUTH.upload(cloudPayload()).then(()=>{ cloudMsg="클라우드에 저장했어요 ("+new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})+")"; render(); }).catch(e=>{ cloudMsg=String(e.message||e); render(); }); break;
-    case "clouddown": cloudMsg="불러오는 중…"; render(); KL_AUTH.download().then(row=>{ if(!row||!row.data||!row.data.save){ cloudMsg="클라우드에 저장된 인생이 없어요."; render(); return; } if(S&&!confirm("이 기기의 현재 인생을 클라우드 저장으로 덮어쓸까요?\n(클라우드 저장 시각: "+(row.updated_at||"").slice(0,16).replace("T"," ")+")")){ cloudMsg="취소했어요."; render(); return; } try{ localStorage.setItem("klife-save",JSON.stringify(row.data.save)); if(row.data.dex) localStorage.setItem("klife-dex",JSON.stringify(row.data.dex)); if(row.data.hof) localStorage.setItem("klife-hof",JSON.stringify(row.data.hof)); if(row.data.cos) localStorage.setItem("klife-cos",JSON.stringify(row.data.cos)); }catch(e){} location.reload(); }).catch(e=>{ cloudMsg=String(e.message||e); render(); }); break;
+    case "clouddown": cloudMsg="불러오는 중…"; render(); KL_AUTH.download().then(row=>{ if(!row||!row.data||!row.data.save){ cloudMsg="클라우드에 저장된 인생이 없어요."; render(); return; } if(S&&!confirm("이 기기의 현재 인생을 클라우드 저장으로 덮어쓸까요?\n(클라우드 저장 시각: "+(row.updated_at||"").slice(0,16).replace("T"," ")+")")){ cloudMsg="취소했어요."; render(); return; } try{ localStorage.setItem("klife-save",JSON.stringify(row.data.save)); if(row.data.dex) localStorage.setItem("klife-dex",JSON.stringify(row.data.dex)); if(row.data.hof) localStorage.setItem("klife-hof",JSON.stringify(row.data.hof)); if(row.data.cos) localStorage.setItem("klife-cos",JSON.stringify(row.data.cos)); if(row.data.ach){ const cur=rd("klife-ach")||{}; localStorage.setItem("klife-ach",JSON.stringify(Object.assign({},row.data.ach,cur))); } if(row.data.wk){ const cw=rd("klife-weekly")||{}; const mw=Object.assign({},row.data.wk); Object.keys(cw).forEach(k=>{ if(!mw[k]||cw[k].score>mw[k].score) mw[k]=cw[k]; }); localStorage.setItem("klife-weekly",JSON.stringify(mw)); } }catch(e){} location.reload(); }).catch(e=>{ cloudMsg=String(e.message||e); render(); }); break;
     case "lang": if(window.KL_I18N) KL_I18N.toggle(); break;
     case "substat": openStat=openStat===v?null:v; keep(render); break;
     case "shop": modals.push({t:"shop"}); keep(render); break;
@@ -1319,7 +1319,7 @@ document.addEventListener("click",e=>{
     case "theme": if(window.KL_THEME){ KL_THEME.toggle(); } render(); break;
     case "tkuse": { if(confirm("새로고침권 1장을 써서 직전 구간을 다시 돌릴까요?\n(지금까지의 결과는 사라지고 구간 시작 전으로 돌아가요)")){ if(snapRestore()){ say("직전 구간을 되돌렸어요"); } else say("되돌릴 수 없어요"); render(); } break; }
     case "tkfree": setTickets(tickets()+5); say("새로고침권 5장을 받았어요 (지금은 무료)"); render(); break;
-    case "bkExport": { try{ const o={app:"klife",v:1,at:new Date().toISOString(),data:{}}; ["klife-save","klife-hof","klife-dex","klife-nick","klife-cos","kl-custom","kl-alias","kl-bgm"].forEach(k=>{ const x=localStorage.getItem(k); if(x!=null) o.data[k]=x; }); const bl=new Blob([JSON.stringify(o)],{type:"application/json"}); const a=document.createElement("a"); a.href=URL.createObjectURL(bl); a.download="klife-backup-"+new Date().toISOString().slice(0,10)+".json"; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },500); say("백업 파일을 저장했어요"); }catch(e){ say("백업에 실패했어요"); } break; }
+    case "bkExport": { try{ const o={app:"klife",v:1,at:new Date().toISOString(),data:{}}; ["klife-save","klife-hof","klife-dex","klife-nick","klife-cos","klife-ach","klife-weekly","kl-custom","kl-alias","kl-bgm"].forEach(k=>{ const x=localStorage.getItem(k); if(x!=null) o.data[k]=x; }); const bl=new Blob([JSON.stringify(o)],{type:"application/json"}); const a=document.createElement("a"); a.href=URL.createObjectURL(bl); a.download="klife-backup-"+new Date().toISOString().slice(0,10)+".json"; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },500); say("백업 파일을 저장했어요"); }catch(e){ say("백업에 실패했어요"); } break; }
     case "setVirt": try{ localStorage.setItem("kl-virt",(window.KL_VIRT&&KL_VIRT.on)?"0":"1"); }catch(e){} location.reload(); break;
     case "setAlias": KL_CUSTOM.alias(!KL_CUSTOM.aliasOn()); say(KL_CUSTOM.aliasOn()?"앱용 이름 세트를 켰어요. 새로고침하면 적용돼요":"앱용 이름 세트를 껐어요. 새로고침하면 원래대로 돌아와요"); render(); break;
     case "setLogoDel": KL_CUSTOM.setLogo(v,null); render(); break;

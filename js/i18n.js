@@ -21,11 +21,16 @@ function boot(){
   var esc=function(s){ return s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"); };
   var JOSA_RE="(?:전에서|전|행|한테|이다|이에요|예요|입니다|에서|에게|으로|이|가|은|는|을|를|의|에|도|로|와|과|만|께|부터|까지)?";
   /* 한글 단어의 중간·끝 조각은 바꾸지 않도록 앞뒤 경계를 확인해요 (뒤에는 조사만 허용) */
-  var phraseRe=keys.length?new RegExp("(^|[^가-힣])("+keys.map(esc).join("|")+")(?="+JOSA_RE+"(?![가-힣]))","g"):null;
+  /* 긴 문구를 먼저, 짧은 조각을 나중에 바꿔요(앞에 숫자 '#'가 붙은 짧은 조각이 긴 문구 중간을 가로채지 않게) */
+  var keysL=keys.filter(function(k){ return k.length>=10; }), keysS=keys.filter(function(k){ return k.length<10; });
+  var phraseReL=keysL.length?new RegExp("(^|[^가-힣])("+keysL.map(esc).join("|")+")(?="+JOSA_RE+"(?![가-힣]))","g"):null;
+  var phraseRe=keysS.length?new RegExp("(^|[^가-힣])("+keysS.map(esc).join("|")+")(?="+JOSA_RE+"(?![가-힣]))","g"):null;
   /* "을(를) 고용했어요."처럼 괄호 조사로 시작하는 조각은 앞이 한글 이름이어도 바꿔요 (괄호 조사는 단어 속에 나오지 않아요) */
   var PJ=/^(?:을\(를\)|를\(을\)|이\(가\)|가\(이\)|은\(는\)|는\(은\)|과\(와\)|와\(과\)|\(으\)로|으로\(로\)|로\(으로\)|\(이\)라|\(이\)며)/;
   var keysJ=keys.filter(function(k){ return PJ.test(k); });
   var phraseReJ=keysJ.length?new RegExp("("+keysJ.map(esc).join("|")+")","g"):null;
+  /* 한글 이름 바로 뒤에 붙은 괄호 조사 조각(예: 파도가(가) 레전드리그#으로 승격했어요.)은 다른 조각이 먼저 글을 바꾸기 전에 처리해요 */
+  var phraseReJH=keysJ.length?new RegExp("([가-힣])("+keysJ.map(esc).join("|")+")","g"):null;
 
   var NUM=/\d+(?:\.\d+)?/g;
   function fmtM(m){ if(m>=1000){ var b=m/1000; return "₩"+(b>=10?Math.round(b):(Math.round(b*10)/10))+"B"; } if(m>=1) return "₩"+(Math.round(m*10)/10)+"M"; return "₩"+Math.round(m*1000)+"K"; }
@@ -46,10 +51,10 @@ function boot(){
     /* 돈 */
     var money=[]; s=s.replace(/(\d[\d,]*(?:\.\d+)?)\s*(억|만)(?! ?명)(?: 원)?/g,function(m,n,u){ var v=parseFloat(n.replace(/,/g,"")); money.push(u==="억"?fmtM(v*100):fmtM(v/100)); return "¤"; });
     var nums=[]; s=s.replace(NUM,function(n){ nums.push(n); return "#"; });
+    if(phraseReJH&&dict[s]==null) s=s.replace(phraseReJH,function(m,pre,key){ return pre+dict[key]; });
     var out;
     if(dict[s]!=null) out=dict[s];
-    else if(phraseRe) out=s.replace(phraseRe,function(m,pre,key){ return pre+dict[key]; });
-    else out=s;
+    else{ out=s; if(phraseReL) out=out.replace(phraseReL,function(m,pre,key){ return pre+dict[key]; }); if(phraseRe) out=out.replace(phraseRe,function(m,pre,key){ return pre+dict[key]; }); }
     if(phraseReJ&&dict[s]==null) out=out.replace(phraseReJ,function(m,key){ return dict[key]; });
     out=nameTx(out).replace(JOS,"$1").replace(/(?:을\(를\)|를\(을\)|이\(가\)|가\(이\)|은\(는\)|는\(은\)|과\(와\)|와\(과\)|으로\(로\)|로\(으로\)|\(으\)로|\(이\)라)/g,"");
     var ni=0, mi=0;
