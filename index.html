@@ -299,5 +299,5 @@ body:not(.show-mgr) .modes{grid-template-columns:1fr!important}.sub{padding-righ
 <script src="js/virtual_map.js"></script><script src="js/josa.js"></script>
 <script src="js/i18n.js"></script>
 <script src="js/pwa.js"></script>
-<script>(function(){var o=window.KL_OPERATOR||{},p=document.getElementById("opLine");if(!p)return;var t=[];if(o.name)t.push("만든이 "+o.name);if(o.email)t.push("문의 "+o.email);if(t.length)p.textContent=t.join(" · ");else p.style.display="none";})();</script></body>
+<script>(function(){var o=window.KL_OPERATOR||{},p=document.getElementById("opLine");if(!p)return;var t=[];if(o.name)t.push("만든이 "+o.name);if(o.email)t.push("문의 "+o.email);var ig=(window.KL_SOCIAL||{}).instagram;if(t.length)p.textContent=t.join(" · ");if(ig){if(t.length)p.appendChild(document.createTextNode(" · "));var a=document.createElement("a");a.href="https://www.instagram.com/"+ig+"/";a.target="_blank";a.rel="noopener";a.className="lnk";a.setAttribute("data-noi18n","1");a.textContent="인스타그램 @"+ig;p.appendChild(a);}else if(!t.length)p.style.display="none";})();</script></body>
 </html>
