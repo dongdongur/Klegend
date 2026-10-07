@@ -90,3 +90,18 @@ body.fx-on{overflow:hidden}
 @keyframes walkbob{0%{transform:translateY(0)}100%{transform:translateY(-6px)}}
 .fx.walk .fx-card{margin-top:22vh}
 .fx.calm .sc-arrive .walker{animation:none;opacity:0}
+
+/* 계약서 도장 옆의 도트 선수 */
+.stp-me{position:absolute;left:50%;bottom:16vh;margin-left:-43px;z-index:3;animation:stpHop .45s ease 0.52s both}.stp-me img{image-rendering:pixelated;display:block;filter:drop-shadow(0 8px 10px rgba(0,0,0,.5))}
+@keyframes stpHop{0%{transform:translateY(0)}40%{transform:translateY(-26px)}100%{transform:translateY(0)}}
+/* 대표팀 소집: 버스가 지나가요 */
+.sc-bus{background:linear-gradient(180deg,#0b2447 0%,#2a5d9a 52%,#4a7a52 52.2%,#2b4a30 100%)}
+.sc-bus .road{position:absolute;left:0;right:0;top:56%;height:18%;background:#2a2d33;border-top:3px solid #555;box-shadow:0 -2px 0 #888}
+.sc-bus .road:after{content:"";position:absolute;left:0;right:0;top:48%;height:3px;background:repeating-linear-gradient(90deg,#f0e6a8 0 26px,transparent 26px 52px);animation:roadmv .5s linear infinite}
+@keyframes roadmv{to{background-position:-52px 0}}
+.sc-bus .bus{position:absolute;top:36%;left:-60%;width:min(60vw,300px);height:22%;min-height:70px;border-radius:14px 14px 6px 6px;background:linear-gradient(180deg,#3b78d6,#2d58a3);box-shadow:0 8px 14px rgba(0,0,0,.5);animation:busgo 4.4s cubic-bezier(.3,.2,.4,1) .3s both}
+.sc-bus .bus b{position:absolute;left:12px;bottom:6px;font:800 12px "Noto Sans KR",sans-serif;color:#fff}
+.sc-bus .bw{position:absolute;top:10px;width:22%;height:42%;border-radius:6px;background:#bfe0ff;overflow:hidden;display:grid;place-items:end center}.sc-bus .bw:nth-child(1){left:8%}.sc-bus .b2{left:36%}.sc-bus .b3{left:64%}
+.sc-bus .bw img{width:34px;height:auto;image-rendering:pixelated;margin-bottom:-2px}
+@keyframes busgo{0%{left:-60%}70%{left:30%}100%{left:112%}}
+.fx.calm .sc-bus .bus{animation:none;left:30%}

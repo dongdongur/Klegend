@@ -353,3 +353,15 @@ html[data-theme="arcade"] .pane-plr .tbl th:first-child,html[data-theme="arcade"
   html[data-theme="arcade"] .modal{padding:8px}
   html[data-theme="arcade"] .m-box{max-height:96vh}
 }
+/* 감독 커리어 이야기 (js/mgr_story.js) */
+html[data-theme="arcade"] .press-eff{color:var(--m-ink2);opacity:1;font-weight:700}
+html[data-theme="arcade"] .ttl-main{background:linear-gradient(160deg,#fff0b8,#fff);border:2.5px solid var(--m-navy);box-shadow:0 3px 0 rgba(20,48,90,.55);color:var(--txt)}
+html[data-theme="arcade"] .ttl-main small,html[data-theme="arcade"] .ttl-main span{color:var(--m-ink2);font-weight:600}
+html[data-theme="arcade"] .ttl{background:#eef3fa;border:2px solid rgba(20,48,90,.4);color:var(--txt);opacity:1}
+html[data-theme="arcade"] .ttl small{color:var(--m-ink2);font-weight:600}
+html[data-theme="arcade"] .ttl:not(.on){filter:grayscale(1);opacity:.7}
+html[data-theme="arcade"] .ttl.on{background:linear-gradient(160deg,#ffe58a,#fff);border:2.5px solid var(--m-navy);box-shadow:0 3px 0 rgba(20,48,90,.55)}
+html[data-theme="arcade"] .chron-i{background:#fff;border:2px solid rgba(20,48,90,.45);color:var(--txt)}
+html[data-theme="arcade"] .chron-i.gold{border:2.5px solid var(--m-navy);background:linear-gradient(160deg,#fff6d6,#fff)}
+html[data-theme="arcade"] .chron-top,html[data-theme="arcade"] .chron-ev{color:var(--m-ink2);font-weight:600}
+html[data-theme="arcade"] .chron-top b{color:var(--m-navy)}

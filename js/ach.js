@@ -7,6 +7,7 @@ const write=v=>{ try{ localStorage.setItem(KEY,JSON.stringify(v)); }catch(e){} }
 
 /* tier: bronze / silver / gold (배지 색). test(R, c): R = 시즌 결과, c = {career, mode, diff, moves} */
 const champ=R=>R.div===1&&R.rank===1;
+const cur=c=>c.career.history[c.career.history.length-1]||{};
 const DEFS=[
  {id:"first_title",  icon:"🏆", tier:"bronze", name:"첫 우승",       desc:"리그 우승을 차지했어요", test:champ},
  {id:"unbeaten",     icon:"🛡️", tier:"silver", name:"무패 우승",     desc:"리그를 한 번도 지지 않고 우승했어요", test:R=>champ(R)&&R.flags.league.l===0},
@@ -39,7 +40,21 @@ const DEFS=[
  {id:"k2_title",    icon:"🥈", tier:"bronze", name:"레전드리그2 우승",    desc:"레전드리그2에서 우승했어요", test:R=>R.div===2&&R.rank===1},
  {id:"relegated",   icon:"⬇️", tier:"bronze", name:"쓴맛",           desc:"레전드리그2로 강등됐어요 (복귀가 더 값져요)", test:R=>R.promo.status==="relegated"},
  {id:"survivor",    icon:"🛟", tier:"silver", name:"생존왕",         desc:"승강 플레이오프에서 이겨 1부에 남았어요", test:R=>R.promo.status==="po_stay"},
- {id:"duel_win",     icon:"🤺", tier:"silver", name:"친구 격파",     desc:"친구 팀과의 맞대결에서 이겼어요", test:()=>false}
+ {id:"duel_win",     icon:"🤺", tier:"silver", name:"친구 격파",     desc:"친구 팀과의 맞대결에서 이겼어요", test:()=>false},
+ /* ---- 감독 커리어 이야기 (기록 업적: 시즌 기록 c.career.history 의 마지막 항목 = 이번 시즌) ---- */
+ {id:"streak10",    icon:"🚀", tier:"silver", name:"10연승 질주",    desc:"리그에서 10연승을 달렸어요", test:(R,c)=>cur(c).ws>=10},
+ {id:"wall18",      icon:"🚪", tier:"silver", name:"무실점의 벽",    desc:"한 시즌에 무실점 경기를 18번 이상 했어요", test:(R,c)=>cur(c).cs>=18},
+ {id:"photo_finish",icon:"📸", tier:"bronze", name:"한 끗 차이 우승",desc:"승점 2점 차 이내로 리그 우승을 차지했어요", test:(R,c)=>R.div===1&&R.rank===1&&cur(c).gap<=2},
+ {id:"crisis_over", icon:"🚒", tier:"bronze", name:"위기 극복",      desc:"강등권 근처에서 한 시즌을 보낸 뒤 이듬해 중위권 이상으로 반등했어요", test:(R,c)=>cur(c).crisis&&R.promo.status!=="po_stay"},
+ {id:"comeback_title",icon:"💪",tier:"silver",name:"연패를 딛고 우승",desc:"한 시즌에 4연패 이상을 겪고도 리그 우승을 차지했어요", test:(R,c)=>champ(R)&&cur(c).ls>=4},
+ {id:"quick_return",icon:"↩️", tier:"silver", name:"1년 만의 복귀",  desc:"강등된 바로 다음 시즌에 레전드리그2를 우승해 1부로 돌아왔어요", test:(R,c)=>{ const h=c.career.history, p=h[h.length-2]; return R.div===2&&R.promo.status==="promoted"&&!!p&&p.st==="relegated"; }},
+ {id:"win28",       icon:"💯", tier:"silver", name:"이기는 습관",    desc:"한 시즌 리그에서 28승 이상을 거뒀어요", test:(R,c)=>cur(c).w>=28},
+ {id:"cup_repeat",  icon:"🏅", tier:"silver", name:"컵 2연패",       desc:"전국컵을 2시즌 연속 우승했어요", test:(R,c)=>{ const h=c.career.history, p=h[h.length-2]; return R.fa.champion&&!!p&&(p.trophies||[]).includes("전국컵 우승"); }},
+ {id:"decade",      icon:"🕰️", tier:"gold",   name:"10년 장기 집권", desc:"한 팀에서 10시즌을 치렀어요", test:(R,c)=>c.career.history.length>=10},
+ {id:"five_titles", icon:"⭐", tier:"gold",   name:"리그 5회 우승",  desc:"감독 커리어 통산 리그 우승 5회", test:(R,c)=>c.career.trophies.league>=5},
+ {id:"collector",   icon:"🧩", tier:"gold",   name:"트로피 컬렉터",  desc:"리그·전국컵·아시아컵 우승을 모두 경험했어요", test:(R,c)=>{ const t=c.career.trophies; return t.league+t.k2>=1&&t.fa>=1&&t.acl>=1; }},
+ {id:"story_teller",icon:"📖", tier:"bronze", name:"사연 많은 감독", desc:"한 커리어에서 시즌 이야기 이벤트를 10번 겪었어요", test:(R,c)=>Object.values(c.career.storyLog||{}).reduce((s,a)=>s+a.length,0)>=10},
+ {id:"title_given", icon:"🎖️", tier:"silver", name:"감독 평가 칭호", desc:"기록으로 감독 평가 칭호를 하나 얻었어요", test:(R,c)=>!!window.KLStory&&KLStory.titles(c.career).earned>=1}
 ];
 
 function unlocked(){ return read(); }

@@ -993,7 +993,7 @@ function afterSegment(out){
   if(out.growth&&out.growth.changes.length) q.push({t:"grow",g:out.growth,label:out.label,notes:out.notes});
   else if(out.notes&&out.notes.length) q.push({t:"grow",g:{changes:[],ovr0:out.growth.ovr0,ovr1:out.growth.ovr1},label:out.label,notes:out.notes});
   { const sr=L.segReactions?L.segReactions(S,out):null; if(sr) q.push({t:"sns",posts:sr.posts,label:out.label}); }
-  out.callups.forEach(c=>{ const T=L.TOURN&&L.TOURN[c.t]; if(T&&!T.rel&&!S.firstCallShown&&!(S.career&&S.career.caps>0)){ S.firstCallShown=true; q.push({t:"cine",o:{kind:"promo",icon:"🇰🇷",kicker:"FIRST CALL-UP",title:"태극마크를 달다",sub:S.p.name+", 처음으로 국가대표 명단에 이름이 올랐어요.",lines:[c.name+" · "+c.months]}}); } q.push({t:"callup",c}); });
+  out.callups.forEach(c=>{ const T=L.TOURN&&L.TOURN[c.t]; if(T&&!T.rel&&!S.firstCallShown&&!(S.career&&S.career.caps>0)){ S.firstCallShown=true; q.push({t:"cine",o:{kind:"promo",scene:"bus",busHtml:(()=>{ try{ return L.pixelImg(S,52,{clean:true}); }catch(e){ return ""; } })(),icon:"🇰🇷",kicker:"FIRST CALL-UP",title:"태극마크를 달다",sub:S.p.name+", 처음으로 국가대표 명단에 이름이 올랐어요.",lines:[c.name+" · "+c.months]}}); } q.push({t:"callup",c}); });
   const uc=(out.recs||[]).filter(r=>r.cup==="ucl"); if(uc.length) q.push({t:"ucl",recs:uc,label:out.label});
   const uev=L.rollUclEvent?L.rollUclEvent(S,out):null; if(uev) q.push({t:"event",ev:uev});
   const ev=uev?null:L.rollEvent(S,out); if(ev) q.push({t:"event",ev});
@@ -1225,7 +1225,7 @@ document.addEventListener("click",e=>{
     case "signclear": { const cv=$("signpad"); if(cv){ cv.getContext("2d").clearRect(0,0,cv.width,cv.height); signDirty=false; } break; }
     case "signprev": { const cv=$("signpad"), im=new Image(); im.onload=()=>{ const c=cv.getContext("2d"); c.clearRect(0,0,cv.width,cv.height); c.drawImage(im,0,0,cv.width,cv.height); signDirty=true; }; im.src=S.sign; break; }
     case "signcancel": modals.shift(); keep(render); break;
-    case "signdone": { if(!signDirty){ say("사인을 먼저 해 주세요"); break; } const cv=$("signpad"); S.sign=cv.toDataURL("image/png"); const m=modals.shift(); save(); if(m&&m.fn){ if(window.KL_FX&&!FAST&&!KL_FX.busy()){ KL_FX.stamp(String(m.title||"").split(" · ").pop().slice(0,16),()=>m.fn()); render(); } else m.fn(); } break; }
+    case "signdone": { if(!signDirty){ say("사인을 먼저 해 주세요"); break; } const cv=$("signpad"); S.sign=cv.toDataURL("image/png"); const m=modals.shift(); save(); if(m&&m.fn){ if(window.KL_FX&&!FAST&&!KL_FX.busy()){ KL_FX.stamp(String(m.title||"").split(" · ").pop().slice(0,16),()=>m.fn(),(()=>{ try{ return L.pixelImg(S,86,{clean:true}); }catch(e){ return ""; } })()); render(); } else m.fn(); } break; }
     case "univ": L.chooseUniv(S); S.dr=null; view="game"; tab="season"; save(); render(); break;
     case "quitdraft": L.quitCareer(S,"draft","프로 구단의 지명을 받지 못해 축구를 접기로 했어요."); S.dr=null; view="quit"; save(); render(); break;
     case "focus": plan.focus=v; keep(render); break;

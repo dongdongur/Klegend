@@ -78,7 +78,6 @@ function boot(){
 }
 /* 사전은 영어일 때만 불러와요 */
 /* 사전 파일(기본 + 이벤트·화면 번역 조각)을 차례로 불러온 뒤 시작해요. 없는 파일은 건너뛰어요. */
-(function(){ var files=["js/i18n_en.js","js/i18n_en_xA.js","js/i18n_en_xB.js","js/i18n_en_xC.js","js/i18n_en_xD.js","js/i18n_en_xE.js","js/i18n_en_xF.js","js/i18n_en_xG.js","js/i18n_en_xH.js","js/i18n_en_xI.js","js/i18n_en_xK.js","js/i18n_en_xL.js","js/i18n_en_xM.js","js/i18n_en_xN.js"], i=0;
-  function next(){ if(i>=files.length){ boot(); return; } var f=files[i++]; if(f==="js/i18n_en.js"&&window.KL_I18N_EN){ next(); return; } var sc=document.createElement("script"); sc.src=f; sc.onload=next; sc.onerror=next; document.head.appendChild(sc); }
+(function(){ var files=["js/i18n_en.js","js/i18n_en_xA.js","js/i18n_en_xB.js","js/i18n_en_xC.js","js/i18n_en_xD.js","js/i18n_en_xE.js","js/i18n_en_xF.js","js/i18n_en_xG.js","js/i18n_en_xH.js","js/i18n_en_xI.js","js/i18n_en_xJ.js","js/i18n_en_xK.js","js/i18n_en_xL.js","js/i18n_en_xM.js","js/i18n_en_xN.js"], i=0;  function next(){ if(i>=files.length){ boot(); return; } var f=files[i++]; if(f==="js/i18n_en.js"&&window.KL_I18N_EN){ next(); return; } var sc=document.createElement("script"); sc.src=f; sc.onload=next; sc.onerror=next; document.head.appendChild(sc); }
   next(); })();
 })();

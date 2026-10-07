@@ -52,6 +52,7 @@ function cine(o,done){
   const sc=o.scene||(o.kind==='flight'?'flight':o.kind==='arrive'?'arrive':'');
   const useMap=sc==='flight'&&o.route&&window.KL_MAP&&!calm;
   if(useMap){ w.classList.add('mapfx'); w.insertAdjacentHTML('afterbegin','<div class="fx-scene"><canvas class="fx-map"></canvas></div>'); }
+  else if(sc==='bus'){ w.insertAdjacentHTML('afterbegin','<div class="fx-scene sc-bus"><i class="road"></i><div class="bus"><span class="bw">'+(o.busHtml||'')+'</span><span class="bw b2"></span><span class="bw b3"></span><b>🇰🇷 대표팀</b></div></div>'); }
   else if(sc){ const sceneHtml=sc==='flight'?'<div class="fx-scene sc-flight"><i class="cl c1">☁️</i><i class="cl c2">☁️</i><i class="cl c3">☁️</i><i class="plane">✈️</i><i class="route"></i></div>':'<div class="fx-scene sc-arrive"><i class="tunnel"></i><i class="crowd">👥👥👥👥👥👥</i><i class="cam c1">📸</i><i class="cam c2">📸</i><i class="cam c3">📸</i></div>';
     w.insertAdjacentHTML('afterbegin',sceneHtml); if(o.walkerHtml){ const sc2=w.querySelector('.sc-arrive'); if(sc2){ sc2.insertAdjacentHTML('beforeend','<div class="gate"><i class="gl l"></i><i class="gl r"></i><b>'+esc(o.gate||"")+'</b><i class="dark"></i></div><div class="ground"></div><div class="walker"><div class="wb">'+o.walkerHtml+'</div></div>'); } w.classList.add("walk"); w.style.setProperty("--sh",SH+"s"); } }
   document.body.appendChild(w); document.body.classList.add("fx-on");
@@ -64,8 +65,8 @@ function cine(o,done){
   setTimeout(close,(o.dur||k.dur)+(SH?1800:0));
 }
 /* 계약서 도장: 쾅! 하고 구단 이름이 찍혀요 */
-function stamp(label,done){
-  const w=document.createElement("div"); w.className="fx-stamp"; w.innerHTML='<div class="paper"><b>계약서</b><i class="ln"></i><i class="ln"></i><i class="ln s"></i><div class="seal"><span>'+esc(label)+'</span></div></div>';
+function stamp(label,done,spriteHtml){
+  const w=document.createElement("div"); w.className="fx-stamp"; w.innerHTML='<div class="paper"><b>계약서</b><i class="ln"></i><i class="ln"></i><i class="ln s"></i><div class="seal"><span>'+esc(label)+'</span></div></div>'+(spriteHtml?'<div class="stp-me">'+spriteHtml+'</div>':'');
   document.body.appendChild(w); let closed=false; const close=()=>{ if(closed) return; closed=true; w.classList.add("out"); setTimeout(()=>{ w.remove(); if(done) done(); },320); };
   w.addEventListener("click",close); setTimeout(()=>{ w.classList.add("hit"); },520); setTimeout(close,1700);
 }

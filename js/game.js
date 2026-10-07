@@ -280,7 +280,8 @@ function openPress(title,qs,done){
     box.append(el("small","c-kicker",title+" · "+(i+1)+"/"+qs.length), el("p","press-who",q.who), el("h3","press-q",q.kind==="event"?q.text:"“"+q.text+"”"), repBars(c));
     const ls=el("div","press-ans");
     q.answers.forEach(a=>{ const b=el("button","press-a",a.label+(a.chance!=null&&a.chance<100?"  (성공 확률 "+a.chance+"%)":"")); b.type="button";
-      b.onclick=()=>{ const r=KLPress.apply(c,a); if(r&&r.text) results.push((r.hit?"✔ ":"✖ ")+r.text); i++; draw(); }; ls.appendChild(b); });
+      if(q.kind==="event"&&window.KLStory) b.appendChild(el("small","press-eff",KLStory.effText(a)));
+      b.onclick=()=>{ const r=KLPress.apply(c,a); if(window.KLStory) KLStory.log(c,q,a,r); if(r&&r.text) results.push((r.hit?"✔ ":"✖ ")+r.text); i++; draw(); }; ls.appendChild(b); });
     box.appendChild(ls);
   };
   draw(); m.appendChild(box);
@@ -588,6 +589,7 @@ function recordSeason(R){
   if(R.trophies.includes("리그 우승")) c.trophies.league++; if(R.trophies.includes("레전드리그2 우승")) c.trophies.k2++;
   if(R.fa.champion) c.trophies.fa++; if(R.acl.champion) c.trophies.acl++;
   c.aclQ=R.aclNext;
+  if(window.KLStory){ try{ KLStory.decorate(R,c); }catch(e){ console.error(e); } }
   applyMoves(R);
   S.last=R; S.done=true; S.phase="results";
   R.newAch = window.KLAch ? window.KLAch.check(R,{career:c,mode:S.mode,diff:S.diff,moves:c.moves}) : [];
@@ -764,8 +766,16 @@ function startNextSeason(){
   S.xi.concat(S.bench).filter(Boolean).forEach(p=>{ p.delta=0; });
   $("deskWinter").hidden=true; $("deskDraft").hidden=false;
   setReel("SEASON "+c.no,"시즌 진행 중",(c.div===1?"레전드리그1":"레전드리그2")+" · 전국컵"+(c.aclQ?(c.aclQ===1?" · 아시아컵":" · 아시아컵2"):""));
-  KLPress.drift(c); openPress("시즌 전 기자회견",KLPress.pre(c,S),runSeason);
+  KLPress.drift(c); preSeason();
 }
+/* 시즌 시작 전: 기자회견 → 시즌 이벤트(감독 커리어 이야기) → 시즌 진행. 첫 시즌은 기존 이벤트도 섞여요 */
+function seasonEvents(){
+  const c=S.career; let ev=[];
+  if(c.no===1&&window.KLPress) ev=KLPress.events(c,S).slice(0,1);
+  if(window.KLStory){ try{ ev=ev.concat(KLStory.pick(c,S,{capFx:captainFx(),max:c.no===1?(ev.length?1:Math.random()<.85?1:0):undefined})); }catch(e){ console.error(e); } }
+  return ev.slice(0,2);
+}
+function preSeason(){ openPress(S.career.no===1?"부임 기자회견":"시즌 전 기자회견",KLPress.pre(S.career,S),()=>{ const ev=seasonEvents(); if(ev.length) openPress("시즌 이벤트",ev,runSeason); else runSeason(); }); }
 
 /* ================= 결과 화면 ================= */
 const hue=s=>{ let h=0; for(const ch of s) h=(h*31+ch.charCodeAt(0))%360; return h; };
@@ -1012,7 +1022,33 @@ function renderCareer(){
   const box=$("career"); box.innerHTML="";
   const tb=el("table","tbl"); tb.innerHTML="<thead><tr><th>시즌</th><th class='t'>리그</th><th>순위</th><th>승점</th><th>전적</th><th class='t'>전국컵</th><th class='t'>아시아컵</th><th class='t'>승강</th></tr></thead>";
   const body=el("tbody"); c.history.forEach(h=>{ const tr=el("tr"); tr.append(el("td","num",h.no+" ("+h.year+")"),el("td","t",h.div===2?"레전드리그2":"레전드리그1"),el("td","num"+(h.rank===1?" pts":""),h.rank+"위"),el("td","num",String(h.pts)),el("td","num",h.w+"-"+h.d+"-"+h.l),el("td","t",h.fa),el("td","t",h.acl),el("td","t",h.promo||"-")); body.appendChild(tr); });
-  tb.appendChild(body); const tw=el("div","tablewrap"); tw.appendChild(tb); box.appendChild(tw);
+  tb.appendChild(body); const tw=el("div","tablewrap"); tw.appendChild(tb);
+  /* 이야기(평가 칭호·연대기)를 먼저, 긴 시즌 표는 맨 아래에 둬서 모바일에서 스크롤이 줄어요 */
+  if(window.KLStory){ try{ box.appendChild(careerTitles(c)); box.appendChild(careerChron(c)); box.appendChild(el("h4","sec","시즌별 기록")); }catch(e){ console.error(e); } }
+  box.appendChild(tw);
+}
+/* 감독 평가 칭호: 기록으로만 정해요 (규칙은 js/mgr_story.js) */
+function careerTitles(c){
+  const T=KLStory.titles(c), sec=el("div","ttl-sec");
+  const top=el("div","ttl-main"); top.append(el("small",null,"현재 감독 평가"), el("b",null,T.main.icon+" "+T.main.name), el("span",null,T.main.desc));
+  sec.appendChild(top);
+  const grid=el("div","ttl-grid"); T.list.forEach(t=>{ const d=el("div","ttl"+(t.on?" on":"")); d.append(el("i",null,t.on?t.icon:"🔒"), el("b",null,t.name), el("small",null,t.desc)); grid.appendChild(d); });
+  sec.append(el("h4","sec","감독 평가 칭호 ("+T.earned+"/"+T.list.length+")"), grid);
+  return sec;
+}
+/* 커리어 연대기: 시즌별 한 줄 서사 + 그 시즌 전에 겪은 이야기 이벤트 */
+function careerChron(c){
+  const sec=el("div","chron-sec"); sec.appendChild(el("h4","sec","커리어 연대기"));
+  const list=el("ol","chron"); const rows=c.history.slice().reverse(), log=c.storyLog||{};
+  const pitch=KLStory.EV; const name=id=>{ const e=pitch.find(x=>x.id===id); return e?e.who:"이야기"; };
+  const draw=all=>{ list.innerHTML=""; rows.slice(0,all?rows.length:6).forEach(h=>{
+    const li=el("li","chron-i"+(h.rank===1&&h.div? " gold":"")); const top=el("div","chron-top");
+    top.append(el("b",null,"시즌 "+h.no+" · "+h.year), el("span",null,(h.div===2?"레전드리그2 ":"레전드리그1 ")+h.rank+"위"+((h.trophies||[]).length?" · "+h.trophies.join(" · "):"")));
+    li.append(top, el("p","chron-line",h.line||"기록이 쌓이는 시즌이에요."));
+    (log[h.no]||[]).forEach(e=>{ li.appendChild(el("p","chron-ev","📌 "+(e.who||name(e.id))+" · "+e.pick+" → "+(e.text||""))); });
+    list.appendChild(li); });
+    if(!all&&rows.length>6){ const mb=el("button","btn ghost small chron-more","이전 시즌 더 보기 ("+(rows.length-6)+")"); mb.type="button"; mb.onclick=()=>draw(true); const li=el("li","chron-more-li"); li.appendChild(mb); list.appendChild(li); } };
+  draw(false); sec.appendChild(list); return sec;
 }
 function renderAch(){
   const A=window.KLAch; if(!A) return;
@@ -1222,7 +1258,7 @@ $("spinBtn").onclick=()=>spin(false);
 $("respinBtn").onclick=()=>spin(true);
 $("mgrBtn").onclick=drawMgr;
 $("benchBtn").onclick=startBench;
-$("simBtn").onclick=()=>{ if(S.done){ enterWinter(); } else if(ready()){ const go=()=>openPress("부임 기자회견",KLPress.pre(S.career,S),()=>{ const ev=KLPress.events(S.career,S); if(ev.length) openPress("시즌 이벤트",ev,runSeason); else runSeason(); }); if(!S.sign) openContract(go); else go(); } };
+$("simBtn").onclick=()=>{ if(S.done){ enterWinter(); } else if(ready()){ const go=preSeason; if(!S.sign) openContract(go); else go(); } };
 $("hard").onchange=()=>{ renderOffers(); renderPitch(); };
 
 newState(); { const n=store.get("kl38-nick"); if(n) $("nick").value=n; }

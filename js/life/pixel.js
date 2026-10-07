@@ -85,7 +85,7 @@ L.pixelSprite=function(o){
 const _imgs={};
 L.pixelCanvasImg=function(S,opts){ opts=opts||{}; try{ const p=S.p, age=(S.year||2026)-(p.born||2008); let col=null; const cc=S.club&&(S.club.col||(S.club.c)); if(typeof cc==="string"&&/^#[0-9a-f]{6}$/i.test(cc)) col=cc;
     let bf={mass:0,tall:0}; try{ if(L.bodyFx) bf=L.bodyFx(p.pos,p.height,p.weight); }catch(e){}
-    const other=!!(opts.name||opts.kit); const base={name:opts.name||p.name,age:opts.age||(other?24:age),kit:opts.kit||col,gk:!!opts.gk||(!other&&p.pos==="GK"&&!opts.field),bodyMass:other?0:bf.mass,bodyTall:other?0:bf.tall,back:!!opts.back,military:!!opts.military,suit:!!opts.suit,injured:false};
+    const other=!!(opts.name||opts.kit); const base={name:opts.name||p.name,age:opts.age||(other?24:age),kit:opts.kit||col,gk:!!opts.gk||(!other&&p.pos==="GK"&&!opts.field),bodyMass:other?0:bf.mass,bodyTall:other?0:bf.tall,back:!!opts.back,military:!!opts.military,suit:!!opts.suit,injured:!!opts.injured};
     let cs=null; if(!other){ try{ cs=L.cosPix?L.cosPix():null; }catch(e){} }
     const url=L.pixelSprite(Object.assign(base,cs||{})); if(!_imgs[url]){ const im=new Image(); im.src=url; _imgs[url]=im; } return _imgs[url]; }catch(e){ return null; } };
 /* 현재 선수의 도트 이미지 태그 (장착한 꾸미기가 함께 적용돼요. opts.cos 로 미리보기 값을, opts.clean 으로 부상·입대 표시 없는 모습을 받아요) */

@@ -483,3 +483,20 @@ td.plink{cursor:pointer}td.plink:hover{color:var(--acc);text-decoration:underlin
 
 /* 한글이 낱말 단위로 줄바꿈되게, 큰 글씨 설정에서도 깨지지 않게 */
 body{word-break:keep-all;overflow-wrap:break-word;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+
+/* 감독 커리어 이야기: 이벤트 효과 줄 · 감독 평가 칭호 · 커리어 연대기 (js/mgr_story.js) */
+.press-eff{display:block;font-size:12px;opacity:.78;margin-top:4px;font-weight:600}
+.ttl-sec,.chron-sec{margin-top:16px}
+.ttl-main{display:flex;flex-direction:column;gap:2px;padding:12px 14px;border-radius:12px;border:1px solid var(--line2);background:rgba(255,255,255,.05);margin-bottom:10px}
+.ttl-main small{font-size:11px;color:var(--muted)}.ttl-main b{font-size:19px}.ttl-main span{font-size:12px;color:var(--muted);line-height:1.4}
+.ttl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.ttl{display:flex;flex-direction:column;gap:2px;padding:9px 11px;border-radius:12px;border:1px solid var(--line2);background:rgba(255,255,255,.04);opacity:.6}
+.ttl.on{opacity:1;border-color:#e7c25a;background:linear-gradient(160deg,rgba(231,194,90,.22),rgba(255,255,255,.04))}
+.ttl i{font-style:normal;font-size:20px;line-height:1.1}.ttl b{font-size:13px}.ttl small{font-size:11px;color:var(--muted);line-height:1.35}
+.chron{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:8px}
+.chron-i{padding:10px 12px;border-radius:12px;border:1px solid var(--line2);background:rgba(255,255,255,.04)}
+.chron-i.gold{border-color:#e7c25a}
+.chron-top{display:flex;flex-wrap:wrap;gap:4px 10px;justify-content:space-between;font-size:12px;color:var(--muted)}.chron-top b{color:inherit;font-size:13px}
+.chron-line{margin:5px 0 0;font-size:14px;line-height:1.5}
+.chron-ev{margin:5px 0 0;font-size:12px;line-height:1.5;color:var(--muted)}
+.chron-more-li{list-style:none}.chron-more{width:100%;min-height:44px}
