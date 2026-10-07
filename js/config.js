@@ -7,10 +7,10 @@ window.KL_CONFIG = {
 
 /* 개발자 후원 안내(선택). 채우면 메인 화면 맨 아래에 '개발자 응원하기'가 나타나고, 비워 두면 보이지 않아요.
    게임 혜택은 없는 순수 후원이라는 문구가 함께 보여요. 개인 계좌번호를 그대로 공개하기보다 송금 링크(토스·카카오페이 등)를 쓰는 걸 권해요. */
-window.KL_SUPPORT = { text: "", link: "", account: "신한 110-429-169576" };
+window.KL_SUPPORT = { text: "", link: "", account: "" };
 
 /* 운영자 정보: 약관·개인정보 처리방침·메인 하단에 표시돼요. 비워 두면 해당 줄은 숨겨져요. (이메일은 공개되니 공개해도 되는 주소를 쓰세요) */
-window.KL_OPERATOR = { name: "동동구리", email: "toki7746@gmail.com", note: "개인 운영 팬 프로젝트" };
+window.KL_OPERATOR = { name: "동동구리", email: "", note: "개인 운영 팬 프로젝트" };
 
 /* 광고 칸(js/ads.js): enabled 가 false 이거나 슬롯 설정이 없으면 아무것도 보이지 않고 자리도 차지하지 않아요. 사업자 등록·광고 심사 뒤에 아래 값만 채우면 돼요.
    provider: "adfit"(카카오 애드핏: unit 에 광고단위 ID) | "adsense"(client 에 ca-pub-…, 슬롯마다 slot) | "custom"(html 에 직접 넣은 태그).
