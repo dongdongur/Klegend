@@ -4,8 +4,8 @@
 (function(){
 "use strict";
 const L=window.LIFE; if(!L||!L.rollEvent||!L.EVPOOL||!L.markEvent) return;
-const NEXT=/^e(6_(coachB|coachC|buddy_b|buddy_c|rehabB)|8_(spB|spC|sibB|sibC|loveB|loveC|loveD|fanB|fanC|protB|protC|bossB|bossC|studyB|studyC|hoodB|hoodC|rivalB|rivalC|natB|natC|slumpB|retB|retC))$/;
-const FIRST=/^e(6_(coachA|buddy_a|rehabA)|8_(spA|sibA|loveA|fanA|protA|bossA|studyA|hoodA|rivalA|natA|slumpA|retA))$/;
+const NEXT=/^e(6_(coachB|coachC|buddy_b|buddy_c|rehabB)|8_(spB|spC|sibB|sibC|loveB|loveC|loveD|fanB|fanC|protB|protC|bossB|bossC|studyB|studyC|hoodB|hoodC|rivalB|rivalC|natB|natC|slumpB|retB|retC)|9_(wcB|wcC|olyB|asiaB|grad))$/;
+const FIRST=/^e(6_(coachA|buddy_a|rehabA)|8_(spA|sibA|loveA|fanA|protA|bossA|studyA|hoodA|rivalA|natA|slumpA|retA)|9_(wcA|olyA|asiaA|sat))$/;
 L.CHAIN_NEXT=NEXT; L.CHAIN_FIRST=FIRST;
 const base=L.rollEvent;
 const open=(S,re)=>{ const seen=S.evSeen||[]; return L.EVPOOL.filter(e=>re.test(e.id)&&!seen.includes(e.id)&&(()=>{ try{ return !e.when||e.when(S); }catch(x){ return false; } })()); };

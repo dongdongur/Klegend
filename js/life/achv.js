@@ -81,6 +81,10 @@ const LIST=[
  A("낭만","natC",["국가가 울려 퍼질 때","When the anthem plays"],["대표팀 소집부터 국가가 울려 퍼지는 순간까지 겪어요.","Live it from the first camp to the anthem."],S=>fl(S,"natC")),
  A("낭만","slumpB",["터널의 끝","The end of the tunnel"],["긴 슬럼프를 지나 감각을 되찾아요.","Find your touch again after a long slump."],S=>fl(S,"slumpB")),
  A("낭만","retC",["후배들의 질문","The juniors' question"],["후배들에게 오래 뛰는 법을 알려 줘요.","Teach the juniors how to last."],S=>fl(S,"retC")),
+ A("낭만","wcC",["공항의 환영 인파","The crowd at the airport"],["월드컵을 마치고 돌아와 환영 인파를 만나요.","Return from the World Cup to a welcoming crowd."],S=>fl(S,"wcC")),
+ A("낭만","olyB",["시상대를 바라보며","Looking up at the podium"],["종합 국제대회 대표팀에서 시상대를 보며 마음을 다잡아요.","Steel yourself at the Olympics, gazing at the podium."],S=>fl(S,"olyB")),
+ A("낭만","asiaB",["토너먼트의 밤","A knockout night"],["아시아 네이션스컵 토너먼트 전날 밤을 동료와 보내요.","Spend the night before an Asian Cup knockout with a teammate."],S=>fl(S,"asiaB")),
+ A("낭만","grad",["졸업식 날","Graduation day"],["유소년 시절의 마지막, 졸업식을 맞아요.","Reach graduation day, the end of your youth years."],S=>fl(S,"grad")),
  A("낭만","story5",["이야기 수집가","Story collector"],["이어지는 이야기를 5편 끝까지 겪어요.","See 5 chained stories through to the end."],S=>prog(nStory(S),5)),
  A("낭만","story12",["모든 이야기의 주인공","Hero of every story"],["이어지는 이야기 12편을 모두 끝까지 겪어요.","See all 12 chained stories through."],S=>prog(nStory(S),12)),
  /* ───── 도전 ───── */

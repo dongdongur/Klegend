@@ -68,6 +68,8 @@ function render(){
   app.innerHTML=h+(modals.length?modalHtml():"")+(toast?`<div class="toast">${esc(toast)}</div>`:"");
   if(modals[0]&&modals[0].t==="cine"){ const cm=modals[0]; if(FAST||!window.KL_FX){ modals.shift(); setTimeout(render,0); } else if(!KL_FX.busy()){ KL_FX.cine(cm.o,()=>{ if(modals[0]===cm) modals.shift(); render(); }); } }
   if(modals[0]&&modals[0].t==="sign") bindSign();
+  try{ if(view==="retired"&&S&&S.retired&&!S.mvSeen&&!modals.length&&!FAST&&L.playMontage){ S.mvSeen=true; save(); setTimeout(()=>{ if(view==="retired") L.playMontage(S); },500); } }catch(e){}
+  try{ app.querySelectorAll(".hlc").forEach(c=>{ if(!c.dataset.on&&S&&S.lastR){ c.dataset.on="1"; L.hlDraw(c,S,S.lastR); } }); }catch(e){}
   { const cm=app.querySelector(".cmark"); if(cm&&L.animMark) L.animMark(cm,1100); }
   if(modals[0]&&modals[0].t==="event"&&modals[0].mini){ const mm=modals[0], host=app.querySelector(".mini"); if(host&&!mm.bound){ mm.bound=true; L.miniBind(host,mm.mini.type,S,(ok)=>{ if(modals[0]!==mm) return; mm.res=L.resolveEvent(S,mm.ev,mm.mini.idx,ok); mm.mini=null; dexAdd(mm.ev.id); save(); keep(render); }); } }
   if(modals[0]&&["shop","ballon","xi","hofcmp","league","jersey","sns","second","grow","msg","ucl","gold"].includes(modals[0].t)){ const sh=app.querySelector(".ov .sheet"); if(sh&&!sh.querySelector(".xclose")) sh.insertAdjacentHTML("afterbegin",'<button type="button" class="xclose" data-act="mok" aria-label="닫기">✕ 닫기</button>'); }
@@ -133,7 +135,7 @@ function homeView(){
    <div class="grid2"><button class="wide" data-act="quiz">⚽ 축구 상식 퀴즈</button><button class="wide" data-act="settings">⚙ 설정 · 구단 이름과 로고</button></div>
    ${CS()?`<button class="wide" data-act="cosgo">🎨 꾸미기 · 도트 선수·액자·은퇴 카드</button>`:""}
    <a class="wide" href="patch-notes.html" style="display:grid;place-items:center;text-decoration:none">📰 패치노트${(()=>{ try{ return window.KL_PATCH_LATEST&&localStorage.getItem("kl-patch-seen")!==window.KL_PATCH_LATEST?" 🔴 NEW":""; }catch(e){ return ""; } })()}</a>
-   <section class="card flat"><h3 class="sec">업데이트 예정</h3><p class="muted">· 시즌 하이라이트(낭만 장면)<br>· 기록 경쟁 더 늘리기(지역·친구 순위)<br>· 이어지는 이야기 더 늘리기<br>· 꾸미기 항목 더 늘리기(유니폼·액자·엠블럼)<br>· 감독판 이야기 늘리기, 선수판 가져오기</p></section>
+   <section class="card flat"><h3 class="sec">업데이트 예정</h3><p class="muted">· 기록 경쟁 더 늘리기(지역·친구 순위)<br>· 하이라이트 장면 종류 더 늘리기<br>· 이어지는 이야기 더 늘리기<br>· 꾸미기 항목 더 늘리기(유니폼·액자·엠블럼)<br>· 감독판 이야기 늘리기, 선수판 가져오기</p></section>
    <p class="muted c"><a class="lnk" href="index.html">게임 선택 메뉴로</a>${S?` · <button class="lnk" data-act="wipe">저장 삭제</button>`:""}</p></main>`;
 }
 
@@ -500,7 +502,7 @@ function resultView(){
   const gk=S.p.pos==="GK";
   const stats=R.military?[]:[["출전",R.apps],[gk?"무실점":"골",gk?R.cs:R.goals],[gk?"선발":"도움",gk?R.starts:R.assists],["평점",R.rating||"-"]];
   const comps=(R.cups||[]).map(c=>`<p class="note ${c.res==="우승"?"good":""}">🏟 ${esc(c.name)} — ${esc(c.res)}</p>`).join("");
-  return `<small class="kick">${R.age}세 시즌</small><h2>${R.year} 시즌 결과</h2>
+  return `${L.hlHtml?L.hlHtml(S,R,esc):""}<small class="kick">${R.age}세 시즌</small><h2>${R.year} 시즌 결과</h2>
    <div class="pills"><span class="pill acc">${esc(R.leagueName)}</span><span class="pill">${esc(R.role||"")}</span>${R.rank?`<span class="pill gold">${R.rank}위 / ${R.N}팀</span>`:""}</div>
    ${stats.length?`<section class="four">${stats.map(([k,v])=>`<div class="stat"><small>${k}</small><b class="cnt" data-to="${v}">${v}</b></div>`).join("")}</section>`:`<section class="card"><p class="muted">군 복무로 한 해를 보냈어요.</p></section>`}
    ${R.rank?`<section class="card flat"><div class="three"><div class="stat"><small>전적</small><b>${R.W}-${R.D}-${R.L}</b></div><div class="stat"><small>득실</small><b>${R.gf}:${R.ga}</b></div><div class="stat"><small>OVR</small><b>${R.ovr0}→${R.ovr1}</b></div></div></section>`:""}
@@ -827,6 +829,7 @@ function chainHtml(){ const ch=L.clubChain(S); return ch.map(c=>c.mil?"🎖 "+c.
 function retiredView(){
   const lg=L.legacy(S), g=L.legacyGrade(lg.total), c=S.career, jr=S.jersey||[];
   return `<main class="body">${CS()?"":`<div style="text-align:center">${L.pixelImg?L.pixelImg(S,150,{suit:true,age:Math.max(L.age(S),30)}):""}</div>`}<small class="kick">RETIREMENT</small><h1>${esc(S.p.name)}, 그라운드를 떠나다</h1>
+   <button class="wide" data-act="mv">🎞 은퇴 영상 보기</button>
    <p class="muted">${L.age(S)}세 · 프로 ${S.history.filter(h=>!h.youth).length}시즌 · ${esc(chainHtml())}</p>
    <div class="pills">${L.titlesOf(S).map(t=>`<span class="pill gold">🏷 ${esc(t)}</span>`).join("")}</div>
    ${retCard()}${lifeCard()}${lg.rom?`<section class="card flat"><p class="note good">🌟 낭만 보너스 +${lg.rom} — 재능 ${lg.grade}등급으로 이뤄낸 업적이라 점수가 더 올랐어요</p></section>`:""}${afterCard()}
@@ -1034,6 +1037,7 @@ function runNext(){
 }
 function finishSeason(){
   runLoading(S.year+" 시즌","시즌 결산 중",["최종 순위 확정","개인 기록 집계","수상 후보 평가","재능 평가·성장 반영"],()=>{
+    if(!S.sim){ render(); return; }   // 시즌 도중 조기 입단 등으로 시즌 정보가 사라진 경우
     const sim=S.sim; const teams=sim?sim.teams:[];
     const R=L.finishSeason(S); R.simTeams=teams; seg=null; boardTab="table";
     liveLog("season",S.year+" 시즌 · "+(R.club?R.club.name:"")+(R.goals!=null?" "+R.goals+"골 "+R.assists+"도움":""));
@@ -1286,6 +1290,7 @@ document.addEventListener("click",e=>{
     case "kidpos": { const k=(document.getElementById("kid")||{}).value; draft.kidName=k; draft.kidPos=v; keep(render); break; }
     case "kid": { const kk0=(S.kids||[])[draft.kidPick]; if(!kk0){ say("이어서 키울 자녀를 먼저 골라 주세요"); break; } const nm=kk0.name; const pos=kk0.dir||draft.kidPos||S.p.pos; const kidObj=(draft.kidPick!=null&&(S.kids||[])[draft.kidPick]&&(S.kids[draft.kidPick].name===nm))?S.kids[draft.kidPick]:null; const res=L.createChild(S,{name:nm,pos,trait:S.p.trait,kid:kidObj}); const par=S; S=res.state; plan=NEWPLAN(); view="game"; tab="season"; save();
       const tl=res.talent; modals.push({t:"msg",kick:"NEXT GENERATION",title:nm+" — "+par.p.name+"의 "+(S.gen)+"세대",body:(tl.same?"부모와 같은 포지션이라 재능이 안정적으로 이어졌어요.":"다른 포지션을 선택해 재능이 크게 달라질 수 있었어요.")+" 재능 바탕 "+tl.base+" (±"+tl.spread+" 범위)에서 뽑은 결과는 비밀이에요. 20세가 되면 스카우터가 알려 줄 거예요. 집안 형편: "+S.family.name+"."}); render(); break; }
+    case "mv": if(L.playMontage&&S) L.playMontage(S); break;
     case "ach": view="ach"; render(); break;
     case "dex": view="dex"; render(); break;
     case "settings": view="settings"; render(); break;
