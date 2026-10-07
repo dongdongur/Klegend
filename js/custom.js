@@ -9,18 +9,27 @@
 (function(){
 "use strict";
 const KEY="kl-custom";
-function load(){ try{ const o=JSON.parse(localStorage.getItem(KEY)||"{}"); return {names:o.names||{},logos:o.logos||{}}; }catch(e){ return {names:{},logos:{}}; } }
+function load(){ try{ const o=JSON.parse(localStorage.getItem(KEY)||"{}"); return {names:o.names||{},logos:o.logos||{},dom:o.dom||{}}; }catch(e){ return {names:{},logos:{},dom:{}}; } }
 function save(o){ try{ localStorage.setItem(KEY,JSON.stringify(o)); return true; }catch(e){ return false; } }
 let C=load();
 function allFL(){ const out=[]; try{ if(window.KL_FL) Object.keys(window.KL_FL).forEach(k=>window.KL_FL[k].forEach(c=>out.push(c))); const E=window.KL_EPL; if(E) (E.clubs||E).forEach(c=>out.push(c)); }catch(e){} return out; }
 function apply(){ const m=C.names||{}; allFL().forEach(c=>{ const o=m[c.id]; if(o){ if(o[0]) c.name=o[0]; if(o[1]) c.short=o[1]; } }); }
 apply();
+/* 화면에 보이는 글자에서 원래 이름을 내가 정한 이름으로 바꿔 보여 줘요(국내 구단·K3·K4 이름용: 내부 기록은 그대로, 보이는 글자만 바뀌어요) */
+let DOM=null, doneTx=new WeakMap();
+function buildDom(){ const m=C.dom||{}; const ks=Object.keys(m).filter(k=>k&&m[k]&&m[k]!==k).sort((a,b)=>b.length-a.length); DOM=ks.length?ks.map(k=>[k,m[k]]):null; }
+function repl(s){ if(!DOM||!s) return s; let o=s; for(let i=0;i<DOM.length;i++){ if(o.indexOf(DOM[i][0])>=0) o=o.split(DOM[i][0]).join(DOM[i][1]); } return o; }
+function walkDom(root){ if(!DOM) return; const tw=document.createTreeWalker(root,4,null,false); let n; while((n=tw.nextNode())){ const p=n.parentNode; if(!p||/^(SCRIPT|STYLE|TEXTAREA|TITLE)$/.test(p.nodeName)||(p.closest&&p.closest("[data-nocustom]"))) continue; const v=n.nodeValue; if(!v||doneTx.get(n)===v) continue; const r=repl(v); doneTx.set(n,r); if(r!==v) n.nodeValue=r; } }
+buildDom();
+function startDom(){ if(!document.body) return; walkDom(document.body); new MutationObserver(function(ms){ if(!DOM) return; for(let i=0;i<ms.length;i++){ const m=ms[i]; if(m.type==="characterData"){ const n=m.target, v=n.nodeValue; if(v&&doneTx.get(n)!==v){ const r=repl(v); doneTx.set(n,r); if(r!==v) n.nodeValue=r; } } else for(let j=0;j<m.addedNodes.length;j++){ const a=m.addedNodes[j]; if(a.nodeType===3){ const v=a.nodeValue, r=repl(v); doneTx.set(a,r); if(r!==v) a.nodeValue=r; } else if(a.nodeType===1) walkDom(a); } } }).observe(document.body,{childList:true,subtree:true,characterData:true}); }
+if(document.body) startDom(); else document.addEventListener("DOMContentLoaded",startDom);
 window.KL_CUSTOM={
   get:()=>C,
   logo:function(club){ if(!club) return null; const k=club.id||club.name; return (C.logos&&(C.logos[k]||C.logos[club.name]))||null; },
   setName:function(id,name,short){ C.names[id]=[String(name||"").trim().slice(0,20),String(short||name||"").trim().slice(0,10)]; if(!C.names[id][0]) delete C.names[id]; return save(C); },
   setLogo:function(key,url){ if(url) C.logos[key]=url; else delete C.logos[key]; return save(C); },
-  resetAll:function(){ C={names:{},logos:{}}; try{ localStorage.removeItem(KEY); localStorage.removeItem("kl-alias"); }catch(e){} },
+  setDisplay:function(orig,name){ name=String(name||"").trim().slice(0,20); if(name&&name!==orig) C.dom[orig]=name; else delete C.dom[orig]; const ok=save(C); buildDom(); doneTx=new WeakMap(); try{ walkDom(document.body); }catch(e){} return ok; },
+  resetAll:function(){ C={names:{},logos:{},dom:{}}; DOM=null; try{ localStorage.removeItem(KEY); localStorage.removeItem("kl-alias"); }catch(e){} },
   alias:function(on){ try{ if(on) localStorage.setItem("kl-alias","1"); else localStorage.removeItem("kl-alias"); }catch(e){} },
   aliasOn:function(){ try{ return localStorage.getItem("kl-alias")==="1"; }catch(e){ return false; } },
   /* 이미지 파일 → 96px 정사각 PNG data URL */

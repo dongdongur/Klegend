@@ -105,3 +105,18 @@ body.fx-on{overflow:hidden}
 .sc-bus .bw img{width:34px;height:auto;image-rendering:pixelated;margin-bottom:-2px}
 @keyframes busgo{0%{left:-60%}70%{left:30%}100%{left:112%}}
 .fx.calm .sc-bus .bus{animation:none;left:30%}
+
+/* 병역: 부대 정문으로 걸어 들어가고, 전역하면 걸어 나와요 */
+.fx.camp .sc-arrive .crowd,.fx.camp .sc-arrive .cam{display:none}
+.fx.camp .sc-arrive{background:linear-gradient(180deg,#1d2a1a 0%,#2f4a2a 42%,#3a3a2a 42.2%,#25241a 100%)}
+.fx.camp .sc-arrive .gate{background:linear-gradient(180deg,#6b7a52,#4a5638);border-radius:6px 6px 0 0}.fx.camp .sc-arrive .gate b{color:#f3f0d8}
+.fx.camp .sc-arrive .gate .dark{border-radius:6px 6px 0 0;background:linear-gradient(180deg,#2a2d22,#12130e)}
+.fx.camp .sc-arrive .tunnel{background:#d9e8b8;box-shadow:0 0 120px 60px #8aa84a}
+.fx.wout .sc-arrive .walker{animation:walkfrom 2.6s cubic-bezier(.3,.1,.3,1) .5s both}
+@keyframes walkfrom{0%{transform:translate(calc(44vw - 46px - 6vw),-25vh) scale(.34);opacity:0}25%{opacity:1}100%{transform:translate(0,0) scale(1);opacity:1}}
+.fx.wout .sc-arrive .tunnel{animation:none;opacity:0}
+/* 입단식: 구단 색 배경 앞에서 카메라 플래시 */
+.sc-unveil{background:linear-gradient(180deg,#0d1322,#18213a)}
+.sc-unveil .wall{position:absolute;left:6%;right:6%;top:14%;height:46%;border-radius:8px;background:repeating-linear-gradient(90deg,var(--kc) 0 26px,rgba(255,255,255,.14) 26px 52px);opacity:.85;box-shadow:0 0 40px rgba(0,0,0,.6) inset;opacity:.5}
+.sc-unveil .podium{position:absolute;left:50%;bottom:19vh;width:min(60vw,260px);height:22px;margin-left:calc(min(60vw,260px) / -2);border-radius:6px;background:linear-gradient(180deg,#e8e8ee,#a9a9b3);box-shadow:0 10px 24px rgba(0,0,0,.6)}
+.sc-unveil .fl{position:absolute;font-style:normal;font-size:28px;opacity:0;animation:camf .5s steps(2) infinite}.sc-unveil .f1{left:10%;bottom:30%;animation-delay:.9s}.sc-unveil .f2{right:12%;bottom:26%;animation-delay:1.3s}.sc-unveil .f3{left:24%;bottom:14%;animation-delay:1.7s}.sc-unveil .f4{right:26%;bottom:18%;animation-delay:2.1s}

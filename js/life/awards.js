@@ -46,8 +46,8 @@ L.awardsFor=function(S,R,sim){
   /* 팀 올해의 선수 (클럽 내 평가) */
   if(R.rating>=7.1&&!A.length&&Math.random()<.5) A.push("팀 올해의 선수");
   /* 연말 시상 (국내 선수 대상) */
-  if(!E&&(K1||K2)&&(A.includes("리그 MVP")||sc>=need+1.2)&&Math.random()<.5) A.push("KFA 올해의 선수");
-  if(!K3&&!K4&&sc>=need+(E?.2:.8)&&Math.random()<.35) A.push("AFC 올해의 국제선수");
+  if(!E&&(K1||K2)&&(A.includes("리그 MVP")||sc>=need+1.2)&&Math.random()<.5) A.push("축구회 올해의 선수");
+  if(!K3&&!K4&&sc>=need+(E?.2:.8)&&Math.random()<.35) A.push("아시아 올해의 국제선수");
   /* 어린 선수 최고 영예: 신예 트로피(21세 이하 최고 선수), 황금 신예(유럽 1부 21세 이하 유망주) — 가상의 시상
      실제로 활약(주전·공격포인트/클린시트)이 있어야 받아요. 황금 신예는 평생 한 번만, 신예 트로피는 최대 두 번 */
   const had=n=>S.awards.filter(x=>x.name===n).length;

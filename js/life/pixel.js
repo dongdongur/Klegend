@@ -92,7 +92,7 @@ L.pixelCanvasImg=function(S,opts){ opts=opts||{}; try{ const p=S.p, age=(S.year|
 L.pixelImg=function(S,size,opts){
   try{ opts=opts||{}; const p=S.p, age=(S.year||2026)-(p.born||2008); let col=null; const cc=S.club&&(S.club.col||(S.club.c)); if(typeof cc==="string"&&/^#[0-9a-f]{6}$/i.test(cc)) col=cc;
     let bf={mass:0,tall:0}; try{ if(L.bodyFx) bf=L.bodyFx(p.pos,p.height,p.weight); }catch(e){}
-    const base={name:p.name,age:opts.age||age,kit:col,injured:!opts.clean&&(!!opts.injured||(S.sim&&S.sim.out>0&&S.stage==="pro")),military:!opts.clean&&(S.military==="serving"||S.military==="sangmu"),suit:!!opts.suit,gk:p.pos==="GK",bodyMass:bf.mass,bodyTall:bf.tall,back:!!opts.back};
+    const base={name:p.name,age:opts.age||age,kit:col,injured:!opts.clean&&(!!opts.injured||(S.sim&&S.sim.out>0&&S.stage==="pro")),military:!!opts.military||(!opts.clean&&(S.military==="serving"||S.military==="sangmu")),suit:!!opts.suit,gk:p.pos==="GK",bodyMass:bf.mass,bodyTall:bf.tall,back:!!opts.back};
     let cs=null; try{ cs=opts.cos!==undefined?opts.cos:(L.cosPix?L.cosPix():null); }catch(e){}
     const url=L.pixelSprite(Object.assign(base,cs||{}));
     const w=Math.round(size*16/24); return '<img class="pix" alt="" width="'+w+'" height="'+size+'" src="'+url+'" style="width:'+w+'px;height:'+size+'px">'; }catch(e){ return ""; }

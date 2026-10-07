@@ -1,17 +1,6 @@
 /* English dictionary part C (js/i18n_en_xC.js) — SNS reactions, second life (coach/owner), epilogue, derbies, fame/character, coaches, international tournaments, awards, legends.
  * Korean phrase -> English. '#' = number. Fragments around runtime values are translated separately. Loaded automatically by js/i18n.js. */
 window.KL_I18N_EN_XC={
-"FC 서울":"FC Seoul",
-"수원 삼성":"Suwon Samsung",
-"울산 HD":"Ulsan HD",
-"전북 현대":"Jeonbuk Hyundai",
-"포항 스틸러스":"Pohang Steelers",
-"손흥민":"Son Heung-min",
-"리오넬 메시":"Lionel Messi",
-"크리스티아누 호날두":"Cristiano Ronaldo",
-"차범근":"Cha Bum-kun",
-"박지성":"Park Ji-sung",
-"홍명보":"Hong Myung-bo",
 "#골":"# goals",
 "골)":" goals)",
 "#골)":"# goals)",
@@ -1289,8 +1278,8 @@ window.KL_I18N_EN_XC={
 "PFA 영플레이어상":"PFA Yealg Player Award",
 "영플레이어상":"Yealg Player Award",
 "팀 올해의 선수":"Club Player of the Year",
-"KFA 올해의 선수":"KFA Player of the Year",
-"the Asian football federation 올해의 국제선수":"the Asian football federation International Player of the Year",
+"축구회 올해의 선수":"Football Association Player of the Year",
+"the Asian football federation 올해의 국제선수":"Asian International Player of the Year",
 "신예 트로피":"Kopa Trophy",
 "황금 신예":"Golden Prospect",
 "월드 베스트 #":"World Best #",
