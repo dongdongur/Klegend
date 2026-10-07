@@ -283,7 +283,7 @@ function fitsSlot(p,label){
   return GROUP[label]===p.pos || GROUP[label]===p.alt;
 }
 
-/* 카드 등급: 능력치에 따라 FIFA처럼 색이 달라요 */
+/* 카드 등급: 능력치에 따라 축구 게임처럼 색이 달라요 */
 function tier(ovr){ return ovr>=90?"icon":ovr>=85?"elite":ovr>=80?"gold":ovr>=75?"silver":"bronze"; }
 
 function avg(a){return a.length? a.reduce((x,y)=>x+y,0)/a.length : 60;}

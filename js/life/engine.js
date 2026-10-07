@@ -569,8 +569,8 @@ L.planCups=function(S,sim){
       :[1,2,3].map(n=>Object.assign(gr(n),{at:"h3"})).concat([4,5,6].map(n=>Object.assign(gr(n),{at:"h4"})),[{at:"h4",n:"8강"},{at:"h4",n:"4강"},{at:"h4",n:"결승"}]);
     const names=shuffle(["알 호크스","알 패스파인더","알 그리폰","알 마스터스","요코하마 레인저스","비셀 블레이즈","상하이 그리폰","부리람","알 레인저스","에스테그랄 그리폰","멜버른 시티","바라구에"]).slice(0,3);
     list.push({id:"acl",name:"아시아 클럽컵",rounds,alive:true,round:0,res:null,grp:{opps:names.map(nm=>({name:nm,l:sim.lvl+rnd(-6,5)})),pts:[0,0,0,0],gf:[0,0,0,0],ga:[0,0,0,0]}}); }
-  if(FL[sim.key]&&FL[sim.key].uel&&S.uel&&!S.ucl) list.push({id:"uel",name:"UEFA 유럽 클럽컵2",rounds:[{at:"h1",n:"리그 페이즈 1"},{at:"h1",n:"리그 페이즈 2"},{at:"h2",n:"리그 페이즈 3"},{at:"h3",n:"리그 페이즈 4"},{at:"h3",n:"16강"},{at:"h4",n:"8강"},{at:"h4",n:"4강"},{at:"h4",n:"결승"}],alive:true,round:0,res:null});
-  if(FL[sim.key]&&FL[sim.key].ucl&&S.ucl) list.push({id:"ucl",name:"유럽 클럽컵",rounds:[{at:"h1",n:"리그 페이즈 1"},{at:"h1",n:"리그 페이즈 2"},{at:"h2",n:"리그 페이즈 3"},{at:"h3",n:"리그 페이즈 4"},{at:"h3",n:"16강"},{at:"h4",n:"8강"},{at:"h4",n:"4강"},{at:"h4",n:"결승"}],alive:true,round:0,res:null});
+  if(FL[sim.key]&&FL[sim.key].uel&&S.uel&&!S.ucl) list.push({id:"uel",name:"유럽 유럽 클럽컵2",rounds:[{at:"h1",n:"리그 페이즈 1"},{at:"h1",n:"리그 페이즈 2"},{at:"h2",n:"리그 페이즈 3"},{at:"h3",n:"리그 페이즈 4"},{at:"h3",n:"16강"},{at:"h4",n:"8강"},{at:"h4",n:"4강"},{at:"h4",n:"결승"}],alive:true,round:0,res:null});
+  if(FL[sim.key]&&FL[sim.key].ucl&&S.ucl) list.push({id:"ucl",name:"유럽 유럽 클럽컵",rounds:[{at:"h1",n:"리그 페이즈 1"},{at:"h1",n:"리그 페이즈 2"},{at:"h2",n:"리그 페이즈 3"},{at:"h3",n:"리그 페이즈 4"},{at:"h3",n:"16강"},{at:"h4",n:"8강"},{at:"h4",n:"4강"},{at:"h4",n:"결승"}],alive:true,round:0,res:null});
   return list;
 };
 function cupOpp(S,sim,cup){ const lvl=sim.lvl;
@@ -723,7 +723,7 @@ L.commitSeason=function(S,R){
   if(!R.youth){ c.earned=r1((c.earned||0)+S.salary); c.peakSal=Math.max(c.peakSal||0,S.salary); }
 };
 /* 수상이 어느 대회(리그)에서 나온 건지 */
-L.awardComp=function(name,R){ if(/^KFA/.test(name)) return "대한축구회"; if(/^AFC/.test(name)) return "AFC"; if(/황금공/.test(name)) return "황금공"; if(/신예 트로피/.test(name)) return "프랑스 풋볼"; if(/황금 신예/.test(name)) return "투토스포르트"; if(/유럽 클럽컵|유럽컵/.test(name)) return "유럽 클럽컵"; return R.leagueName||""; };
+L.awardComp=function(name,R){ if(/^KFA/.test(name)) return "대한축구회"; if(/^AFC/.test(name)) return "AFC"; if(/황금공/.test(name)) return "황금공"; if(/신예 트로피/.test(name)) return "프랑스 풋볼"; if(/황금 신예/.test(name)) return "투토스포르트"; if(/유럽 클럽컵|유럽컵/.test(name)) return "유럽 유럽 클럽컵"; return R.leagueName||""; };
 /* 커리어 팀 흐름: 시간 순서대로 (복무 포함) */
 L.clubChain=function(S){ const out=[]; S.history.filter(h=>!h.youth).forEach(h=>{ const nm=h.military?"군 복무":h.club; if(!out.length||out[out.length-1].name!==nm) out.push({name:nm,from:h.year,to:h.year,mil:!!h.military||h.lg==="MIL"}); else out[out.length-1].to=h.year; }); return out; };
 L.slimRecord=function(R,S){ return {year:R.year,age:R.age,club:R.club.name,clubId:R.club.id,lg:R.club.lg,leagueName:R.leagueName,rank:R.rank,N:R.N,W:R.W,D:R.D,L:R.L,apps:R.apps,starts:R.starts,minutes:R.minutes,goals:R.goals,assists:R.assists,cs:R.cs||0,rating:R.rating,mom:R.mom||0,

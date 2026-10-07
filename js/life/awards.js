@@ -183,7 +183,7 @@ L.recordsFor=function(S,R){
   const u=(R.matches||[]).filter(m=>m.cup==="ucl"), ug=u.reduce((s,m)=>s+(m.g||0),0), ua=u.reduce((s,m)=>s+(m.as||0),0);
   R.uclGoals=ug; R.uclAssists=ua; if(!u.length) return;
   const c=S.career, was=c.uclG||0; c.uclG=was+ug; c.uclA=(c.uclA||0)+ua;
-  if(ug>=5&&ug>=ri(L.UCL_REC.leader[0],L.UCL_REC.leader[1])){ R.awards.push("유럽 클럽컵 득점왕"); out.push("유럽 클럽컵 득점왕 ("+ug+"골)"); }
+  if(ug>=5&&ug>=ri(L.UCL_REC.leader[0],L.UCL_REC.leader[1])){ R.awards.push("유럽 클럽컵 득점왕"); out.push("유럽 유럽 클럽컵 득점왕 ("+ug+"골)"); }
   if(ug>L.UCL_REC.season){ R.awards.push("유럽컵 시즌 최다 골 신기록"); out.push("유럽 클럽컵 한 시즌 최다 골 신기록! ("+ug+"골)"); }
   if(c.uclG>L.UCL_REC.career&&was<=L.UCL_REC.career){ R.awards.push("유럽컵 통산 최다 골 신기록"); out.push("유럽 클럽컵 통산 최다 골 신기록! (통산 "+c.uclG+"골, 종전 "+L.UCL_REC.career+"골)"); }
 };

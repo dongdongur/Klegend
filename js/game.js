@@ -45,7 +45,7 @@ const ready = () => xiFull() && !benchOpen() && !!S.mgr;
 
 /* ================= 카드 ================= */
 const SIL='<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="31" r="17"/><path d="M14 98c0-24 15-38 36-38s36 14 36 38z"/></svg>';
-/* FIFA 스타일 선수 카드. p: {name,pos,ovr,det?}, o: {pos,sub,badge,badgeCls,cls,blind} */
+/* 축구 게임 스타일 선수 카드. p: {name,pos,ovr,det?}, o: {pos,sub,badge,badgeCls,cls,blind} */
 function cardEl(p,o){
   o=o||{};
   const bl = o.blind!==undefined ? o.blind : blind();

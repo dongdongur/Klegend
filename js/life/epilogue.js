@@ -31,7 +31,7 @@ L.afterPaths=function(S){
 
 L.afterDo=function(S,id){
   if(S.after) return S.after; const P=L.afterPaths(S).find(x=>x.id===id); if(!P) return null;
-  const lg=L.legacy(S).total, ch=L.charOf(S), fm=S.fameMax||S.fame, ft=L.fameTier(fm), club=mainClub(S), a0=age(S), lines=[]; let bonus=0, title="";
+  const lg=L.legacy(S).total, ch=L.charOf(S), fm=S.fameMax||S.fame, ft=L.fameTierOf(S,fm), club=mainClub(S), a0=age(S), lines=[]; let bonus=0, title="";
   const tf=L.traitFx(S.p); const lead=(tf.winner>0?.25:0)+(S.p.hidden==="iq"?.25:0)+(S.p.hidden==="captain"?.2:0);
   const add=(y,t)=>lines.push({y,t});
   if(id==="coach"){

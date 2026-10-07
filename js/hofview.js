@@ -41,8 +41,9 @@ function style(){
 .hv .note{padding:10px 12px;border-radius:12px;background:rgba(255,207,74,.1);border:1px solid rgba(255,207,74,.3);color:#ffe9a8}
 `; document.head.appendChild(s);
 }
-function open(html){
+function open(html,frame){
   style(); const w=document.createElement("div"); w.className="hv"; w.innerHTML='<div class="box">'+html+'</div>';
+  try{ if(frame&&window.KL_COS&&KL_COS.safeFrameId(frame)){ const bx=w.firstChild, st=KL_COS.frameInset(frame); if(st) bx.style.cssText+=st; } }catch(e){}   /* 올린 사람이 고른 액자(꾸미기)는 안쪽 테두리로만 보여요 */
   const close=()=>w.remove(); w.addEventListener("click",e=>{ if(e.target===w||e.target.closest("[data-hvx]")) close(); });
   document.addEventListener("keydown",function k(e){ if(e.key==="Escape"){ close(); document.removeEventListener("keydown",k); } });
   document.body.appendChild(w);
@@ -210,7 +211,7 @@ function playerView(r){
   if(d.ballon&&d.ballon.length) h+=`<h3>황금공 순위</h3><p class="mu">${d.ballon.map(b=>b[0]+"년 "+b[1]+"위").join(" · ")}</p>`;
   if(d.seasons&&d.seasons.length){ h+=`<h3>시즌별 커리어</h3><div class="tw"><table><tr><th>나이</th><th>팀</th><th>리그</th><th>출전</th><th>골</th><th>도움</th><th>평점</th><th>OVR</th></tr>${d.seasons.map(s=>`<tr><td>${s[0]}</td><td>${esc(s[1])}</td><td>${esc(s[2])}</td><td>${s[3]}</td><td>${s[4]}</td><td>${s[5]}</td><td>${s[6]||"-"}</td><td>${s[7]||""}</td></tr>`).join("")}</table></div>`; }
   h+='<p class="mu">※ 후일담의 인물과 매체는 모두 가상이에요.</p>';
-  open(h); heirLoad(r);
+  open(h,d&&d.cos&&d.cos.frame); heirLoad(r);
 }
 /* 세대 계승으로 직접 키운 자녀만 '선수 커리어'를 볼 수 있어요: 자녀 기록의 detail.parent 가 이 선수를 가리키는 경우 */
 function heirLoad(r){

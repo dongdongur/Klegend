@@ -1,0 +1,85 @@
+/* 꾸미기 (css/cosmetics.css) — 액자·은퇴 카드·꾸미기 화면. 색은 각 화면의 변수(--panel, --line, --txt …)를 따라가요 */
+.cf{position:relative}
+.cf>.cf-orn{position:absolute;top:-14px;z-index:2;pointer-events:none;line-height:0;filter:drop-shadow(0 2px 3px rgba(0,0,0,.45))}
+.cf>.cf-orn.l{left:-10px}.cf>.cf-orn.r{right:-10px;transform:scaleX(-1)}
+.cf-anim{animation:cfpulse 2.8s ease-in-out infinite}
+@keyframes cfpulse{50%{filter:brightness(1.14) saturate(1.1)}}
+@media(prefers-reduced-motion:reduce){.cf-anim{animation:none}}
+.cemb{display:inline-block;flex:none}
+
+/* 은퇴 카드(화면용) */
+.rcard{position:relative;border-radius:26px;padding:16px 14px 18px;text-align:center;color:var(--ci,#fff);margin:8px 8px 14px}
+.rcard.sq{border-radius:6px}
+.rcard::before,.rcard::after{border-radius:inherit}
+.rcard::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(260px 200px at 50% 22%,rgba(255,255,255,.22),transparent 70%)}
+.rcard.p-stripes::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 10%,transparent 10% 20%)}
+.rcard.p-grid::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(rgba(255,207,74,.12) 1px,transparent 1px) 0 0/18px 18px,linear-gradient(90deg,rgba(255,207,74,.12) 1px,transparent 1px) 0 0/18px 18px}
+.rcard>*{position:relative;z-index:1}
+.rcard .rc-k{font:700 12px var(--f-num,Oswald,sans-serif);letter-spacing:.3em;color:var(--ca,#19f2a3)}
+.rcard .rc-sp{margin:6px 0 2px;min-height:150px;display:grid;place-items:end center}
+.rcard .rc-sp img{image-rendering:pixelated}
+.rcard h2{font:400 clamp(26px,8vw,34px)/1.15 var(--f-head,"Black Han Sans",sans-serif);color:var(--ci,#fff);word-break:keep-all;overflow-wrap:anywhere}
+.rcard .rc-sb{color:var(--cs,#bbb);font-size:14px;margin-top:2px;display:flex;justify-content:center;align-items:center;gap:6px;flex-wrap:wrap}
+.rcard .rc-two{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 10px}
+.rcard .rc-two div{border-radius:14px;border:1px solid var(--ca,#19f2a3);background:rgba(0,0,0,.18);padding:8px 4px 6px}
+.rcard .rc-two small{display:block;color:var(--cs,#bbb);font-size:11px}
+.rcard .rc-two b{font:700 38px/1.1 var(--f-num,Oswald,sans-serif);color:var(--ca,#19f2a3)}
+.rcard .rc-four{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.rcard .rc-four b{display:block;font:700 22px var(--f-num,Oswald,sans-serif);color:var(--ci,#fff)}
+.rcard .rc-four small{color:var(--cs,#bbb);font-size:11px}
+.rcard .rc-tt{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:10px}
+.rcard .rc-tt span{padding:4px 10px;border-radius:999px;background:rgba(0,0,0,.22);border:1px solid var(--ca,#19f2a3);font-size:12px;font-weight:700;color:var(--ci,#fff)}
+.rcard .rc-ft{margin-top:12px;font-size:11px;color:var(--cs,#bbb);opacity:.85}
+.rcbtn{display:grid;grid-template-columns:1fr;gap:8px;margin:2px 0 6px}
+
+/* 이미지 미리보기 창 */
+.cardimg{width:100%;max-height:60dvh;object-fit:contain;border-radius:12px;display:block;margin:0 auto;-webkit-touch-callout:default;user-select:auto}
+
+/* 꾸미기 화면 */
+.cospv{display:grid;gap:8px;justify-items:center;text-align:center}
+.cospv .stage{min-height:170px;display:grid;place-items:center;width:100%;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--line,rgba(255,255,255,.12));padding:10px 4px}
+.cospv .stage img.pix{image-rendering:pixelated}
+.cospv .mock{width:150px;min-height:92px;border-radius:14px;padding:10px 8px;display:grid;place-items:center;font-weight:700;font-size:13px;background:linear-gradient(180deg,#1b1530,#0a0816);color:#ffe9a8;border:1px solid rgba(255,207,74,.5)}
+.cospv .mock.card{width:130px;min-height:130px}
+.cospv h3{font-size:16px}
+.cospv .why{font-size:13px;color:var(--muted)}
+.cospv .why.lock{color:var(--gold,#ffcf4a)}
+.cosgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.cosit{position:relative;min-height:96px;border-radius:14px;border:1px solid var(--line,rgba(255,255,255,.14));background:rgba(255,255,255,.04);display:grid;grid-template-rows:56px auto;place-items:center;padding:6px 4px 8px;gap:2px;text-align:center;font-size:12px;font-weight:700;color:var(--txt)}
+.cosit.on{border-color:var(--acc,#19f2a3);box-shadow:0 0 0 2px rgba(25,242,163,.25)}
+.cosit.sel{outline:2px solid var(--gold,#ffcf4a);outline-offset:1px}
+.cosit.lk .th{opacity:.45;filter:grayscale(.6)}
+.cosit .th{display:grid;place-items:center;width:100%;height:56px}
+.cosit .th img.pix{image-rendering:pixelated}
+.cosit .sw{width:34px;height:34px;border-radius:50%;border:2px solid rgba(255,255,255,.35)}
+.cosit .fr{width:44px;height:30px;border-radius:6px;background:#1b1530}
+.cosit .cd{width:44px;height:48px;border-radius:8px;border:1px solid rgba(255,255,255,.25)}
+.cosit .bd{position:absolute;top:4px;right:5px;font-size:11px;line-height:1;padding:2px 5px;border-radius:999px;background:rgba(0,0,0,.35);color:#fff}
+.cosit .bd.ok{background:var(--acc,#19f2a3);color:#04281b}
+.cosit small{display:block;font-size:11px;color:var(--muted);font-weight:500}
+.cosit>span:not(.th){line-height:1.25}
+.cossub{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.cossub button{flex:none;min-height:44px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-weight:700;font-size:13px}
+.cossub button.on{background:rgba(25,242,163,.14);border-color:var(--acc);color:var(--acc)}
+.supbox{display:grid;gap:8px}
+.supbox input{min-height:48px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.05);padding:0 12px;letter-spacing:.06em;text-transform:uppercase}
+.setmain{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0 10px}
+.setmain button{min-height:46px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-weight:700}
+.setmain button.on{background:rgba(25,242,163,.14);border-color:var(--acc);color:var(--acc)}
+
+/* 스카우터 새로고침 */
+.rescout{display:grid;gap:6px;margin:10px 0 4px}
+.rescout .wide small{display:block;font-weight:500;color:var(--muted)}
+
+.crop{display:block;width:56px;height:56px;overflow:hidden;border-radius:10px;background:rgba(255,255,255,.05)}
+.crop img{display:block;margin:-2px 0 0 -12px}
+.crop.t img{margin:-30px 0 0 -12px}
+
+/* 테마(아케이드·매치데이)의 제목 효과가 카드 글자를 덮지 않게 */
+.rcard h2,.rcard b,.rcard small,.rcard span,.rcard .rc-k{text-shadow:none!important;-webkit-text-stroke:0!important;filter:none}
+.rcard h2{color:var(--ci)!important;-webkit-text-fill-color:var(--ci)!important;background:none!important}
+.rcard .rc-sb,.rcard .rc-sb span,.rcard small,.rcard .rc-ft{color:var(--cs)!important;-webkit-text-fill-color:var(--cs)!important}
+.rcard .rc-two b,.rcard .rc-k{color:var(--ca)!important;-webkit-text-fill-color:var(--ca)!important}
+.rcard .rc-four b,.rcard .rc-tt span{color:var(--ci)!important;-webkit-text-fill-color:var(--ci)!important}
+.rcard .rc-tt span{background:rgba(0,0,0,.22)}
+.rcard .rc-k{display:block;padding:0;border:0;box-shadow:none;background:none}

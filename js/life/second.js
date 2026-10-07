@@ -51,7 +51,7 @@ function skillBase(S){
 const line=(S,t)=>{ S.second.lines.push({y:S.second.age,t}); };
 
 function startCoach(S){
-  const ft=L.fameTier(S.fameMax||S.fame), ch=L.charOf(S);
+  const ft=L.fameTierOf(S,S.fameMax||S.fame), ch=L.charOf(S);
   const rep=clamp(8+ft.i*7+(S.p.peak-70)*.6+(ch-50)*.2+(S.pcYears||0)*3,5,62);
   S.second={path:"coach",icon:"🧑‍🏫",name:"지도자의 길",age:age(S)+1,lvl:0,maxLvl:0,rep,skillAdd:0,exp:0,tr:{lg:0,cup:0,ucl:0,nat:0,promo:0},grads:0,fired:0,steps:0,jobs:[],lines:[],node:null,done:false,style:null};
   S.second.node={kind:"course"};

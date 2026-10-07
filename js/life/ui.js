@@ -42,6 +42,8 @@ function keep(fn){ window.__keepScroll=true; fn(); window.__keepScroll=false; }
 function render(){
   if(window.KL_VIRT){ if(S&&S.p) KL_VIRT.keep(S.p.name); (S&&S.kids||[]).forEach(k=>KL_VIRT.keep(k.name)); try{ (JSON.parse(localStorage.getItem(HOF)||"[]")||[]).forEach(x=>KL_VIRT.keep(x.name)); }catch(e){} (srvRows||[]).forEach(x=>KL_VIRT.keep(x.name)); }
   if(window.KL_BGM){ const t=modals[0]&&modals[0].t; let md="menu"; if(t==="ucl"||t==="gold"||t==="ballon"||t==="cine"||t==="jersey") md="epic"; else if(view==="retired") md="retire"; else if(view==="game"&&S){ if(S.phase==="offseason"||S.phase==="draft") md="market"; else if(S.stage==="youth"||S.stage==="univ") md="cute"; else md=S.phase==="run"?"match":"calm"; } else if(view==="quiz") md="match"; KL_BGM.mood(md); }
+  /* 화면 상태와 게임 상태가 어긋났을 때 스스로 바로잡아요(예: 드래프트 단계인데 시즌 화면이 열려 본문이 비던 문제) */
+  if(S&&!S.retired){ if(S.phase==="draft"&&view==="game"){ view="draft"; if(!S.offers&&L.draftOffers){ try{ S.offers=L.draftOffers(S); }catch(e){} } } }
   if(S&&view==="game"&&S.phase==="offseason"&&!off) buildOff();
   let h="", nav=false;
   if(view==="home") h=homeView();
@@ -106,7 +108,7 @@ function say(m){ toast=m; keep(render); setTimeout(()=>{ toast=null; keep(render
 function header(){
   const p=S.p;
   return `<header class="top"><button class="ibtn" data-act="home" title="K-라이프 첫 화면">☰</button>${emblem(S.club,40)}
-   <div class="who"><b>${esc(p.name)} <small>No.${p.number}</small></b><small>${esc(S.club.name)} · ${esc(subName())} · ${age()}세</small></div>
+   <div class="who"><b>${esc(p.name)} <small>No.${p.number}</small></b><small>${CS()?CS().emblemSvg(null,13)+" ":""}${esc(S.club.name)} · ${esc(subName())} · ${age()}세</small></div>
    <div class="ovr"><small>OVR</small><b>${p.ovr}</b></div></header>`;
 }
 function navHtml(){ return `<nav class="nav">${[["season","🗓","시즌"],["player","⚽","선수"],["career","🏆","커리어"],["feed","📰","소식"]].map(([k,i,t])=>`<button data-act="tab" data-v="${k}" class="${tab===k?"on":""}"><span>${i}</span>${t}</button>`).join("")}</nav>`; }
@@ -124,8 +126,9 @@ function homeView(){
    <button class="wide" data-act="help">📘 도움말 · 능력치와 한계선</button>
    <button class="wide" data-act="lang" data-noi18n>🌐 ${window.KL_LANG==="en"?"한국어로 보기 (Korean)":"English (beta)"}</button>
    <div class="grid2"><button class="wide" data-act="quiz">⚽ 축구 상식 퀴즈</button><button class="wide" data-act="settings">⚙ 설정 · 구단 이름과 로고</button></div>
+   ${CS()?`<button class="wide" data-act="cosgo">🎨 꾸미기 · 도트 선수·액자·은퇴 카드</button>`:""}
    <a class="wide" href="patch-notes.html" style="display:grid;place-items:center;text-decoration:none">📰 패치노트${(()=>{ try{ return window.KL_PATCH_LATEST&&localStorage.getItem("kl-patch-seen")!==window.KL_PATCH_LATEST?" 🔴 NEW":""; }catch(e){ return ""; } })()}</a>
-   <section class="card flat"><h3 class="sec">업데이트 예정</h3><p class="muted">· 5부 이하 지역 리그, 영어 번역 다듬기<br>· 더 많은 중요 경기 미니게임<br>· 은사·단짝·라이벌 후속 이야기 더 늘리기<br>· 감독판 이야기 늘리기, 선수판 가져오기</p></section>
+   <section class="card flat"><h3 class="sec">업데이트 예정</h3><p class="muted">· 5부 이하 지역 리그, 영어 번역 다듬기<br>· 더 많은 중요 경기 미니게임<br>· 은사·단짝·라이벌 후속 이야기 더 늘리기<br>· 꾸미기 항목 더 늘리기(유니폼·액자·엠블럼)<br>· 감독판 이야기 늘리기, 선수판 가져오기</p></section>
    <p class="muted c"><a class="lnk" href="index.html">게임 선택 메뉴로</a>${S?` · <button class="lnk" data-act="wipe">저장 삭제</button>`:""}</p></main>`;
 }
 
@@ -172,7 +175,7 @@ function helpView(){
     <div class="hp"><b>핵심 인재 · 핵심 주전 · 주전 · 로테이션 · 벤치 · 2군</b><small>감독이 얼마나 믿고 기용하는지의 단계예요. 팀 수준 대비 내 OVR, 감독 신뢰, 포지션 경쟁으로 정해져요. 차기 유망주는 어리고 잠재력이 높아 아직 기회를 받는 단계예요.</small></div></section>
    <section class="card flat"><h3 class="sec">성장의 기본 규칙</h3>
     <div class="hp"><b>약점 vs 강점 특훈</b><small>낮은 능력치는 쉽게 오르고, 이미 높은 능력치는 더 어렵게 올라요. 트레이너 등급이 높을수록 높은 능력치도 잘 올라요.</small></div>
-    <div class="hp"><b>몸 관리</b><small>컨디션이 낮거나 몸 관리를 소홀히 하면 성장이 둔해지고 부상 위험이 올라가요.</small></div></section>${helpFamily()}</main>`;
+    <div class="hp"><b>몸 관리</b><small>컨디션이 낮거나 몸 관리를 소홀히 하면 성장이 둔해지고 부상 위험이 올라가요.</small></div></section>${helpFamily()}${adslot("help")}</main>`;
 }
 function helpFamily(){
   try{ const fam=Object.entries(L.FAMILY_PERK||{}).map(([id,f])=>{ const nm=(L.FAMILY.find(x=>x.id===id)||{}).name||id; return `<div class="hp"><b>${f.icon} ${esc(nm)} — ${esc(f.name)}</b><small>${esc(f.desc)}</small></div>`; }).join("");
@@ -293,6 +296,7 @@ function scoutView(){
    <p class="muted">세 후보는 유형도, 체격도, 성장 여력도 서로 달라요. 지금 강한 선수가 끝까지 강하다는 보장은 없어요. 재능 등급은 20세가 되면 확정되고, 그 전에는 스카우터의 눈대중으로만 알 수 있어요.</p>
    <div class="scout">${draft.cands.map((c,i)=>`<button class="cand ${draft.pick===i?"on":""}" data-act="cand" data-v="${i}"><div class="hd"><b>후보 ${i+1} · ${esc(c.arch?c.arch.name:c.p.typeName)}</b><b>${c.p.ovr}</b></div>${c.arch?`<small class="muted" style="display:block;margin:-2px 0 6px">${esc(c.arch.desc)} · 스카우터: ${esc(c.hint)}</small>`:""}
      ${d.stats.map(([k,n])=>`<div class="sbar"><span>${n}</span><div class="bar"><i style="width:${c.p.stats[k]}%"></i></div><b>${c.p.stats[k]}</b></div>`).join("")}<small class="muted">${c.p.height}cm ${c.p.weight}kg · ${c.p.foot} · ${esc(L.traitName(c.p.trait))} · ${esc(c.family.name)}</small></button>`).join("")}</div>
+   ${rescoutHtml()}
    <div class="cta"><button class="big ${draft.pick<0?"needs":""}" data-act="start"><span>${draft.pick<0?"후보를 골라 주세요 ↑":"후보 "+(draft.pick+1)+"로 시작"}</span><b>→</b></button></div></main>`;
 }
 
@@ -302,7 +306,7 @@ function draftView(){
   const dr=ensureDr(); const finalDraft=age()>=22;
   const pay=o=>{ const c=L.clubPayroll(S,o.club.id,o.club.lg); return c?`<small>구단 최고 ${money(c.top.sal)} · 최저 ${money(c.low.sal)}</small>`:""; };
   const card=(o,i,act)=>`<button class="offer" data-act="${act}" data-v="${i}">${emblem(o.club,52)}<div><b>${esc(o.club.name)}</b><small>${esc(o.tag||L.lgLabel(o.club.lg))}${L.isRivalMove&&L.isRivalMove(S,o.club)?" · ⚠ 라이벌":""} · 전력 ${o.lvl}${lgAvg(o)} · 예상 ${esc(o.role)}</small>${outlookTag(o)}${pay(o)}<span class="sal">연봉 ${money(o.salary)} · ${o.years}년</span></div></button>`;
-  let h=`<main class="body"><small class="kick">K LEAGUE DRAFT</small><h2>프로 입단 도전</h2>
+  let h=`<main class="body"><small class="kick">LEGEND LEAGUE DRAFT</small><h2>프로 입단 도전</h2>
    <section class="card"><div class="row"><div class="grow"><b>${esc(S.p.name)}</b><br><small class="muted">${POSK[S.p.pos]} · OVR ${S.p.ovr} · ${esc(scoutLabel())}</small></div><div class="stat"><small>지명 확률</small><b style="color:${dr.chance>=60?"var(--acc)":dr.chance>=30?"var(--gold)":"var(--red)"}">${dr.chance}%</b></div></div>
     <div class="bar ${dr.chance<30?"warn":""}"><i style="width:${dr.chance}%"></i></div>
     <p class="muted">능력치와 잠재력으로 정해져요. ${finalDraft?"이번이 마지막 기회예요. 지명받지 못하면 프로의 꿈은 여기까지예요.":"지명받지 못해도 대학에 진학해 성장한 뒤 다시 도전할 수 있어요."}</p></section>`;
@@ -328,7 +332,7 @@ function draftView(){
 /* ================= 시즌 탭 ================= */
 function meters(){
   const m=(n,v,cls)=>`<div class="meter"><span>${n}</span><div class="bar ${cls||""}"><i style="width:${Math.min(100,v)}%"></i></div><b>${Math.round(v)}</b></div>`;
-  const ft=L.fameTier(S.fame), ct=L.charTier(L.charOf(S));
+  const ft=L.fameTierOf(S,S.fame), ct=L.charTier(L.charOf(S));
   const fameRow=`<div class="meter"><span>인기</span><div class="bar gold"><i style="width:${Math.min(100,ft.next?((S.fame-ft.base)/(ft.next-ft.base))*100:100)}%"></i></div><b>${Math.round(S.fame)}</b></div><div class="tierline"><span class="pill gold">${ft.icon} ${ft.name}</span><small class="muted">${esc(ft.desc)}${ft.next?" · 다음 "+ft.nextName+"까지 "+Math.max(1,Math.round(ft.next-S.fame)):""}</small></div>`;
   return `<section class="card flat">${m("컨디션",S.cond,S.cond<50?"warn":"")}${m("사기",S.morale,S.morale<40?"warn":"")}${fameRow}${m("인성",L.charOf(S),"")}${perkChips()}<div class="tierline"><span class="pill">${ct.icon} ${ct.name}</span><small class="muted">선택과 행동이 쌓여 인성 점수가 돼요. 광고 계약금과 평판에 영향을 줘요.</small></div><div class="row"><small class="muted">보유 자금 <b style="color:var(--gold)">${money(S.funds)}</b></small><span class="grow"></span><button class="ghost" data-act="shop" style="min-height:44px">💸 소비·후원</button></div></section>`;
 }
@@ -395,7 +399,7 @@ function compCard(){
   const key=S.stage==="youth"||S.stage==="univ"?"YOUTH":L.leagueKey(S); const names=[];
   names.push(key==="YOUTH"?(S.stage==="univ"?"대학 리그":(S.club.abroad?"해외 유스 리그":"유소년 리그")):L.lgLabel(key==="K1"&&S.club.lg==="MIL"?"MIL":key));
   if(key==="K1"||key==="K2"||key==="K3"||key==="K4") names.push("전국컵"); if(L.isForeign(key)) L.cupNames(key).forEach(n=>names.push(n)); if(key==="YOUTH") names.push("전국대회");
-  if((key==="K1"||(L.FL[key]&&L.FL[key].acl))&&S.acl) names.push("아시아 클럽컵 🌏"); if(L.isForeign(key)&&S.uel&&!S.ucl) names.push("UEFA 유럽 클럽컵2 🟠"); if(L.isForeign(key)&&S.ucl) names.push("유럽 클럽컵 ⭐");
+  if((key==="K1"||(L.FL[key]&&L.FL[key].acl))&&S.acl) names.push("아시아 클럽컵 🌏"); if(L.isForeign(key)&&S.uel&&!S.ucl) names.push("유럽 유럽 클럽컵2 🟠"); if(L.isForeign(key)&&S.ucl) names.push("유럽 유럽 클럽컵 ⭐");
   return `<p class="note">🏟 올해 출전 대회: ${names.map(esc).join(" · ")}${(key==="K1"&&S.acl)?"<br><small>지난 시즌 성적(또는 구단 전력)으로 아시아 클럽컵 출전권을 얻었어요.</small>":""}</p>`;
 }
 function coachCard(){
@@ -500,9 +504,10 @@ function resultView(){
    ${R.react?`<section class="card flat"><small class="kick">SNS · 팬 반응</small><h3 class="sec">📰 ${esc(R.react.headline)}</h3>${R.react.posts.map(p=>`<div class="sns ${p.tone>0?"up":p.tone<0?"dn":""}"><b>${esc(p.h)}${p.src&&p.src!=="SNS"?` <em class="srctag">${esc(p.src)}</em>`:""}</b><span>${esc(p.t)}</span><small>♥ ${p.likes}</small></div>`).join("")}<p class="muted">※ 모든 계정은 가상이에요.</p></section>`:""}
    ${(R.derbies||[]).length?`<section class="card flat"><h3 class="sec">🔥 ${esc(R.derbies[0].name)}</h3>${R.derbies.map(d=>`<div class="row"><span class="grow">${esc(d.opp)}전${d.min>0?"":" (결장)"}${d.g?" · "+d.g+"골":""}</span><b style="color:${d.res==="W"?"var(--acc)":d.res==="L"?"var(--red)":"var(--gold)"}">${d.f}:${d.a}</b></div>`).join("")}</section>`:""}
    ${(R.moneyNotes||[]).length?`<section class="card flat"><h3 class="sec">재정 리포트</h3>${R.moneyNotes.map(t=>`<p class="muted">${esc(t)}</p>`).join("")}</section>`:""}
+   ${adslot("result")}
    ${R.awards.some(a=>/베스트 11|올해의 팀/.test(a))&&!R.youth?`<button class="wide" data-act="xi">⭐ 이번 시즌 베스트 11 보기</button>`:""}
    ${R.ballon?`<button class="wide" data-act="ballon">🏅 황금공 후보 ${R.ballon.rank}위 — 30인 명단 보기</button>`:""}
-   ${comps}${R.nextAcl?`<p class="note good">🌏 다음 시즌 아시아 클럽컵 출전권을 얻었어요!</p>`:""}${R.nextUel?`<p class="note good">🟠 다음 시즌 UEFA 유럽 클럽컵2에 진출해요!</p>`:""}${R.nextUcl?`<p class="note good">⭐ 다음 시즌 유럽 클럽컵에 진출해요!</p>`:""}
+   ${comps}${R.nextAcl?`<p class="note good">🌏 다음 시즌 아시아 클럽컵 출전권을 얻었어요!</p>`:""}${R.nextUel?`<p class="note good">🟠 다음 시즌 유럽 유럽 클럽컵2에 진출해요!</p>`:""}${R.nextUcl?`<p class="note good">⭐ 다음 시즌 유럽 유럽 클럽컵에 진출해요!</p>`:""}
    ${(R.natEvents||[]).map(e=>e.skipped?`<p class="note warn">🇰🇷 ${esc(e.name)} — ${esc(e.text)}</p>`:e.declined?`<p class="note warn">🇰🇷 ${esc(e.name)} — 소집 불참</p>`:`<p class="note ${e.title?"good":""}">🇰🇷 ${esc(e.name)}${e.host?" ("+esc(e.host)+")":""} · ${esc(e.stage)} (팀 ${e.games||e.caps}경기 중 ${e.caps}경기 출전 · ${e.goals}골)${e.exempt?" · 체육요원 편입!":""}</p>`).join("")}
    ${R.injury?`<p class="note warn">🩹 ${esc(R.injury.text)}</p>`:""}${R.bonus?`<p class="note good">💰 옵션 보너스 ${R.bonus}억 (${(R.bonusHit||[]).map(esc).join(", ")})</p>`:""}
    ${(R.endorses||[]).map(e=>`<p class="note ${e.ok?"good":"warn"}">🤝 ${esc(e.brand)} 광고 ${e.cancelled?"이미지 조항 위반으로 해지":e.ok?"조건 달성":"조건 미달"} — ${money(e.pay)}</p>`).join("")}${R.famNote?`<p class="note">${esc(R.famNote)}</p>`:""}${R.noMedal?`<p class="note">🥈 2군 소속이라 이번 시즌 1군의 우승 메달은 받지 못했어요. 1군에서 뛰면 기록돼요.</p>`:""}${R.valueSpike?`<p class="note good">💰 몸값 폭등! 시장 가치 ${money(R.valueSpike.before)} → ${money(R.valueSpike.after)} (${esc(R.valueSpike.why||"맹활약")}). 이적 제의가 커질 수 있어요. ${L.age(S)>=29?"다만 나이 때문에 폭은 제한적이에요.":""}</p>`:""}${R.fameDrop?`<p class="note warn">📉 인기가 ${R.fameDrop} 떨어졌어요 (${esc(R.fameWhy)}). 경기력과 이미지를 관리해야 팬이 남아요.</p>`:""}${R.titleBoost?`<p class="note good">🏆 주전으로 우승에 기여한 자신감이 성장에 보태졌어요.</p>`:""}
@@ -648,10 +653,11 @@ function accountCard(){
   if(!u) return `<div class="card flat" style="gap:6px"><b>☁ 구글로 로그인하면 기기를 바꿔도 이어서 해요</b><small class="muted">로그인은 선택이에요. 진행 중인 인생이 내 계정에 백업돼요.</small><button class="big" data-act="login"><span>구글로 로그인</span><b>→</b></button>${cloudMsg?`<p class="note">${esc(cloudMsg)}</p>`:""}</div>`;
   return `<div class="card flat" style="gap:6px"><b>☁ ${esc(u.name||u.email)}</b><small class="muted">${esc(u.email||"")} · 로그인됨</small><div class="grid2"><button class="wide" data-act="cloudup">지금 저장</button><button class="wide" data-act="clouddown">불러오기</button></div><button class="wide" data-act="logout">로그아웃</button>${cloudMsg?`<p class="note">${esc(cloudMsg)}</p>`:""}</div>`;
 }
-function cloudPayload(){ try{ return {save:JSON.parse(localStorage.getItem("klife-save")||"null"),dex:JSON.parse(localStorage.getItem("klife-dex")||"null"),hof:JSON.parse(localStorage.getItem("klife-hof")||"null"),at:new Date().toISOString()}; }catch(e){ return {}; } }
+function cloudPayload(){ try{ return {save:JSON.parse(localStorage.getItem("klife-save")||"null"),dex:JSON.parse(localStorage.getItem("klife-dex")||"null"),hof:JSON.parse(localStorage.getItem("klife-hof")||"null"),cos:rd("klife-cos"),at:new Date().toISOString()}; }catch(e){ return {}; } }
 function settingsView(){
+  if(setMain==="cos"&&CS()) return cosPage();
   const C=KL_CUSTOM.get(), cl=setClubs(setTab);
-  return `<main class="body"><div class="brand"><span class="mark">⚙</span><div><small>SETTINGS</small><b>구단 이름과 로고</b></div></div>
+  return `<main class="body"><div class="brand"><span class="mark">⚙</span><div><small>SETTINGS</small><b>구단 이름과 로고</b></div></div>${CS()?setMainChips():""}
    <section class="card flat"><p class="muted">리그별로 구단 이름과 로고를 내 마음대로 바꿀 수 있어요. 이 기기에만 저장돼요. 이미 진행 중인 인생의 지난 기록 글자는 그대로이고, 새로 만나는 곳부터 바뀐 이름이 보여요. 바꾼 뒤에는 새로고침이 필요해요.</p>
    ${accountCard()}
    <button class="wide" data-act="theme">🎨 화면: ${window.KL_THEME?(KL_THEME.names[KL_THEME.get()]||""):""} → ${window.KL_THEME?(KL_THEME.names[KL_THEME.next()]||""):""}</button>
@@ -674,7 +680,7 @@ function mainClub(){ const e=Object.entries(S.clubYears||{}).sort((a,b)=>b[1]-a[
 function derbySum(pro){ const m={}; pro.forEach(h=>(h.dv||[]).forEach(x=>{ const k=x[0]; const o=m[k]||(m[k]={name:x[0],opp:x[1],w:0,d:0,l:0,g:0}); o.opp=x[1]; if(x[2]==="W") o.w++; else if(x[2]==="L") o.l++; else o.d++; o.g+=x[3]||0; })); const a=Object.values(m).sort((p,q)=>(q.w+q.d+q.l)-(p.w+p.d+p.l)); return a[0]||null; }
 function hofDetail(){
   const p=S.p, d=L.POSDEF[p.pos], pro=S.history.filter(h=>!h.youth), hid=p.hidden?L.HIDDEN_LIST.find(h=>h.id===p.hidden):null, tr=L.TRAIT_ALL.find(t=>t.id===p.trait);
-  return {v:1,ovr:p.ovr,stats:d.stats.map(([k,n])=>[n,p.stats[k]]),sub:subName(),role:L.roleName(p),foot:p.foot,height:p.height,weight:p.weight,trait:tr?tr.icon+" "+tr.name:"",hidden:hid?hid.name:"",
+  return {v:1,cos:CS()?CS().publicPick():null,ovr:p.ovr,stats:d.stats.map(([k,n])=>[n,p.stats[k]]),sub:subName(),role:L.roleName(p),foot:p.foot,height:p.height,weight:p.weight,trait:tr?tr.icon+" "+tr.name:"",hidden:hid?hid.name:"",
     family:{married:!!S.married,kids:(S.kids||[]).map(k=>k.name+"("+(k.girl?"딸":"아들")+")")},gen:S.gen||1,parent:S.parent?{name:S.parent.name,pos:S.parent.pos,peak:S.parent.peak,grade:S.parent.grade}:null,after:S.after?{name:S.after.name,title:S.after.title,lines:S.after.lines.map(x=>[x.y,x.t])}:null,ver:{start:S.verStart||null,end:window.KL_VER?window.KL_VER("선수판"):null},fame:Math.round(S.fameMax||S.fame),fameTier:L.fameTier(S.fameMax||S.fame).name,char:Math.round(L.charOf(S)),charTier:L.charTier(L.charOf(S)).name,styleLog:(S.styleLog||[]).map(x=>[x.year,x.age,x.text]),titles:L.titlesOf(S),trophies:S.trophies.filter(t=>!t.youth).map(t=>[t.name,t.year]),awards:S.awards.filter(a=>!a.youth).map(a=>[a.name+(a.comp?" ("+a.comp+")":""),a.year]),
     jerseys:(S.jersey||[]).map(j=>({club:j.club,number:j.number})),chain:L.clubChain(S).map(c=>c.name+" ("+c.from+(c.to>c.from?"~"+c.to:"")+")"),ballon:S.ballon.map(b=>[b.year,b.rank]),
     seasons:pro.map(h=>[h.age,h.club,h.leagueName||h.lg||"",h.apps,h.goals,h.assists,h.rating,h.ovr1]),derby:derbySum(pro)};
@@ -716,7 +722,7 @@ function hofView(){
    <p class="muted">은퇴한 선수를 서버에 등록하면 친구들과 비교할 수 있어요. 선수를 누르면 내 최고 선수와 비교해요.</p>
    ${hofBusy?'<p class="muted c">불러오는 중…</p>':""}${hofErr?'<p class="note warn">'+esc(hofErr)+'</p>':""}
    ${(hofRows||[]).map((x,i)=>`<button class="offer" data-act="hofcmp" data-v="${i}"><b style="font-family:var(--f-num);color:var(--gold);width:26px">${i+1}</b><div><b>${esc(x.name)} <small class="muted">by ${esc(x.nickname)}</small></b><small>${esc(x.pos)} · ${esc(x.club)} · ${x.years}년 · ${x.goals}골 ${x.assists}도움${x.jersey?" · 영구결번":""}${x.ballon?" · 황금공 "+x.ballon+"회":""}</small></div><span class="pill gold">${esc(x.grade)} ${x.score}</span></button>`).join("")}
-   ${!hofBusy&&hofRows&&!hofRows.length&&!hofErr?'<p class="muted c">아직 등록된 선수가 없어요.</p>':""}</main>`;
+   ${!hofBusy&&hofRows&&!hofRows.length&&!hofErr?'<p class="muted c">아직 등록된 선수가 없어요.</p>':""}${adslot("hof")}</main>`;
 }
 function bestLocal(){ const h=rd(HOF)||[]; return h.filter(x=>x.apps!=null).sort((a,b)=>b.score-a.score)[0]||null; }
 function cmpHtml(a){
@@ -770,7 +776,7 @@ function afterCard(){
   return `<section class="card flat"><small class="kick">AFTER CAREER</small><h3 class="sec">은퇴 후의 삶</h3><p class="muted">어떤 길을 갈까요? 한 번만 고를 수 있고, 선수 시절의 능력·인기·인성·재산이 이어져요. 길에 따라 커리어 점수가 올라요.</p>${L.afterPaths(S).map(p=>`<button class="opt" data-act="after" data-v="${p.id}" ${p.locked?"disabled":""}><b>${p.locked?"🔒 ":""}${p.icon} ${esc(p.name)}</b><small>${esc(p.desc)}</small></button>`).join("")}</section>`;
 }
 function lifeCard(){
-  const ft=L.fameTier(S.fameMax||S.fame), ct=L.charTier(L.charOf(S)), cs=L.charSummary(S);
+  const ft=L.fameTierOf(S,S.fameMax||S.fame), ct=L.charTier(L.charOf(S)), cs=L.charSummary(S);
   return `<section class="card flat"><small class="kick">LIFE</small><h3 class="sec">어떤 삶을 살았나</h3>
    <div class="row"><div class="grow"><small class="muted">최고 인기</small><br><b style="font-size:20px">${ft.icon} ${esc(ft.name)}</b> <small class="muted">(${Math.round(S.fameMax||S.fame)})</small></div><div class="grow"><small class="muted">인성 점수</small><br><b style="font-size:20px">${ct.icon} ${esc(ct.name)}</b> <small class="muted">(${Math.round(L.charOf(S))})</small></div></div>
    <p class="muted">${esc(ft.desc)}</p>
@@ -802,16 +808,16 @@ function chainHtml(){ const ch=L.clubChain(S); return ch.map(c=>c.mil?"🎖 "+c.
 /* ================= 은퇴 · 중도 포기 ================= */
 function retiredView(){
   const lg=L.legacy(S), g=L.legacyGrade(lg.total), c=S.career, jr=S.jersey||[];
-  return `<main class="body"><div style="text-align:center">${L.pixelImg?L.pixelImg(S,150,{suit:true,age:Math.max(L.age(S),30)}):""}</div><small class="kick">RETIREMENT</small><h1>${esc(S.p.name)}, 그라운드를 떠나다</h1>
+  return `<main class="body">${CS()?"":`<div style="text-align:center">${L.pixelImg?L.pixelImg(S,150,{suit:true,age:Math.max(L.age(S),30)}):""}</div>`}<small class="kick">RETIREMENT</small><h1>${esc(S.p.name)}, 그라운드를 떠나다</h1>
    <p class="muted">${L.age(S)}세 · 프로 ${S.history.filter(h=>!h.youth).length}시즌 · ${esc(chainHtml())}</p>
    <div class="pills">${L.titlesOf(S).map(t=>`<span class="pill gold">🏷 ${esc(t)}</span>`).join("")}</div>
-   ${lifeCard()}${lg.rom?`<section class="card flat"><p class="note good">🌟 낭만 보너스 +${lg.rom} — 재능 ${lg.grade}등급으로 이뤄낸 업적이라 점수가 더 올랐어요</p></section>`:""}${afterCard()}
+   ${retCard()}${lifeCard()}${lg.rom?`<section class="card flat"><p class="note good">🌟 낭만 보너스 +${lg.rom} — 재능 ${lg.grade}등급으로 이뤄낸 업적이라 점수가 더 올랐어요</p></section>`:""}${afterCard()}
    <section class="card flat"><h3 class="sec">선수 정보</h3><p class="muted">${esc(S.p.height)}cm ${esc(S.p.weight)}kg · ${esc(S.p.foot)} · ${esc(subName())}${L.roleName(S.p)?" · "+esc(L.roleName(S.p)):""} · ${esc(S.p.typeName)}</p>${(S.styleLog||[]).length?`<div class="stylelog">${S.styleLog.map(x=>`<p class="muted"><b>${x.year}</b> (${x.age}세) ${esc(x.text)}</p>`).join("")}</div>`:""}</section>
    ${jr.map(j=>`<section class="banner"><small>PERMANENTLY RETIRED NUMBER</small><div class="no">${j.number}</div><b>${esc(j.club)} 영구결번</b><small>${j.yrs}시즌 활약 · 우승 ${j.titles}회</small></section>`).join("")}
    <section class="hero"><small class="kick">LEGACY</small><div class="row"><h1 style="font-size:64px;color:var(--gold)">${g}</h1><div class="grow"><b style="font-size:24px;font-family:var(--f-num)">${lg.total}</b><br><small class="muted">커리어 점수</small></div></div></section>
    <section class="four"><div class="stat"><small>출전</small><b>${c.apps}</b></div><div class="stat"><small>골</small><b>${c.goals}</b></div><div class="stat"><small>도움</small><b>${c.assists}</b></div><div class="stat"><small>대표팀</small><b>${c.caps}</b></div></section>
    <section class="card flat"><div class="pay"><small>전성기 OVR</small><b>${S.p.peak}</b><small>우승</small><b>${S.trophies.filter(t=>!t.youth).length}회</b><small>수상</small><b>${S.awards.filter(a=>!a.youth).length}회</b><small>황금공 후보</small><b>${S.ballon.length}회</b><small>누적 옵션 보너스</small><b>${money(c.bonus||0)}</b><small>누적 광고 수입</small><b>${money(c.sponsor||0)}</b></div></section>
-   ${srvRecCard()}${valueChart()}${playStyle()}${honours()}${legendCard()}
+   ${srvRecCard()}${valueChart()}${playStyle()}${honours()}${legendCard()}${adslot("retired")}
    ${S.moments.length?`<section class="card flat"><h3 class="sec">하이라이트</h3>${S.moments.slice(-12).reverse().map(m=>`<p class="muted">${m.year} · ${esc(m.text)}</p>`).join("")}</section>`:""}
    ${mgrCard()}
    <section class="card flat"><h3 class="sec">명예의 전당 등록</h3><p class="muted">서버에 등록하면 친구들이 내 선수를 보고 비교할 수 있어요.</p>${S.hofUp?'<p class="note good">등록 완료! 친구 명예의 전당에서 확인해 보세요.</p>':`<input type="text" id="nick" maxlength="12" placeholder="닉네임" value="${esc(((()=>{ try{ return localStorage.getItem("klife-nick")||""; }catch(e){ return ""; } })()))}"><button class="wide" data-act="hofup">서버에 등록</button>`}<button class="ghost" data-act="hoflist">친구들 명예의 전당 보기</button></section>
@@ -905,6 +911,7 @@ function modalHtml(){
   const m=modals[0];
   if(m.t==="cine") return "";
   if(m.t==="confirm") return `<div class="ov center"><div class="sheet"><small class="kick">CONFIRM</small><h3>${esc(m.title)}</h3><p class="muted">${esc(m.body)}</p><button class="big" data-act="cfyes"><span>${esc(m.yes||"확인")}</span><b>→</b></button><button class="wide" data-act="cfno">${esc(m.no||"취소")}</button></div></div>`;
+  if(m.t==="cardimg") return `<div class="ov"><div class="sheet"><div class="grab"></div><small class="kick">RETIREMENT CARD</small><h3>${esc(m.name)}의 은퇴 카드</h3><img class="cardimg" alt="${esc(m.name)} 은퇴 카드" src="${m.url}"><p class="muted c">저장이 안 되면 이미지를 길게 눌러 '이미지 저장'을 골라 주세요.</p><button class="big" data-act="cardsave"><span>이미지로 저장</span><b>↓</b></button>${m.can?`<button class="wide" data-act="cardshare">📤 공유하기</button>`:""}<button class="wide" data-act="mok">닫기</button></div></div>`;
   if(m.t==="shop") return shopHtml();
   if(m.t==="tier2") return tier2Html(m);
   if(m.t==="camp") return campHtml(m);
@@ -1050,7 +1057,7 @@ function goOffseason(){
   save(); render();
 }
 function doRetire(){
-  { const ch=L.charOf(S), ft=L.fameTier(S.fameMax||S.fame), yrs=S.history.filter(h=>!h.youth).length, c=S.career;
+  { const ch=L.charOf(S), ft=L.fameTierOf(S,S.fameMax||S.fame), yrs=S.history.filter(h=>!h.youth).length, c=S.career;
     const o={kind:"retire",icon:"🎽",kicker:"FAREWELL · "+L.age(S)+"세",title:ch>=75?"박수 속에 떠나는 "+S.p.name:ch<35?S.p.name+", 논란도 이야기가 되다":S.p.name+", 그라운드를 떠나다",
       sub:ch>=75?"상대 팬들까지 일어나 박수를 보냈어요. 실력만큼 사람됨으로 기억될 선수예요.":ch<35?"호불호가 갈렸지만, 누구도 그의 존재감을 무시하지 못했어요.":"긴 여정을 마치고 새 이야기를 준비해요.",
       lines:[yrs+"시즌 · "+c.apps+"경기 "+c.goals+"골 "+c.assists+"도움",ft.name+" 인기 · "+L.charTier(ch).name]};
@@ -1068,6 +1075,92 @@ function nextYear(){
 }
 function finishPopup(){            // 팝업이 모두 끝난 뒤 처리(중도 포기 엔딩 등)
   if(!modals.length&&S&&S.retired&&S.quit&&view==="game"){ view="quit"; }
+}
+
+/* ================= 꾸미기 · 은퇴 카드 · 스카우터 새로고침 (js/life/cosmetics.js) ================= */
+const CS=()=>window.KL_COS;
+let setMain="club", cosGrp="player", cosTyp="hair", cosSel=null, cosMsg="", supDraft="";
+if(L){ L.onCosChange=()=>{ if(window.KL_AUTH) KL_AUTH.queue(cloudPayload); }; if(L.rewardHook===undefined) L.rewardHook=null; }   // rewardHook: 나중에 보상형 광고를 붙일 자리 — function(kind, done){ …광고를 끝까지 보면 done(true) }
+const adslot=n=>`<div class="adslot" data-slot="${n}"></div>`;
+/* 미리보기용 도트: 진행 중인 선수가 있으면 그 선수의 체격으로, 없으면 기본 체격으로 그려요 */
+function cosSprite(size,cosOv,extra){
+  if(S&&S.p&&L.pixelImg) return L.pixelImg(S,size,Object.assign({clean:true,cos:cosOv},extra||{}));
+  const url=L.pixelSprite(Object.assign({name:"dot",age:24,kit:"#2f6fd6"},cosOv,extra||{})), w=Math.round(size*16/24);
+  return `<img class="pix" alt="" width="${w}" height="${size}" src="${url}" style="width:${w}px;height:${size}px">`;
+}
+function cosThumb(it,eqs){
+  const K=CS(), pv=Object.assign({},eqs); pv[it.type]=it.id;
+  if(it.type==="hcolor"){ return it.c?`<span class="sw" style="background:${it.c}"></span>`:`<span class="sw" style="background:conic-gradient(#14110f,#6b4528,#e3c15a,#3f7fe0,#14110f)"></span>`; }
+  if(it.type==="frame"){ const f=K.frameShadow(it.id); return `<span class="fr" style="${f}"></span>`; }
+  if(it.type==="card"){ return `<span class="cd" style="background:${K.cardBg(it.id)}"></span>`; }
+  if(it.type==="emblem"){ return it.d?K.emblemSvg(it.id,34):`<span class="muted" style="font-size:20px">∅</span>`; }
+  const torso=it.type==="captain"||it.type==="pattern";
+  return `<span class="crop ${torso?"t":""}">${cosSprite(120,K.pixOpts(pv),{})}</span>`;
+}
+function cosStage(pv,it){
+  const K=CS();
+  if(cosGrp==="player") return `<div class="stage">${cosSprite(132,K.pixOpts(pv))}</div>`;
+  if(cosGrp==="frame"){ const id=pv.frame, f=K.frameOf(id); return `<div class="stage"><div class="mock ${K.frameClass(id)}" style="${K.frameStyle(id)}">${K.ornHtml(id)}<span>🏅 영구결번 전시관</span><span class="muted" style="font-size:11px">내 선수 카드가 이 액자에 담겨요</span></div></div>`; }
+  if(cosGrp==="card"){ const c=K.by(pv.card); return `<div class="stage"><div class="mock card" style="background:${K.cardBg(pv.card)};color:${c.ink};border-color:${c.acc}"><b style="color:${c.acc};letter-spacing:.2em;font-size:11px">RETIREMENT</b><span style="font-size:15px">내 선수</span><b style="font-size:30px;color:${c.acc}">88</b><span style="color:${c.sub};font-size:11px">최고 OVR</span></div></div>`; }
+  return `<div class="stage"><div style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:16px">${K.emblemSvg(pv.emblem,30)||"∅"}<span>내 구단</span></div></div>`;
+}
+function cosPage(){
+  const K=CS(), eqs=K.eqAll(), items=K.items.filter(x=>x.type===cosTyp);
+  if(!items.some(x=>x.id===cosSel)) cosSel=null;
+  const cur=cosSel?K.by(cosSel):K.by(eqs[cosTyp]), pv=Object.assign({},eqs); pv[cosTyp]=cur.id;
+  const u=K.unlock(cur.id), isEq=eqs[cosTyp]===cur.id, kinds={achv:"기록으로 해금",supporter:"후원자 전용",free:"기본"};
+  const act=u.ok?(isEq?`<p class="why" style="color:var(--acc)">✓ 장착 중이에요</p>`:`<button class="big" data-act="cosequip" data-v="${cur.id}"><span>이걸로 장착하기</span><b>→</b></button>`)
+    :`<p class="why lock">🔒 ${esc(u.why||"")}${u.need!=null?" ("+u.cur+"/"+u.need+")":""}</p>${cur.unlock.kind==="supporter"?`<button class="wide" data-act="cossup">후원자 코드 입력하러 가기 ↓</button>`:""}`;
+  const subs=cosGrp==="player"?`<div class="cossub">${K.types.filter(t=>t[2]==="player").map(t=>`<button class="${t[0]===cosTyp?"on":""}" data-act="costyp" data-v="${t[0]}">${t[1]}</button>`).join("")}</div>`:"";
+  const sup=K.isSupporter();
+  return `<main class="body"><div class="brand"><span class="mark">🎨</span><div><small>STYLE</small><b>꾸미기</b></div></div>${setMainChips()}
+   <section class="card flat cospv">${cosStage(pv,cur)}<h3>${esc(cur.name)} <small class="muted">· ${kinds[cur.unlock.kind]||""}</small></h3>${cur.desc?`<p class="muted">${esc(cur.desc)}</p>`:""}${act}</section>
+   <div class="chips setchips">${K.groups.map(g=>`<button class="chip ${g[0]===cosGrp?"on":""}" data-act="cosgrp" data-v="${g[0]}">${g[1]}</button>`).join("")}</div>
+   ${subs}
+   <div class="cosgrid">${items.map(it=>{ const un=K.unlock(it.id), on=eqs[it.type]===it.id, pg=!un.ok&&un.need!=null?`<small>${un.cur}/${un.need}</small>`:(!un.ok&&it.unlock.kind==="supporter"?"<small>후원자</small>":""); return `<button class="cosit ${on?"on":""} ${cur.id===it.id?"sel":""} ${un.ok?"":"lk"}" data-act="cossel" data-v="${it.id}" aria-label="${esc(it.name)}"><span class="th">${cosThumb(it,eqs)}</span><span>${esc(it.name)}${pg}</span>${on?`<i class="bd ok">장착</i>`:un.ok?"":`<i class="bd">🔒</i>`}</button>`; }).join("")}</div>
+   <p class="muted">장착한 꾸미기는 이 기기와 로그인한 계정의 클라우드 저장에 함께 저장돼요. 게임 능력치·결과에는 영향이 없어요.</p>
+   <section class="card flat supbox" id="sec-sup"><h3 class="sec">후원자 코드</h3><p class="muted">후원해 주신 분께 따로 알려 드리는 코드예요. 등록하면 후원자 전용 꾸미기가 열리고 광고가 꺼져요.</p>
+    ${sup?`<p class="note good">후원자로 등록돼 있어요. 고맙습니다! 💚</p>`:""}
+    <input type="text" id="supcode" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="24" placeholder="KLS-XXXXXX-XXXX" value="${esc(supDraft)}">
+    <button class="wide" data-act="supgo">${sup?"코드 더 등록하기":"코드 등록"}</button>${cosMsg?`<p class="note ${/!$|열려|이미/.test(cosMsg)?"good":"warn"}">${esc(cosMsg)}</p>`:""}</section>
+   <p class="muted c"><button class="lnk" data-act="home">돌아가기</button></p></main>`;
+}
+function setMainChips(){ return `<div class="setmain"><button class="${setMain==="club"?"on":""}" data-act="setMain" data-v="club">구단·로고</button><button class="${setMain==="cos"?"on":""}" data-act="setMain" data-v="cos">🎨 꾸미기</button></div>`; }
+/* 은퇴 카드(화면) — 같은 내용을 canvas 이미지로도 저장해요 */
+function retCard(){
+  const K=CS(); if(!K||!L.pixelImg) return "";
+  const eqs=K.eqAll(), cd=K.by(eqs.card), fr=K.frameOf(eqs.frame), lg=L.legacy(S), g=L.legacyGrade(lg.total), c=S.career, tt=L.titlesOf(S).slice(0,3);
+  const sty=`background:${K.cardBg(eqs.card)};--ci:${cd.ink};--ca:${cd.acc};--cs:${cd.sub};${K.frameStyle(eqs.frame)}`;
+  return `<section class="rcard ${K.frameClass(eqs.frame)} ${fr&&fr.sq?"sq":""} ${cd.pat?"p-"+cd.pat:""}" style="${sty}">${K.ornHtml(eqs.frame)}<div class="rc-k">RETIREMENT</div><div class="rc-sp">${L.pixelImg(S,150,{suit:true,age:Math.max(L.age(S),30)})}</div>
+   <h2>${esc(S.p.name)}</h2><div class="rc-sb">${K.emblemSvg(eqs.emblem,16)}<span>${POSK[S.p.pos]} · ${esc(mainClub())}</span></div>
+   <div class="rc-two"><div><small>최고 OVR</small><b>${S.p.peak}</b></div><div><small>커리어 등급</small><b>${g}</b></div></div>
+   <div class="rc-four"><div><b>${c.apps}</b><small>출전</small></div><div><b>${c.goals}</b><small>골</small></div><div><b>${c.assists}</b><small>도움</small></div><div><b>${c.caps}</b><small>대표팀</small></div></div>
+   ${tt.length?`<div class="rc-tt">${tt.map(t=>`<span>${esc(t)}</span>`).join("")}</div>`:""}<div class="rc-ft">K-레전드 · K-라이프 · ${S.year}</div></section>
+   <div class="rcbtn"><button class="big" data-act="cardmake"><span>🖼 카드 이미지로 저장</span><b>→</b></button><button class="wide" data-act="cosgo">🎨 카드·액자 꾸미기</button></div>`;
+}
+function cardInfo(){
+  const K=CS(), lg=L.legacy(S), c=S.career, eqs=K.eqAll();
+  const tx=s=>{ s=String(s==null?"":s); try{ if(window.KL_VIRT&&KL_VIRT.on&&KL_VIRT.tx) s=KL_VIRT.tx(s); if(window.KL_LANG==="en"&&window.KL_I18N) s=KL_I18N.tx(s); }catch(e){} return s; };
+  const m=/src="([^"]+)"/.exec(L.pixelImg(S,150,{suit:true,age:Math.max(L.age(S),30)})||"");
+  return {name:S.p.name,pos:tx(POSK[S.p.pos]),club:tx(mainClub()),ovr:S.p.peak,apps:c.apps,goals:c.goals,assists:c.assists,caps:c.caps,grade:L.legacyGrade(lg.total),score:lg.total,titles:L.titlesOf(S).slice(0,3).map(tx),year:S.year,spriteUrl:m?m[1]:"",eqs};
+}
+function cardSaveFile(m){ try{ const a=document.createElement("a"); a.href=m.url; a.download=m.file; document.body.appendChild(a); a.click(); setTimeout(()=>a.remove(),400); return true; }catch(e){ return false; } }
+/* 스카우터 새로고침: 하루 무료 3번(내 기기의 날짜 기준). 보상형 광고는 L.rewardHook 이 생기면 연결해요 */
+const SCK="klife-screfresh", SC_FREE=3;
+const dayKey=()=>{ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); };
+function scState(){ const o=rd(SCK); return (o&&o.d===dayKey())?{d:o.d,used:+o.used||0,extra:+o.extra||0}:{d:dayKey(),used:0,extra:0}; }
+const scLeft=()=>{ const o=scState(); return Math.max(0,SC_FREE+o.extra-o.used); };
+function scUse(){ const o=scState(); if(SC_FREE+o.extra-o.used<=0) return false; o.used++; wr(SCK,o); return true; }
+function rescoutHtml(){
+  const n=scLeft(), hook=typeof L.rewardHook==="function";
+  return `<div class="rescout">${n>0?`<button class="wide" data-act="rescout">🔄 후보 다시 뽑기<small>오늘 ${n}번 남았어요 · 하루 ${SC_FREE}번 무료</small></button>`
+    :`<p class="muted c">오늘 다시 뽑기 ${SC_FREE}번을 모두 썼어요. 내일 다시 뽑을 수 있어요.</p>${hook?`<button class="wide" data-act="rescoutad">▶ 광고를 보고 한 번 더 뽑기</button>`:""}`}
+   ${n>0?`<p class="muted">다시 뽑으면 지금 보이는 후보 세 명은 사라지고 새 후보 세 명이 나와요. 재능 등급은 뽑아도 20세 전에는 알 수 없어요.</p>`:""}</div>`;
+}
+function rescoutGo(){
+  draft.cands=makeCands(); draft.pick=-1;
+  if(FAST){ render(); return; }
+  draft.loading=true; draft.prog=10; render(); setTimeout(()=>{ draft.prog=70; render(); setTimeout(()=>{ draft.loading=false; render(); },500); },450);
 }
 
 /* ================= 이벤트 위임 ================= */
@@ -1132,7 +1225,7 @@ document.addEventListener("click",e=>{
     case "login": KL_AUTH.login(); break;
     case "logout": KL_AUTH.logout(); cloudMsg="로그아웃했어요."; render(); break;
     case "cloudup": cloudMsg="저장하는 중…"; render(); KL_AUTH.upload(cloudPayload()).then(()=>{ cloudMsg="클라우드에 저장했어요 ("+new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})+")"; render(); }).catch(e=>{ cloudMsg=String(e.message||e); render(); }); break;
-    case "clouddown": cloudMsg="불러오는 중…"; render(); KL_AUTH.download().then(row=>{ if(!row||!row.data||!row.data.save){ cloudMsg="클라우드에 저장된 인생이 없어요."; render(); return; } if(S&&!confirm("이 기기의 현재 인생을 클라우드 저장으로 덮어쓸까요?\n(클라우드 저장 시각: "+(row.updated_at||"").slice(0,16).replace("T"," ")+")")){ cloudMsg="취소했어요."; render(); return; } try{ localStorage.setItem("klife-save",JSON.stringify(row.data.save)); if(row.data.dex) localStorage.setItem("klife-dex",JSON.stringify(row.data.dex)); if(row.data.hof) localStorage.setItem("klife-hof",JSON.stringify(row.data.hof)); }catch(e){} location.reload(); }).catch(e=>{ cloudMsg=String(e.message||e); render(); }); break;
+    case "clouddown": cloudMsg="불러오는 중…"; render(); KL_AUTH.download().then(row=>{ if(!row||!row.data||!row.data.save){ cloudMsg="클라우드에 저장된 인생이 없어요."; render(); return; } if(S&&!confirm("이 기기의 현재 인생을 클라우드 저장으로 덮어쓸까요?\n(클라우드 저장 시각: "+(row.updated_at||"").slice(0,16).replace("T"," ")+")")){ cloudMsg="취소했어요."; render(); return; } try{ localStorage.setItem("klife-save",JSON.stringify(row.data.save)); if(row.data.dex) localStorage.setItem("klife-dex",JSON.stringify(row.data.dex)); if(row.data.hof) localStorage.setItem("klife-hof",JSON.stringify(row.data.hof)); if(row.data.cos) localStorage.setItem("klife-cos",JSON.stringify(row.data.cos)); }catch(e){} location.reload(); }).catch(e=>{ cloudMsg=String(e.message||e); render(); }); break;
     case "lang": if(window.KL_I18N) KL_I18N.toggle(); break;
     case "substat": openStat=openStat===v?null:v; keep(render); break;
     case "shop": modals.push({t:"shop"}); keep(render); break;
@@ -1179,13 +1272,27 @@ document.addEventListener("click",e=>{
     case "qzpick": { if(!qz||qz.picked!=null) break; qz.picked=+v; if(qz.list[qz.i].opts[qz.picked].ok) qz.score++; render(); break; }
     case "qznext": { if(!qz) break; if(qz.i+1<qz.list.length){ qz.i++; qz.picked=null; } else { qz.done=true; try{ const b=parseInt(localStorage.getItem("klife-quizbest")||"0",10)||0; if(qz.score>b) localStorage.setItem("klife-quizbest",String(qz.score)); const day=new Date().toISOString().slice(0,10); if(qz.score>=8&&localStorage.getItem("klife-quizday")!==day){ localStorage.setItem("klife-quizday",day); setTickets(tickets()+1); qz.reward=true; } }catch(e){} } render(); break; }
     case "setTab": setTab=v; render(); break;
+    case "setMain": setMain=v; render(); break;
+    case "cosgo": setMain="cos"; view="settings"; render(); break;
+    case "cosgrp": cosGrp=v; cosTyp=v==="player"?(["hair","hcolor","band","glasses","captain","pattern"].includes(cosTyp)?cosTyp:"hair"):v; cosSel=null; keep(render); break;
+    case "costyp": cosTyp=v; cosSel=null; keep(render); break;
+    case "cossel": cosSel=v; keep(render); break;
+    case "cosequip": { if(CS().equip(v)){ cosSel=null; say(CS().by(v).name+" 장착했어요"); } else say("아직 열리지 않았어요"); break; }
+    case "cossup": { const e=document.getElementById("sec-sup"); if(e) e.scrollIntoView({block:"center",behavior:"smooth"}); break; }
+    case "supgo": { const el=document.getElementById("supcode"); supDraft=el?el.value:""; const r=CS().redeem(supDraft); cosMsg=r.msg; if(r.ok) supDraft=""; if(r.ok&&!r.dup&&window.KL_ADS_SCAN) setTimeout(window.KL_ADS_SCAN,0); keep(render); break; }
+    case "cardmake": { const K=CS(); if(!K||!S) break; const fname="klegend-"+(String(S.p.name).replace(/[^\p{L}\p{N}_-]+/gu,"")||"card")+".png"; say("카드를 만드는 중이에요…");
+      K.makeCard(cardInfo()).then(cv=>{ const done=blob=>{ const url=blob?URL.createObjectURL(blob):cv.toDataURL("image/png"); let fo=null; try{ if(blob&&typeof File==="function") fo=new File([blob],fname,{type:"image/png"}); }catch(e){} let can=false; try{ can=!!(fo&&navigator.canShare&&navigator.canShare({files:[fo]})); }catch(e){} modals.unshift({t:"cardimg",url,fname,fo,can,name:S.p.name}); keep(render); }; if(cv.toBlob) cv.toBlob(done,"image/png"); else done(null); }).catch(()=>say("카드를 만들지 못했어요")); break; }
+    case "cardsave": { const m=modals[0]; if(m&&m.t==="cardimg"){ try{ const a=document.createElement("a"); a.href=m.url; a.download=m.fname; document.body.appendChild(a); a.click(); setTimeout(()=>a.remove(),400); say("이미지를 저장했어요. 안 보이면 이미지를 길게 눌러 주세요"); }catch(e){ say("이미지를 길게 눌러 저장해 주세요"); } } break; }
+    case "cardshare": { const m=modals[0]; if(m&&m.t==="cardimg"&&m.can){ try{ navigator.share({files:[m.fo],title:"K-라이프 은퇴 카드"}).catch(()=>{}); }catch(e){ say("공유할 수 없어요. 이미지를 길게 눌러 저장해 주세요"); } } break; }
+    case "rescout": { if(!scUse()){ say("오늘 무료 횟수를 모두 썼어요"); break; } rescoutGo(); break; }
+    case "rescoutad": { if(typeof L.rewardHook!=="function"){ say("아직 준비 중이에요"); break; } L.rewardHook("scout",ok=>{ if(ok){ const o=scState(); o.extra++; wr(SCK,o); say("한 번 더 뽑을 수 있어요"); } else say("광고를 끝까지 보지 않아 적용되지 않았어요"); }); break; }
     case "numpick": { const m=modals[0]; if(!m||m.t!=="numpick") break; let n; if(v==="orig") n=m.orig; else if(v==="cur") n=m.cur; else n=parseInt(($("numin")||{}).value,10);
       if(!n||n<1||n>99){ say("1~99 사이의 번호를 적어 주세요"); break; } if(m.banned.includes(n)){ say(n+"번은 영구결번이라 쓸 수 없어요"); break; }
       if(!S.numOrig&&n!==+S.p.number) S.numOrig=+S.p.number; S.p.number=n; S.numByClub=S.numByClub||{}; S.numByClub[m.cid]=n; modals.shift(); L.addMoment(S,"등번호","번호",m.club+"에서 "+n+"번을 달아요."); save(); keep(render); break; }
     case "theme": if(window.KL_THEME){ KL_THEME.toggle(); } render(); break;
     case "tkuse": { if(confirm("새로고침권 1장을 써서 직전 구간을 다시 돌릴까요?\n(지금까지의 결과는 사라지고 구간 시작 전으로 돌아가요)")){ if(snapRestore()){ say("직전 구간을 되돌렸어요"); } else say("되돌릴 수 없어요"); render(); } break; }
     case "tkfree": setTickets(tickets()+5); say("새로고침권 5장을 받았어요 (지금은 무료)"); render(); break;
-    case "bkExport": { try{ const o={app:"klife",v:1,at:new Date().toISOString(),data:{}}; ["klife-save","klife-hof","klife-dex","klife-nick","kl-custom","kl-alias","kl-bgm"].forEach(k=>{ const x=localStorage.getItem(k); if(x!=null) o.data[k]=x; }); const bl=new Blob([JSON.stringify(o)],{type:"application/json"}); const a=document.createElement("a"); a.href=URL.createObjectURL(bl); a.download="klife-backup-"+new Date().toISOString().slice(0,10)+".json"; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },500); say("백업 파일을 저장했어요"); }catch(e){ say("백업에 실패했어요"); } break; }
+    case "bkExport": { try{ const o={app:"klife",v:1,at:new Date().toISOString(),data:{}}; ["klife-save","klife-hof","klife-dex","klife-nick","klife-cos","kl-custom","kl-alias","kl-bgm"].forEach(k=>{ const x=localStorage.getItem(k); if(x!=null) o.data[k]=x; }); const bl=new Blob([JSON.stringify(o)],{type:"application/json"}); const a=document.createElement("a"); a.href=URL.createObjectURL(bl); a.download="klife-backup-"+new Date().toISOString().slice(0,10)+".json"; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },500); say("백업 파일을 저장했어요"); }catch(e){ say("백업에 실패했어요"); } break; }
     case "setVirt": try{ localStorage.setItem("kl-virt",(window.KL_VIRT&&KL_VIRT.on)?"0":"1"); }catch(e){} location.reload(); break;
     case "setAlias": KL_CUSTOM.alias(!KL_CUSTOM.aliasOn()); say(KL_CUSTOM.aliasOn()?"앱용 이름 세트를 켰어요. 새로고침하면 적용돼요":"앱용 이름 세트를 껐어요. 새로고침하면 원래대로 돌아와요"); render(); break;
     case "setLogoDel": KL_CUSTOM.setLogo(v,null); render(); break;
@@ -1209,6 +1316,6 @@ document.addEventListener("change",e=>{ const t=e.target;
   else if(t.dataset&&t.dataset.cl!=null&&t.files&&t.files[0]){ KL_CUSTOM.shrink(t.files[0],url=>{ if(!url){ say("이미지를 읽지 못했어요"); return; } KL_CUSTOM.setLogo(t.dataset.cl,url); render(); }); } });
 document.addEventListener("input",e=>{ if(e.target.id==="ht"||e.target.id==="wt"){ draft.height=(document.getElementById("ht")||{}).value||""; draft.weight=(document.getElementById("wt")||{}).value||""; const bf=document.getElementById("bodyfx"); if(bf) bf.textContent=bodyLine(); } if(e.target.id==="nm"){ draft.name=e.target.value; } });
 window.__LIFE={get S(){return S;},get view(){return view;},pushModal:(m)=>{ modals.push(m); render(); },modalCount:()=>modals.length,act:(a,v)=>{ const el=document.createElement("button"); el.dataset.act=a; if(v!=null) el.dataset.v=v; document.body.appendChild(el); el.click(); el.remove(); },render,draftSet:o=>Object.assign(draft,o),getPlan:()=>plan,setPlan:p=>{plan=p;},get modals(){return modals;},get off(){return off;},get seg(){return seg;}};
-try{ const go=((location.hash+"&"+location.search).match(/[#?&]go=(\w+)/)||[])[1]; if(go==="quiz"){ window.__fromIndex=true; qz=null; view="quiz"; } else if(go==="settings"){ window.__fromIndex=true; view="settings"; } }catch(e){}
+try{ const go=((location.hash+"&"+location.search).match(/[#?&]go=(\w+)/)||[])[1]; if(go==="quiz"){ window.__fromIndex=true; qz=null; view="quiz"; } else if(go==="settings"){ window.__fromIndex=true; view="settings"; } else if(go==="cos"&&CS()){ window.__fromIndex=true; setMain="cos"; view="settings"; } }catch(e){}
 loadRetired(); render();
 })();

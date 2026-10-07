@@ -49,8 +49,10 @@ body{word-break:keep-all;overflow-wrap:break-word;-webkit-text-size-adjust:100%;
   <p class="foot" style="text-align:left">그동안 바뀐 중요한 내용을 버전별로 모았어요. 최신 버전이 위에 있고, 눌러서 펼쳐 볼 수 있어요.</p>
   <div class="filters" id="flt"></div>
   <div id="list"></div>
+  <div class="adslot" data-slot="patch"></div>
   <p class="foot">팬 프로젝트 · 새 업데이트가 나올 때마다 여기에 추가돼요.</p>
 </main>
+<script src="js/config.js"></script>
 <script src="js/patchnotes.js"></script>
 <script>
 (function(){
@@ -71,6 +73,7 @@ body{word-break:keep-all;overflow-wrap:break-word;-webkit-text-size-adjust:100%;
   try{ localStorage.setItem("kl-patch-seen",window.KL_PATCH_LATEST); }catch(e){}
 })();
 </script>
+<script src="js/ads.js"></script>
 <script src="js/i18n.js"></script>
 </body>
 </html>

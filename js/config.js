@@ -12,6 +12,16 @@ window.KL_SUPPORT = { text: "", link: "", account: "신한 110-429-169576" };
 /* 운영자 정보: 약관·개인정보 처리방침·메인 하단에 표시돼요. 비워 두면 해당 줄은 숨겨져요. (이메일은 공개되니 공개해도 되는 주소를 쓰세요) */
 window.KL_OPERATOR = { name: "동동구리", email: "toki7746@gmail.com", note: "개인 운영 팬 프로젝트" };
 
+/* 광고 칸(js/ads.js): enabled 가 false 이거나 슬롯 설정이 없으면 아무것도 보이지 않고 자리도 차지하지 않아요. 사업자 등록·광고 심사 뒤에 아래 값만 채우면 돼요.
+   provider: "adfit"(카카오 애드핏: unit 에 광고단위 ID) | "adsense"(client 에 ca-pub-…, 슬롯마다 slot) | "custom"(html 에 직접 넣은 태그).
+   슬롯 이름: home(메인 하단) · result(시즌 결과 중간) · retired(은퇴 화면) · hof(명예의 전당 목록) · help(도움말) · patch(패치노트) · terms(약관·방침). "*" 는 모든 슬롯 기본값.
+   미니게임·이벤트 선택창·계약서·하단 고정 버튼 주변에는 넣지 않아요. 후원자 코드를 등록한 사람에게는 광고가 꺼져요. */
+window.KL_ADS = { enabled: false, provider: "adfit", client: "", hideForSupporters: true, minGapMs: 60000,
+  slots: {
+    // "*": { unit: "DAN-xxxxxxxx", w: 320, h: 100 },
+    // home: { unit: "DAN-xxxxxxxx", w: 320, h: 100 },
+  } };
+
 /* 읽기 요청 간살(KL_FETCH_CACHE): 같은 주소의 명예의 전당·실시간 소식 조회는 잠깐(2분/30초) 브라우저가 기억해서 서버 요청을 줄여요. 쓰기·로그인·채팅은 건드리지 않아요. */
 (function(){
   if(!window.fetch||window.KL_FETCH_CACHE) return; window.KL_FETCH_CACHE=true; var orig=window.fetch.bind(window);
