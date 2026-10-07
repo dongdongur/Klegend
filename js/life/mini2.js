@@ -147,7 +147,7 @@ function gkGame(root,S,finish){
     let kind, p, saved=false, msg;
     if(shot.out==="wide"){ msg="키커가 골대 밖으로 날렸어요! 행운이에요."; saved=true; }
     else if(shot.out==="post"){ msg="공이 골대를 맞고 튕겨 나왔어요!"; saved=true; }
-    else { const late=!dive; const dd=late?null:dive.d;
+    else { const late=!dive||dive.t>GKS.contact+GKS.grace; const dd=late?null:dive.d;
       if(late){ kind="late"; p=shot.d===0?.55:L.gkSaveChance(q,"late"); }
       else if(dd===shot.d){ kind=dd===0?"mid":"same"; p=L.gkSaveChance(q,kind); }
       else { kind="miss"; p=L.gkSaveChance(q,"miss"); }

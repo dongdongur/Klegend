@@ -14,7 +14,7 @@ L.rollEvent=function(S,out){
   let ev=base.apply(this,arguments);
   try{
     if(S.military==="serving") return ev;
-    if(ev&&(NEXT.test(ev.id)||FIRST.test(ev.id)||ev.story)) return ev;
+    if(ev&&(NEXT.test(ev.id)||FIRST.test(ev.id)||ev.story||/^(famcrash|famboom|studypress)$/.test(ev.id))) return ev;
     const nx=open(S,NEXT), fr=nx.length?[]:open(S,FIRST);
     const cand=nx.length&&Math.random()<(ev?0.55:0.45)?nx:(fr.length&&Math.random()<.1?fr:null);
     if(!cand||!cand.length) return ev;
