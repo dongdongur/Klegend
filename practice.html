@@ -48,6 +48,7 @@ html[data-theme="arcade"] .muted{color:#5a7396}html[data-theme="arcade"] select{
 </div>
 <script>window.LIFE=window.LIFE||{};</script>
 <script src="js/theme.js"></script>
+<script src="js/life/pixel.js"></script>
 <script src="js/life/mini_gfx.js"></script>
 <script src="js/life/mini.js"></script>
 <script src="js/life/mini2.js"></script>
@@ -64,8 +65,8 @@ function next(){
   if(n>=TOTAL()){ var b=best(mode); if(mode==="so"){ try{ localStorage.setItem(KEY.so,b+goals); }catch(e){} } else saveBest(mode,goals); $("game").hidden=true; $("end").hidden=false; if(mode==="so"){ $("endt").textContent=goals?"승부차기 승리!":"승부차기 패배"; $("endm").textContent="통산 "+best("so")+"승"; } else { $("endt").textContent=goals+" / 5"; $("endm").textContent=goals>b?"🎉 최고 기록 갱신!":"최고 기록 "+b+"/5"; } labels(); return; }
   $("info").textContent=(n+1)+"번째 킥";
   $("host").innerHTML=L.miniHtml(mode); sc();
-  var S={p:{stats:{composure:+$("lvl").value,finishing:+$("lvl").value}}};
-  L.miniBind($("host").firstChild,mode,S,function(ok){ res[n]=ok; if(ok) goals++; n++; next(); });
+  var S={p:{name:"연습생",pos:"FW",stats:{composure:+$("lvl").value,finishing:+$("lvl").value}}};
+  try{ L.miniBind($("host").firstChild,mode,S,function(ok){ res[n]=ok; if(ok) goals++; n++; next(); }); }catch(e){ $("host").innerHTML="<p class=\"muted c\">연습 화면을 불러오지 못했어요. 새로고침해 주세요. ("+(e&&e.message||e)+")</p>"; }
 }
 function start(m){ mode=m; n=0; goals=0; res=[]; $("menu").hidden=true; $("end").hidden=true; $("game").hidden=false; next(); }
 document.querySelectorAll("[data-m]").forEach(function(b){ b.addEventListener("click",function(){ start(b.dataset.m); }); });

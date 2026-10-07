@@ -7,8 +7,9 @@
 "use strict";
 var lang="ko"; try{ var q=location.search.match(/[?&]lang=(ko|en)/); if(q) localStorage.setItem("kl-lang",q[1]); lang=localStorage.getItem("kl-lang")||"ko"; }catch(e){}
 window.KL_LANG=lang;
-function toggle(){ try{ localStorage.setItem("kl-lang",lang==="en"?"ko":"en"); }catch(e){} location.reload(); }
-window.KL_I18N={lang:lang,toggle:toggle,set:function(l){ try{ localStorage.setItem("kl-lang",l); }catch(e){} location.reload(); },tx:function(s){ return s; },coverage:function(){ return null; }};
+function wait(next){ try{ var d=document.createElement("div"); d.style.cssText="position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(10,20,40,.72);color:#fff;font:700 20px sans-serif"; d.textContent=next==="en"?"Switching to English…":"한국어로 바꾸는 중…"; document.body.appendChild(d); }catch(e){} }
+function toggle(){ var n=lang==="en"?"ko":"en"; try{ localStorage.setItem("kl-lang",n); }catch(e){} wait(n); setTimeout(function(){ location.reload(); },30); }
+window.KL_I18N={lang:lang,toggle:toggle,set:function(l){ try{ localStorage.setItem("kl-lang",l); }catch(e){} wait(l); setTimeout(function(){ location.reload(); },30); },tx:function(s){ return s; },coverage:function(){ return null; }};
 if(lang!=="en"){ document.documentElement.setAttribute("lang","ko"); return; }
 document.documentElement.setAttribute("lang","en");
 function boot(){
@@ -83,6 +84,5 @@ function boot(){
 }
 /* 사전은 영어일 때만 불러와요 */
 /* 사전 파일(기본 + 이벤트·화면 번역 조각)을 차례로 불러온 뒤 시작해요. 없는 파일은 건너뛰어요. */
-(function(){ var files=["js/i18n_en.js","js/i18n_en_xA.js","js/i18n_en_xB.js","js/i18n_en_xC.js","js/i18n_en_xD.js","js/i18n_en_xE.js","js/i18n_en_xF.js","js/i18n_en_xG.js","js/i18n_en_xH.js","js/i18n_en_xI.js","js/i18n_en_xJ.js","js/i18n_en_xK.js","js/i18n_en_xL.js","js/i18n_en_xM.js","js/i18n_en_xN.js"], i=0;  function next(){ if(i>=files.length){ boot(); return; } var f=files[i++]; if(f==="js/i18n_en.js"&&window.KL_I18N_EN){ next(); return; } var sc=document.createElement("script"); sc.src=f; sc.onload=next; sc.onerror=next; document.head.appendChild(sc); }
-  next(); })();
+(function(){ var files=["js/i18n_en.js","js/i18n_en_xA.js","js/i18n_en_xB.js","js/i18n_en_xC.js","js/i18n_en_xD.js","js/i18n_en_xE.js","js/i18n_en_xF.js","js/i18n_en_xG.js","js/i18n_en_xH.js","js/i18n_en_xI.js","js/i18n_en_xJ.js","js/i18n_en_xK.js","js/i18n_en_xL.js","js/i18n_en_xM.js","js/i18n_en_xN.js","js/i18n_en_xO.js"], i=0, left=0; function done(){ if(--left<=0) boot(); } files.forEach(function(f){ if(f==="js/i18n_en.js"&&window.KL_I18N_EN) return; left++; var sc=document.createElement("script"); sc.src=f; sc.async=false; sc.onload=done; sc.onerror=done; document.head.appendChild(sc); }); if(!left) boot(); })();
 })();
