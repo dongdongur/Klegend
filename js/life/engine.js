@@ -369,7 +369,7 @@ L.assignYouthClub=function(S){
   const d=pick(K.TEAMS26.concat(K.K2_DEFS)); S.youthTier=ri(-3,3);
   S.club={id:d.club,name:L.youthTeamName(d.short,age(S)),short:d.short,lg:"YOUTH",code:CODE(d.club),parent:d.club};
 };
-const UNIVS=["연세대학교","고려대학교","한양대학교","성균관대학교","중앙대학교","명지대학교","단국대학교","인천대학교"];
+const UNIVS=["한빛대학교","푸른대학교","새벽대학교","가람대학교","누리대학교","청솔대학교","미르대학교","항구대학교"];
 L.chooseUniv=function(S){ S.stage="univ"; S.club={id:"univ",name:pick(UNIVS),short:"대학",lg:"UNIV",code:null}; S.phase="prep"; S.offers=[]; S.plan=null; L.addMoment(S,"대학 진학","대학 진학",S.club.name+"에 진학했어요."); };
 L.youthLevel=ag=>26+(ag-13)*4.3;
 
@@ -439,7 +439,7 @@ L.beginSeason=function(S,plan){
   if(key==="YOUTH"){
     const lv=L.youthLevel(ag)+S.youthTier+(stage==="univ"?2:0); lvl=lv;
     let opp;
-    if(stage==="univ") opp=shuffle(UNIVS.concat(["경희대학교","동국대학교","건국대학교","홍익대학교"])).slice(0,11).map(n=>({id:"u_"+n,name:n,short:n.replace("대학교","대"),l:lv+rnd(-5,5)}));
+    if(stage==="univ") opp=shuffle(UNIVS.concat(["별빛대학교","솔뫼대학교","동녘대학교","이음대학교"])).slice(0,11).map(n=>({id:"u_"+n,name:n,short:n.replace("대학교","대"),l:lv+rnd(-5,5)}));
     else if(S.club.abroad) opp=shuffle(EPL()).filter(c=>c.id!==S.club.parent).slice(0,11).map(c=>({id:c.id,name:L.youthTeamName(c.short,ag),short:L.youthTeamName(c.short,ag),l:lv+rnd(-5,5)}));
     else opp=shuffle(K.TEAMS26.concat(K.K2_DEFS)).filter(d=>d.club!==S.club.parent).slice(0,11).map(d=>({id:d.club,name:L.youthTeamName(d.short,ag),short:L.youthTeamName(d.short,ag),l:lv+rnd(-5,5)}));
     opp.push({id:myId,name:S.club.name,short:S.club.name,l:lv}); sim.teams=opp;

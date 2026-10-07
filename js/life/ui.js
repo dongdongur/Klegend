@@ -957,7 +957,7 @@ function modalHtml(){
 let ld=null;
 function showLoading(kick,title,steps){
   hideLoading(); const el=document.createElement("div"); el.className="ov center load"; el.innerHTML=`<div class="sheet"><small class="kick">${esc(kick)}</small><h3>${esc(title)}</h3><div class="pg"><i style="width:6%"></i></div><div class="steps">${steps.map(s=>`<p>${esc(s)}</p>`).join("")}</div></div>`;
-  document.body.appendChild(el); ld={el,steps}; return ld;
+  document.body.appendChild(el); ld={el,steps}; const mine=ld; setTimeout(()=>{ if(ld===mine){ hideLoading(); try{ say("진행이 늦어져서 화면을 풀었어요. 다시 눌러 주세요"); }catch(e){} } },25000); return ld;
 }
 function setLoading(i,n){ if(!ld) return; ld.el.querySelector(".pg i").style.width=Math.round(i/n*100)+"%"; ld.el.querySelectorAll(".steps p").forEach((p,k)=>{ p.className=k<i?"ok":""; }); }
 function hideLoading(){ if(ld){ ld.el.remove(); ld=null; } }
@@ -1192,7 +1192,7 @@ document.addEventListener("click",e=>{
     case "start": { if(draft.pick<0){ hint(".cand","후보를 한 명 골라 주세요"); break; } S=draft.cands[draft.pick]; plan=NEWPLAN(); view=S.phase==="draft"?"draft":"game"; tab="season";
       if(S.phase==="draft") S.dr=null; else modals.push({t:"msg",kick:"FAMILY",title:S.family.name,body:S.family.note+". 해마다 지원 포인트 "+S.family.pts+"점으로 성장 투자를 고를 수 있고, 구간마다 다시 나눌 수 있어요. 가정 형편은 살다 보면 바뀌기도 해요."});
       save(); render(); break; }
-    case "draftgo": { const dr=ensureDr(); dr.rolled=true; dr.ok=Math.random()*100<dr.chance; if(dr.ok) S.offers=L.draftOffers(S); else S.offers=[]; save(); render(); break; }
+    case "draftgo": { const dr=ensureDr(); if(dr.rolled) break; dr.rolled=true; dr.ok=Math.random()*100<dr.chance; if(dr.ok) S.offers=L.draftOffers(S); else S.offers=[]; save(); render(); break; }
     case "sign": { const o=S.offers[+v]; askSign("프로 계약서 · "+o.club.name,["연봉 "+money(o.salary)+" · "+o.years+"년 계약","계약금 "+money(Math.max(.05,Math.round(o.salary*8)/10))+" 지급","예상 역할 "+o.role],()=>{ L.signWith(S,o); S.dr=null; view="game"; tab="season"; if(!FAST) transferCines(o,false).reverse().forEach(m=>modals.unshift(m)); modals.unshift({t:"cine",o:{kind:"promo",icon:"✍️",kicker:"PRO DEBUT · "+S.year,title:"프로 선수가 되다",sub:o.club.name+"과(와) 프로 계약을 맺었어요. 이제부터 진짜 시작이에요.",lines:["연봉 "+money(o.salary)+" · "+o.years+"년"]}}); tier2Prompt(); save(); render(); numAfter(); }); break; }
     case "signk3": { const o=S.dr.k3[+v]; askSign("프로 계약서 · "+o.club.name,["레전드리그3(3부) · 연봉 "+money(o.salary)+" · "+o.years+"년 계약","예상 역할 "+o.role,"세미프로 구단이에요. 잘하면 레전드리그2 승격 제안이 와요"],()=>{ L.signWith(S,o); S.dr=null; view="game"; tab="season"; leagueWelcome(); modals.unshift({t:"cine",o:{kind:"promo",icon:"🏟",kicker:"K3 DEBUT · "+S.year,title:"레전드리그3에서 시작하다",sub:o.club.name+"과(와) 계약했어요. 밑바닥에서 다시 올라가 봐요.",lines:["연봉 "+money(o.salary)+" · "+o.years+"년"]}}); save(); render(); numAfter(); }); break; }
     case "signk4": { const o=S.dr.k4[+v]; askSign("프로 계약서 · "+o.club.name,["레전드리그4(4부) · 연봉 "+money(o.salary)+" · "+o.years+"년 계약","예상 역할 "+o.role,"지역 구단이에요. 생활비를 벌며 뛰는 선수도 많아요. 잘하면 레전드리그3 승격 제안이 와요"],()=>{ L.signWith(S,o); S.dr=null; view="game"; tab="season"; leagueWelcome(); modals.unshift({t:"cine",o:{kind:"promo",icon:"🌱",kicker:"K4 DEBUT · "+S.year,title:"레전드리그4에서 시작하다",sub:o.club.name+"과(와) 계약했어요. 가장 낮은 곳에서 다시 시작해요.",lines:["연봉 "+money(o.salary)+" · "+o.years+"년"]}}); save(); render(); numAfter(); }); break; }
@@ -1251,7 +1251,7 @@ document.addEventListener("click",e=>{
     case "buy": { const [kind,id]=v.split(":"); const r=L.buyItem(S,kind,id); const m=modals[0]; if(m&&m.t==="shop"){ m.msg=r.text; m.ok=r.ok; } save(); keep(render); break; }
     case "endorse": { const o=off.endorse[+v]; L.signEndorse(S,o); off.endorse.splice(+v,1); if(L.endorseFree(S)<=0) off.endorse=[]; save(); say(o.brand+"와(과) 광고 계약을 맺었어요"); break; }
     case "offseason": goOffseason(); break;
-    case "nextyear": if(off&&S.stage==="pro"&&S.contractYears<=1&&!off.accepted&&!(S.club.lg==="MIL"||S.military==="serving"||S.military==="sangmu")){ hint("[data-act=accept]","계약을 먼저 확정해 주세요"); break; } nextYear(); break;
+    case "nextyear": if(off&&S.stage==="pro"&&S.contractYears<=1&&!off.accepted&&!(S.club.lg==="MIL"||S.military==="serving"||S.military==="sangmu")){ hint("[data-act=accept]","계약을 먼저 확정해 주세요"); break; } if(S.phase!=="offseason"&&S.stage!=="youth"&&S.stage!=="univ") break; nextYear(); break;
     case "inc": chosenInc=chosenInc.includes(v)?chosenInc.filter(x=>x!==v):chosenInc.concat(v); keep(render); break;
     case "renego": { if(off.renego) break; const n=L.negotiate(S,off.contract); off.renego=true; const o=Object.assign({},off.contract,{offer:n.offer,rate:n.rate}); off.contract=o; say(n.mult>1?"협상 성공! 연봉이 올랐어요":n.mult<1?"역효과… 구단이 제시액을 낮췄어요":"구단이 기존 제안을 유지했어요"); break; }
     case "accept": { const o=L.applyIncentives(S,off.contract,chosenInc); askSign("재계약서 · "+S.club.name,["연봉 "+money(o.offer)+" · "+o.years+"년"],()=>{ if(!off) return; L.acceptContract(S,o); off.accepted=true; save(); keep(render); }); break; }
