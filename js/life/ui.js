@@ -21,7 +21,9 @@ let plan=S&&S.plan?Object.assign(NEWPLAN(),{focus:S.plan.focus||"",tier:S.plan.t
 let openStat=null, seg=null, modals=[], toast=null, off=null, openDet=false, chosenInc=[], planOpen=false, boardTab="table", ldTimer=null;
 const TRAITS=()=>L.TRAIT_LIST;
 const money=v=>v>=1?(Math.round(v*10)/10)+"억 원":Math.round(v*10000)+"만 원";
-const save=()=>{ if(S){ wr(KEY,S); if(window.KL_AUTH) KL_AUTH.queue(cloudPayload); } };
+const save=()=>{ if(S){ wr(KEY,S); if(window.KL_AUTH) KL_AUTH.queue(cloudPayload); achTick(); } };
+/* 새 업적: 달성하면 알림 창을 띄워요 */
+function achTick(){ try{ if(!L.achTick||!S) return; const nu=L.achTick(S); if(!nu.length) return; nu.slice(0,3).forEach(a=>modals.push({t:"msg",kick:"ACHIEVEMENT · "+a.cat,title:"🏅 "+a.ko,body:a.dko+(nu.length>3?" (그 밖에 "+(nu.length-3)+"개 더!)":"")})); setTimeout(()=>{ if(modals.length&&!document.querySelector(".ov")) render(); },80); }catch(e){} }
 const age=()=>L.age(S);
 const subName=()=>{ const d=L.POSDEF[S.p.pos].subs.find(s=>s[0]===S.p.sub); return d?d[1]:S.p.sub; };
 const scoutLabel=()=>{ const b=L.scoutBand(S); return b.final?"재능 "+b.label+" (확정)":"재능 "+b.label+" (예상 · 20세에 확정)"; };
@@ -54,13 +56,14 @@ function render(){
   else if(view==="quit") h=quitView();
   else if(view==="hof") h=hofView();
   else if(view==="dex") h=dexView();
+  else if(view==="ach") h=achView();
   else if(view==="settings") h=settingsView();
   else if(view==="help") h=helpView();
   else if(view==="tactest") h=tacView();
   else if(view==="quiz") h=quizView();
   else { nav=true; h=header()+`<main class="body">${tab==="season"?seasonTab():tab==="player"?playerTab():tab==="career"?careerTab():feedTab()}</main>`+navHtml(); }
   if(view==="quiz") h=h.replace("<main class=\"body\"","<main data-novirt class=\"body\"");
-  if(["settings","dex","hof","quiz","help","tactest"].includes(view)){ const ttl={settings:"설정",dex:"이벤트 도감",hof:"명예의 전당",quiz:"축구 상식 퀴즈",help:"도움말",tactest:"감독 성향 테스트"}[view]; h=h.replace('<main class="body">','<main class="body"><div class="backbar"><button type="button" data-act="home">← 뒤로</button><b>'+ttl+'</b></div>'); }
+  if(["settings","dex","ach","hof","quiz","help","tactest"].includes(view)){ const ttl={settings:"설정",dex:"이벤트 도감",ach:"업적",hof:"명예의 전당",quiz:"축구 상식 퀴즈",help:"도움말",tactest:"감독 성향 테스트"}[view]; h=h.replace('<main class="body">','<main class="body"><div class="backbar"><button type="button" data-act="home">← 뒤로</button><b>'+ttl+'</b></div>'); }
   app.className="phone"+(nav?"":" nonav");
   app.innerHTML=h+(modals.length?modalHtml():"")+(toast?`<div class="toast">${esc(toast)}</div>`:"");
   if(modals[0]&&modals[0].t==="cine"){ const cm=modals[0]; if(FAST||!window.KL_FX){ modals.shift(); setTimeout(render,0); } else if(!KL_FX.busy()){ KL_FX.cine(cm.o,()=>{ if(modals[0]===cm) modals.shift(); render(); }); } }
@@ -121,14 +124,16 @@ function homeView(){
    <section class="hero"><small class="kick">NEW FOOTBALL LIFE</small><h1>이번 생, 어떤 선수로 살아볼까요?</h1>
     <p class="muted">중학교 유소년부터 은퇴까지. 훈련·계약·이적·국가대표·병역까지, 선택이 커리어를 바꿔요.</p>${cont}
     <button class="big" data-act="new"><span>새로운 인생 시작</span><b>→</b></button></section>
+   ${weeklyCard()}
    <section class="card"><h3 class="sec">명예의 전당</h3>${hof.length?hof.slice().sort((a,b)=>b.score-a.score).slice(0,10).map((x,i)=>`<div class="hof"><b>${i+1}</b><div><b>${esc(x.name)}</b><br><small>${esc(x.pos)} · ${esc(x.club)} · ${x.years}년 · 통산 ${x.goals}골 ${x.assists}도움${x.retire?" · 영구결번":""}</small></div><span class="pill gold">${x.grade} ${x.score}</span></div>`).join(""):`<p class="muted">아직 은퇴한 선수가 없어요.</p>`}</section>
    <div class="grid2"><button class="wide" data-act="hoflist">🏆 친구들 명예의 전당</button><button class="wide" data-act="dex">📖 이벤트 도감</button></div>
+   <button class="wide" data-act="ach">🏅 업적 ${(()=>{ try{ return Object.keys(L.achSaved()).length+" / "+L.ACH.length; }catch(e){ return ""; } })()} · 기록·이야기·도전</button>
    <button class="wide" data-act="help">📘 도움말 · 능력치와 한계선</button>
    <button class="wide" data-act="lang" data-noi18n>🌐 ${window.KL_LANG==="en"?"한국어로 보기 (Korean)":"English (beta)"}</button>
    <div class="grid2"><button class="wide" data-act="quiz">⚽ 축구 상식 퀴즈</button><button class="wide" data-act="settings">⚙ 설정 · 구단 이름과 로고</button></div>
    ${CS()?`<button class="wide" data-act="cosgo">🎨 꾸미기 · 도트 선수·액자·은퇴 카드</button>`:""}
    <a class="wide" href="patch-notes.html" style="display:grid;place-items:center;text-decoration:none">📰 패치노트${(()=>{ try{ return window.KL_PATCH_LATEST&&localStorage.getItem("kl-patch-seen")!==window.KL_PATCH_LATEST?" 🔴 NEW":""; }catch(e){ return ""; } })()}</a>
-   <section class="card flat"><h3 class="sec">업데이트 예정</h3><p class="muted">· 차남곤 축구상·황금 신예 시상 연출, 입단 입장 장면<br>· 주간 도전과 기록 경쟁<br>· 이어지는 이야기 더 늘리기<br>· 꾸미기 항목 더 늘리기(유니폼·액자·엠블럼)<br>· 감독판 이야기 늘리기, 선수판 가져오기</p></section>
+   <section class="card flat"><h3 class="sec">업데이트 예정</h3><p class="muted">· 차남곤 축구상·황금 신예 시상 연출, 입단 입장 장면<br>· 시즌 하이라이트(낭만 장면)<br>· 이어지는 이야기 더 늘리기<br>· 꾸미기 항목 더 늘리기(유니폼·액자·엠블럼)<br>· 감독판 이야기 늘리기, 선수판 가져오기</p></section>
    <p class="muted c"><a class="lnk" href="index.html">게임 선택 메뉴로</a>${S?` · <button class="lnk" data-act="wipe">저장 삭제</button>`:""}</p></main>`;
 }
 
@@ -208,7 +213,7 @@ function createView(){
   if(!d.subs.some(s=>s[0]===draft.sub)) draft.sub=d.subs[0][0];
   if(!L.rolesOf(draft.sub).some(r=>r[0]===draft.role)) draft.role=(L.rolesOf(draft.sub)[0]||[])[0]||"";
   const left=ptsLeft();
-  return `<main class="body"><div class="row"><button class="ibtn" data-act="home">‹</button><h2>선수 만들기</h2></div>
+  return `<main class="body"><div class="row"><button class="ibtn" data-act="home">‹</button><h2>선수 만들기</h2></div>${draft.weekly?weeklyBanner(draft.weekly):""}
    <section class="card" id="sec-name"><span class="lab">이름</span><input type="text" id="nm" maxlength="8" value="${esc(draft.name)}" placeholder="선수 이름">
     <span class="lab">등번호 (비워 두면 자동)</span><input type="number" id="no" inputmode="numeric" min="1" max="99" value="${esc(draft.number)}" placeholder="1–99"></section>
    <section class="card"><span class="lab">포지션</span><div class="chips">${Object.keys(L.POSDEF).map(k=>`<button data-act="pos" data-v="${k}" class="${draft.pos===k?"on":""}">${POSK[k]}</button>`).join("")}</div>
@@ -285,6 +290,7 @@ function makeCands(){
     const sc=.75+Math.random()*.5; d.stats.forEach(([k],i)=>{ c.p.stats[k]=Math.max(10,Math.min(95,Math.round(c.p.stats[k]+a[3][i]*sc+a[4]))); });
     if(!hh&&body) c.p.height+=body[0]||0; if(!ww&&body) c.p.weight+=body[1]||0;
     c.p.ovr=L.ovrOf(c.p); c.p.peak=c.p.ovr; c.arch={name:a[0],desc:a[1],now:a[4],pot:a[5]};
+    if(draft.weekly){ const f=(L.FAMILY||[]).find(x=>x.id===draft.weekly.fam); if(f){ c.family={id:f.id,name:f.name,pts:f.pts,pts0:f.pts,note:f.note,allow:f.allow}; c.funds=Math.round((f.start!=null?f.start:.1+f.funds*.1)*10)/10; } c.challenge=draft.weekly.id; }
     const est=Math.round(t.pot+(Math.random()*10-5)); const pk=x=>x[Math.floor(Math.random()*x.length)]; c.hint=est>=90?pk(["스카우터가 말을 잇지 못했어요. 이런 재목은 드물어요","\"10년에 한 번 나올 재능\"이라는 평가예요"]):est>=82?pk(["성장 여력이 아주 커 보여요","몇 년 뒤가 기대되는 원석이에요"]):est>=76?pk(["성장 여력이 괜찮은 편이에요","노력하면 프로 주전까지는 충분해 보여요"]):est>=70?pk(["평균적인 성장이 예상돼요","지금 모습 그대로 무난하게 클 것 같아요"]):pk(["성장 여력은 크지 않아 보여요","타고난 재능보다 노력으로 승부해야 해요"]);
     return c;
   });
@@ -671,6 +677,17 @@ function settingsView(){
    <label class="wide" style="display:grid;place-items:center;cursor:pointer">📂 백업 파일 불러오기<input type="file" accept=".json,application/json" data-bk="1" hidden></label></section>
    <p class="muted c"><button class="lnk" data-act="setReset">설정 전체 초기화</button> · <button class="lnk" data-act="home">돌아가기</button></p></main>`;
 }
+/* ================= 주간 도전 ================= */
+let wkTop=null, wkBusy=false, wkErr="", wkFor="";
+function weeklyDesc(W){ const rt=ROUTES.find(r=>r[0]===W.route), fm=(L.FAMILY||[]).find(f=>f.id===W.fam); return {pos:POSK[W.pos],route:rt?rt[1]:W.route,fam:fm?fm.name:W.fam,famNote:fm?fm.note:""}; }
+function weeklyBanner(W){ const d=weeklyDesc(W); return `<section class="card weekly"><small class="kick">WEEKLY CHALLENGE · ${esc(W.id)}</small><h3 class="sec">이번 주 도전</h3><p class="muted">${esc(d.pos)} · ${esc(d.route)} · ${esc(d.fam)} 출신으로 시작해요. 이 조건은 바꿀 수 없고, 이름·특성·포인트는 마음대로 정할 수 있어요.</p></section>`; }
+function weeklyLoad(id){ if(wkBusy||!hofOn) return; wkBusy=true; wkFor=id; fetch(CFG.SUPABASE_URL+"/rest/v1/life_hof?select=nickname,name,pos,score,grade&challenge=eq."+encodeURIComponent(id)+"&order=score.desc&limit=5",{headers:HH}).then(r=>{ if(!r.ok){ const e=new Error("x"); e.st=r.status; throw e; } return r.json(); }).then(rows=>{ wkTop=rows; wkErr=""; }).catch(e=>{ wkTop=[]; wkErr=e&&e.st===400?"순위 서버를 준비하고 있어요":"순위를 불러오지 못했어요"; }).finally(()=>{ wkBusy=false; if(view==="home") render(); }); }
+function weeklyCard(){ try{ const W=L.weekly(), d=weeklyDesc(W); if(wkFor!==W.id&&!wkBusy) weeklyLoad(W.id);
+  const best=L.weeklyBest(W.id); const rank=wkBusy&&!wkTop?"<p class=\"muted\">순위를 불러오는 중…</p>":wkErr?`<p class="muted">${esc(wkErr)}</p>`:(wkTop&&wkTop.length?wkTop.map((x,i)=>`<div class="hof"><b>${i+1}</b><div><b>${esc(x.nickname||x.name)}</b><br><small>${esc(x.name)} · ${esc(x.grade||"")}</small></div><span>${x.score}</span></div>`).join(""):"<p class=\"muted\">아직 기록이 없어요. 첫 번째 도전자가 되어 보세요!</p>");
+  return `<section class="card weekly"><small class="kick">WEEKLY CHALLENGE · ${esc(W.id)} · 마감 ${esc(W.endsOn)}</small><h3 class="sec">이번 주 도전</h3><p class="muted">${esc(d.pos)} · ${esc(d.route)} · ${esc(d.fam)} 출신. 같은 조건으로 시작해 커리어 점수로 겨뤄요.</p>${best?`<p class="note">이번 주 내 최고 기록 <b>${best.score}</b>점 (${esc(best.name||"")})</p>`:""}<button class="big" data-act="wk"><span>도전 시작</span><b>→</b></button><h4 class="sec" style="margin-top:12px">이번 주 순위</h4>${rank}</section>`; }catch(e){ return ""; } }
+function achView(){ const st=L.achState(S||null), done=st.filter(x=>x.done).length;
+  const row=x=>{ const a=x.a, pc=x.pg?Math.round(x.pg[0]/x.pg[1]*100):0; return `<div class="ach ${x.done?"on":""}"><i>${x.done?"🏅":"🔒"}</i><div><b>${esc(a.ko)}</b><small>${esc(a.dko)}</small>${x.pg&&!x.done?`<div class="bar"><i style="width:${pc}%"></i></div><small>${x.pg[0]} / ${x.pg[1]}</small>`:""}</div></div>`; };
+  return `<main class="body"><section class="card flat"><h3 class="sec">달성한 업적 ${done} / ${st.length}</h3><div class="bar"><i style="width:${Math.round(done/st.length*100)}%"></i></div><p class="muted">한 번 달성하면 다음 인생에도 계속 남아요.</p></section>`+["성취","낭만","도전"].map(c=>`<section class="card"><h3 class="sec">${c}</h3>${st.filter(x=>x.a.cat===c).map(row).join("")}</section>`).join("")+`</main>`; }
 function dexView(){ const d=rd(DEX)||{}, all=L.dexAll(); const n=all.filter(x=>d[x.id]).length;
   return `<main class="body"><h2 class="sec" style="margin:4px 0 8px">이벤트 도감</h2>
    <section class="card flat"><h3 class="sec">확률 도감 — 이벤트 규칙</h3>${L.EVENT_RULES.map(t=>`<p class="muted">· ${esc(t)}</p>`).join("")}</section>
@@ -689,7 +706,7 @@ function hofEntry(nick){
   const c=S.career, lg=L.legacy(S), tr=S.trophies.filter(t=>!t.youth), aw=S.awards.filter(a=>!a.youth&&!/후보/.test(a.name));
   return {nickname:nick,name:S.p.name,pos:POSK[S.p.pos],type_name:S.p.typeName,club:mainClub(),years:S.history.filter(h=>!h.youth).length,apps:c.apps,goals:c.goals,assists:c.assists,caps:c.caps,
     trophies:tr.length,awards:aw.length,ballon:S.ballon.filter(b=>b.rank===1).length,ballon_cand:S.ballon.length,wc:tr.filter(t=>/월드컵 우승/.test(t.name)).length,peak:S.p.peak,
-    score:lg.total,grade:L.legacyGrade(lg.total),jersey:(S.jersey||[]).length,cs:c.cs||0,pv:Math.round(((S.valueHist||[]).reduce((m,x)=>Math.max(m,x.val),0))*10)/10,psal:Math.round((c.peakSal||0)*10)/10,earned:Math.round((c.earned||0)*10)/10,jerseys:(S.jersey||[]).map(j=>({club:j.club,number:j.number})),detail:hofDetail()};
+    score:lg.total,grade:L.legacyGrade(lg.total),jersey:(S.jersey||[]).length,cs:c.cs||0,pv:Math.round(((S.valueHist||[]).reduce((m,x)=>Math.max(m,x.val),0))*10)/10,psal:Math.round((c.peakSal||0)*10)/10,earned:Math.round((c.earned||0)*10)/10,jerseys:(S.jersey||[]).map(j=>({club:j.club,number:j.number})),detail:hofDetail(),challenge:S.challenge||null};
 }
 /* 비정상 기록 거르기(친구들 순위를 지키기 위해): 불가능한 숫자가 있으면 등록하지 않아요 */
 function hofSanity(r){
@@ -705,7 +722,8 @@ async function hofPost(row){
   { const bad=hofSanity(row); if(bad) throw new Error(bad); }
   const send=b=>fetch(CFG.SUPABASE_URL+"/rest/v1/life_hof",{method:"POST",headers:Object.assign({Prefer:"return=minimal"},HH),body:JSON.stringify(b)});
   let r=await send(row);
-  if(!r.ok&&r.status===400){ const s0=Object.assign({},row); delete s0.pv; delete s0.psal; delete s0.earned; r=await send(s0); if(!r.ok&&r.status===400){ const s1=Object.assign({},s0); delete s1.detail; r=await send(s1); if(!r.ok&&r.status===400){ const s2=Object.assign({},s1); delete s2.jerseys; r=await send(s2); } } }   // jerseys 컬럼이 아직 없는 서버면 옛 형식으로 저장
+  if(!r.ok&&r.status===400&&row.challenge){ const sc=Object.assign({},row); delete sc.challenge; r=await send(sc); if(r.ok) return; }
+  if(!r.ok&&r.status===400){ const s0=Object.assign({},row); delete s0.challenge; delete s0.pv; delete s0.psal; delete s0.earned; r=await send(s0); if(!r.ok&&r.status===400){ const s1=Object.assign({},s0); delete s1.detail; r=await send(s1); if(!r.ok&&r.status===400){ const s2=Object.assign({},s1); delete s2.jerseys; r=await send(s2); } } }   // jerseys 컬럼이 아직 없는 서버면 옛 형식으로 저장
   if(!r.ok) throw new Error(r.status===404?"서버에 life_hof 표가 아직 없어요":"등록 실패 ("+r.status+")");
 }
 async function hofLoad(){
@@ -1063,6 +1081,7 @@ function doRetire(){
       lines:[yrs+"시즌 · "+c.apps+"경기 "+c.goals+"골 "+c.assists+"도움",ft.name+" 인기 · "+L.charTier(ch).name]};
     modals.unshift({t:"cine",o}); const tb=L.retireTribute&&L.retireTribute(S); if(tb) modals.push({t:"msg",kick:"TRIBUTE",title:tb.title,body:tb.body}); }
   liveLog("retire","은퇴했어요 ("+(S.history.filter(h=>!h.youth).length)+"시즌 · 통산 "+S.career.goals+"골)");
+  try{ if(S.challenge&&L.weeklyRecord) L.weeklyRecord(S.challenge,L.legacy(S).total,S.p.name); }catch(e){}
   const jr=L.jerseyRetired(S); S.jersey=jr; S.retired=true; view="retired"; jr.forEach(j=>modals.push({t:"jersey",j,name:S.p.name}));
   const h=rd(HOF)||[]; h.push(Object.assign(hofEntry(""),{retire:jr.length>0}));
   wr(HOF,h); save(); render();
@@ -1173,13 +1192,14 @@ document.addEventListener("click",e=>{
     case "tab": tab=v; render(); break;
     case "continue": view=S.retired?(S.quit?"quit":"retired"):S.phase==="draft"?"draft":"game"; tab="season"; render(); break;
     case "wipe": if(confirm("저장된 선수를 삭제할까요?")){ try{ localStorage.removeItem(KEY); }catch(_){} S=null; render(); } break;
+    case "wk": { const W=L.weekly(); S=null; draft=NEWDRAFT(); plan=NEWPLAN(); draft.pos=W.pos; draft.sub=L.POSDEF[W.pos].subs[0][0]; draft.route=W.route; draft.weekly=W; if(W.route==="high"||W.route==="univ") draft.points.mentor=0; view="create"; render(); break; }
     case "new": S=null; draft=NEWDRAFT(); plan=NEWPLAN(); view="create"; render(); break;
-    case "pos": draft.pos=v; draft.sub=L.POSDEF[v].subs[0][0]; keep(render); break;
+    case "pos": if(draft.weekly){ say("이번 주 도전은 포지션과 시작 시점이 정해져 있어요"); break; } draft.pos=v; draft.sub=L.POSDEF[v].subs[0][0]; keep(render); break;
     case "sub": draft.sub=v; draft.role=""; keep(render); break;
     case "role": draft.role=v; keep(render); break;
     case "foot": draft.foot=v; keep(render); break;
     case "trait": draft.trait=v; keep(render); break;
-    case "route": draft.route=v; if(v==="high"||v==="univ") draft.points.mentor=0; keep(render); break;
+    case "route": if(draft.weekly){ say("이번 주 도전은 포지션과 시작 시점이 정해져 있어요"); break; } draft.route=v; if(v==="high"||v==="univ") draft.points.mentor=0; keep(render); break;
     case "pt": { const [k,d]=v.split(":"); const nx=draft.points[k]+(+d); if(nx<0||nx>5||(+d>0&&ptsLeft()<=0)) break; draft.points[k]=nx; keep(render); break; }
     case "create": view="create"; render(); break;
     case "scout":
@@ -1265,6 +1285,7 @@ document.addEventListener("click",e=>{
     case "kidpos": { const k=(document.getElementById("kid")||{}).value; draft.kidName=k; draft.kidPos=v; keep(render); break; }
     case "kid": { const kk0=(S.kids||[])[draft.kidPick]; if(!kk0){ say("이어서 키울 자녀를 먼저 골라 주세요"); break; } const nm=kk0.name; const pos=kk0.dir||draft.kidPos||S.p.pos; const kidObj=(draft.kidPick!=null&&(S.kids||[])[draft.kidPick]&&(S.kids[draft.kidPick].name===nm))?S.kids[draft.kidPick]:null; const res=L.createChild(S,{name:nm,pos,trait:S.p.trait,kid:kidObj}); const par=S; S=res.state; plan=NEWPLAN(); view="game"; tab="season"; save();
       const tl=res.talent; modals.push({t:"msg",kick:"NEXT GENERATION",title:nm+" — "+par.p.name+"의 "+(S.gen)+"세대",body:(tl.same?"부모와 같은 포지션이라 재능이 안정적으로 이어졌어요.":"다른 포지션을 선택해 재능이 크게 달라질 수 있었어요.")+" 재능 바탕 "+tl.base+" (±"+tl.spread+" 범위)에서 뽑은 결과는 비밀이에요. 20세가 되면 스카우터가 알려 줄 거예요. 집안 형편: "+S.family.name+"."}); render(); break; }
+    case "ach": view="ach"; render(); break;
     case "dex": view="dex"; render(); break;
     case "settings": view="settings"; render(); break;
     case "quiz": qz=null; view="quiz"; render(); break;

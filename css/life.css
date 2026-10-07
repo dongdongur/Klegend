@@ -305,3 +305,5 @@ button.ghost[data-act="shop"],.card button.ghost{min-height:44px}
 .pkpow .pzone.gold{background:rgba(255,207,74,.75);box-shadow:0 0 14px rgba(255,207,74,.9)}
 .awpips{display:flex;gap:10px;justify-content:center;margin:6px 0 10px}.awpips i{font-style:normal;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3)}.awpips i.perfect{background:#ffd84a;color:#3a2200;border-color:#b78a00}.awpips i.good{background:#7be3a1;color:#06331a;border-color:#2c9a5a}.awpips i.miss{background:#ff9a9a;color:#4a0b0b;border-color:#c0392b}
 .pkpow .pmark{z-index:3}
+
+.ach{display:flex;gap:10px;align-items:flex-start;padding:10px 4px;border-bottom:1px solid rgba(255,255,255,.07)}.ach:last-child{border-bottom:0}.ach>i{font-style:normal;font-size:22px;width:28px;text-align:center;opacity:.55}.ach.on>i{opacity:1}.ach b{display:block;font-size:14.5px}.ach small{display:block;opacity:.72;font-size:12.5px;line-height:1.35}.ach .bar{margin:6px 0 2px;height:7px}.ach:not(.on) b{opacity:.85}
