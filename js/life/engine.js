@@ -46,7 +46,7 @@ const TYPES={
 const STATE_VER=3;
 const BORN=2008, YOUTH_END=18, PRO_START=19, UNIV_END=22, UNIV_DRAFT=23;
 /* 옛 저장 데이터 보정: 공격수에게 새로 생긴 '크로스·패스' 능력치를 채워요 */
-L.migrate=function(S){ try{ const p=S&&S.p; if(p&&p.pos==="FW"&&p.stats&&p.stats.passing==null){ p.stats.passing=clamp(Math.round(((p.stats.dribble||50)+(p.stats.composure||50))/2-6),10,95); p.ovr=ovrOf(p); p.peak=Math.max(p.peak||0,p.ovr); } }catch(e){} return S; };
+L.migrate=function(S){ try{ if(L.healSave) L.healSave(S);  const p=S&&S.p; if(p&&p.pos==="FW"&&p.stats&&p.stats.passing==null){ p.stats.passing=clamp(Math.round(((p.stats.dribble||50)+(p.stats.composure||50))/2-6),10,95); p.ovr=ovrOf(p); p.peak=Math.max(p.peak||0,p.ovr); } }catch(e){} return S; };
 const wingInv=p=>(p.sub==="LW"&&p.foot==="오른발")||(p.sub==="RW"&&p.foot==="왼발");
 const ovrOf=p=>{ const d=POSDEF[p.pos], w=(d.wSub&&((wingInv(p)&&d.wSub[p.sub+"i"])||d.wSub[p.sub]))||d.w; return Math.round(d.stats.reduce((s,[k],i)=>s+(p.stats[k]!=null?p.stats[k]:50)*w[i],0)); };
 const age=S=>S.year-S.p.born;
@@ -269,6 +269,10 @@ L.K4_DEFS=K4_DEFS; const K4GAP=8;
 /* 리그 사다리: 구단은 '자기 리그의 척도'(K1·K2=0, K3=K3GAP, K4=K3GAP+K4GAP)로 전력이 정해지고, 승강하면 그 차이만큼 새 리그에서 약해지거나 강해져요 */
 const TOFF={K1:0,K2:0,K3:K3GAP,K4:K3GAP+K4GAP};
 const lowDef=id=>K3_DEFS.find(d=>d.id===id)||K4_DEFS.find(d=>d.id===id);
+/* 옛 저장(이전 버전의 구단 이름)이 지금 구단 목록과 안 맞으면 리그·소속 구단을 다시 맞춰요 (시즌 시작·드래프트가 멈추던 문제 방지) */
+L.healSave=function(S){ try{ if(!S||!S.league) return; const ok=id=>!!(L.defById(id)||lowDef(id)); let bad=false; [["k1",12],["k2",10],["k3",8],["k4",8]].forEach(([k,min])=>{ const a=(S.league[k]||[]).filter(ok); if(a.length<min) bad=true; else S.league[k]=a; }); if(bad) L.initLeague(S);
+  const fixClub=c=>{ if(!c||!c.lg||c.abroad) return; if(c.lg==="K1"||c.lg==="K2"){ if(L.defById(c.id)) return; const d=KDEFS().find(x=>x.short===c.short||x.club===c.name)||L.defById((S.league[c.lg.toLowerCase()]||[])[0]); if(d){ c.id=d.club; c.name=d.club; c.short=d.short||d.club; } } else if(c.lg==="K3"||c.lg==="K4"){ if(lowDef(c.id)) return; const d=(c.lg==="K3"?K3_DEFS:K4_DEFS)[0]; if(d){ c.id=d.id; c.name=d.name; c.short=d.short||d.name; } } };
+  fixClub(S.club); if(S.club&&S.club.origin) fixClub(S.club.origin); }catch(e){} };
 L.lowTier=lg=>lg==="K3"||lg==="K4";   // 연봉 상한이 있는 세미프로·아마추어 리그
 L.initLeague=function(S){ S.league.k1=K.TEAMS26.map(d=>d.club).concat([K.GIMCHEON.club]); S.league.k2=K.K2_DEFS.map(d=>d.club); S.league.k3=K3_DEFS.map(d=>d.id); S.league.k4=K4_DEFS.map(d=>d.id); };
 L.strengthOf=function(S,def){ const s=K.oppStrength(def,false,(S.drift[def.club]||0)); return {att:s.att,def:s.def,lvl:(s.att+s.def)/2}; };
@@ -446,7 +450,8 @@ L.beginSeason=function(S,plan){
     sim.rounds=L.makeRounds(opp.map(t=>t.id),2,0);
     sim.st={}; opp.forEach(t=>{ sim.st[t.id]={att:t.l,def:t.l}; });
   } else {
-    const clubs=L.leagueClubs(S,key); sim.teams=clubs.map(c=>({id:c.id,name:c.name,short:c.short,l:c.l,code:c.code}));
+    let clubs=L.leagueClubs(S,key); if(!clubs.length){ try{ S.league=S.league||{}; L.initLeague(S); }catch(e){} clubs=L.leagueClubs(S,key); }
+    sim.teams=clubs.map(c=>({id:c.id,name:c.name,short:c.short,l:c.l,code:c.code}));
     const me=clubs.find(c=>c.id===myId)||clubs[0]; lvl=me.l; sim.st={}; clubs.forEach(c=>{ sim.st[c.id]={att:c.att,def:c.def}; });
     sim.rounds=L.makeRounds(clubs.map(c=>c.id),key==="K1"||key==="K3"?3:2,key==="K1"?5:0);   // K3 39경기 · K4 26경기
   }

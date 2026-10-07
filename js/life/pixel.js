@@ -14,7 +14,7 @@ const cache={};
 /* o: {꾸미기 hs(머리 모양 0~9)·hc(머리색)·band·gl·cap·pat 도 받아요(js/life/cosmetics.js), name, age, kit:"#hex", injured, military, suit, pos, bodyMass, bodyTall} → data URL  (bodyMass: 근육량 단계(+단단/−마름), bodyTall: 키 단계) */
 L.pixelSprite=function(o){
   const heavy=(o.bodyMass||0)>=1.2, lean=(o.bodyMass||0)<=-1.2, tallB=(o.bodyTall||0)>=1.3?1:(o.bodyTall||0)<=-1.3?-1:0;
-  const key=[o.name,o.age,o.kit,o.injured?1:0,o.military?1:0,o.suit?1:0,o.gk?1:0,heavy?"H":lean?"T":"M",tallB,o.hs==null?"":o.hs,o.hc||"",o.band||"",o.gl||"",o.cap||"",o.pat||""].join("|"); if(cache[key]) return cache[key];
+  const key=[o.name,o.age,o.kit,o.injured?1:0,o.military?1:0,o.suit?1:0,o.gk?1:0,heavy?"H":lean?"T":"M",tallB,o.hs==null?"":o.hs,o.hc||"",o.band||"",o.gl||"",o.cap||"",o.pat||"",o.back?"B":""].join("|"); if(cache[key]) return cache[key];
   const h=hash(o.name||"x"), skin=SKIN[h%3], hairStyle=o.hs!=null?o.hs:(h>>>3)%4, hair0=o.hc||HAIR[(h>>>5)%4], dyed=!!o.hc, boy=o.age<=15, teen=o.age<=18, uni=o.age>=19&&o.age<=22, old1=o.age>=34, old2=o.age>=38, old3=o.age>=41;
   const hair=(old2&&!dyed)?"#e9e9ec":hair0, gray="#b9bcc4", kit=o.kit||PAL[h%PAL.length], kitD=shade(kit,.7), kitL=shade(kit,1.25);
   const c=document.createElement("canvas"); c.width=16; c.height=24; const g=c.getContext("2d");
@@ -61,14 +61,18 @@ L.pixelSprite=function(o){
   /* 나이: 희끗한 구레나룻 → 흰머리 */
   if(old1&&!old2&&!mil&&!dyed&&hairStyle<4){ px(4,hy,1,3,gray); px(11,hy,1,3,gray); px(5,hy-1,1,1,gray); px(10,hy-1,1,1,gray); }
   if(old2&&!mil&&!dyed&&hairStyle<4){ px(4,hy,1,5,"#f1f1f4"); px(11,hy,1,5,"#f1f1f4"); }
+  /* 뒷모습(킥·헤딩 장면): 얼굴 대신 뒤통수, 등에 번호 */
+  if(o.back&&!o.suit){ px(5,hy,6,6,hairStyle===9?skin:hair); if(hairStyle<9){ px(5,hy+5,6,1,hair); } px(4,hy+3,1,2,skin); px(11,hy+3,1,2,skin); px(7,hy+6,2,1,skin); px(bx+1,bodyTop+1,bw-2,1,kitL); px(6,bodyTop+2,4,1,"rgba(255,255,255,.75)"); px(7,bodyTop+3,2,3,"rgba(255,255,255,.75)"); }
   /* 얼굴: 눈·입 */
+  if(!o.back){
   px(6,hy+3,1,1,"#1b1b22"); px(9,hy+3,1,1,"#1b1b22"); px(7,hy+5,2,1,boy?"#c86b6b":"#a85a55");
   if(boy) { px(5,hy+4,1,1,"#f1a6a0"); px(10,hy+4,1,1,"#f1a6a0"); }                 // 볼
   if(o.age>=33&&(h&1)){ px(5,hy+5,6,1,old2?"#d8d8de":"#4a4048"); }                  // 수염 자국
   if(old3){ px(5,hy+4,1,1,"rgba(120,80,70,.55)"); px(10,hy+4,1,1,"rgba(120,80,70,.55)"); px(6,hy+2,2,1,"rgba(90,60,50,.35)"); }  // 주름
+  }
   /* 헤어밴드 · 안경 */
   if(o.band&&!mil){ px(4,hy+1,8,1,o.band==="white"?"#f4f4f4":o.band==="kit"?kitL:o.band==="gold"?"#ffcf4a":"#19f2a3"); }
-  if(o.gl){ const fr=o.gl==="round"?"#8a5a1e":o.gl==="goggle"?"#27a9e1":o.gl==="neon"?"#19f2a3":"#101014";
+  if(o.gl&&!o.back){ const fr=o.gl==="round"?"#8a5a1e":o.gl==="goggle"?"#27a9e1":o.gl==="neon"?"#19f2a3":"#101014";
     if(o.gl==="shade"||o.gl==="neon"){ px(5,hy+3,3,2,fr); px(8,hy+3,3,2,fr); px(5,hy+3,1,1,"rgba(255,255,255,.35)"); px(8,hy+3,1,1,"rgba(255,255,255,.35)"); px(4,hy+3,1,1,fr); px(11,hy+3,1,1,fr); }
     else { [5,8].forEach(x=>{ px(x+1,hy+2,1,1,fr); px(x+1,hy+4,1,1,fr); px(x,hy+3,1,1,fr); px(x+2,hy+3,1,1,fr); px(x+1,hy+3,1,1,"#1b1b22"); }); px(4,hy+3,1,1,fr); px(11,hy+3,1,1,fr); if(o.gl==="goggle") px(7,hy+1,2,1,fr); } }
   /* 목발 / 꽃다발 */
@@ -76,6 +80,14 @@ L.pixelSprite=function(o){
   if(o.suit){ const fx=Math.max(0,bx-3); px(fx,bodyTop+bodyH-2,3,3,"#e9507a"); px(fx+1,bodyTop+bodyH-3,1,1,"#ffd84a"); px(fx,bodyTop+bodyH-2,1,1,"#fff"); px(fx+1,bodyTop+bodyH+1,1,2,"#2c9a5a"); }
   const url=c.toDataURL("image/png"); cache[key]=url; return url;
 };
+/* 캔버스에 그릴 도트 선수 이미지(뒷모습 옵션): 같은 모양은 한 번만 만들어요. 선수 이름·나이·체격·구단색·꾸미기가 그대로 적용돼요.
+   opts: {back:true(뒷모습), kit:"#hex"(다른 팀 색), name:"x"(다른 얼굴), gk:true} → HTMLImageElement (로딩 전이면 complete=false) */
+const _imgs={};
+L.pixelCanvasImg=function(S,opts){ opts=opts||{}; try{ const p=S.p, age=(S.year||2026)-(p.born||2008); let col=null; const cc=S.club&&(S.club.col||(S.club.c)); if(typeof cc==="string"&&/^#[0-9a-f]{6}$/i.test(cc)) col=cc;
+    let bf={mass:0,tall:0}; try{ if(L.bodyFx) bf=L.bodyFx(p.pos,p.height,p.weight); }catch(e){}
+    const other=!!(opts.name||opts.kit); const base={name:opts.name||p.name,age:opts.age||(other?24:age),kit:opts.kit||col,gk:!!opts.gk||(!other&&p.pos==="GK"&&!opts.field),bodyMass:other?0:bf.mass,bodyTall:other?0:bf.tall,back:!!opts.back,military:false,injured:false};
+    let cs=null; if(!other){ try{ cs=L.cosPix?L.cosPix():null; }catch(e){} }
+    const url=L.pixelSprite(Object.assign(base,cs||{})); if(!_imgs[url]){ const im=new Image(); im.src=url; _imgs[url]=im; } return _imgs[url]; }catch(e){ return null; } };
 /* 현재 선수의 도트 이미지 태그 (장착한 꾸미기가 함께 적용돼요. opts.cos 로 미리보기 값을, opts.clean 으로 부상·입대 표시 없는 모습을 받아요) */
 L.pixelImg=function(S,size,opts){
   try{ opts=opts||{}; const p=S.p, age=(S.year||2026)-(p.born||2008); let col=null; const cc=S.club&&(S.club.col||(S.club.c)); if(typeof cc==="string"&&/^#[0-9a-f]{6}$/i.test(cc)) col=cc;

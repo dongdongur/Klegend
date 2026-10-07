@@ -29,6 +29,8 @@ function eff(S,e,f){
   if(e.inj){ if(S.sim) S.sim.out+=e.inj; out.push("결장 "+e.inj+"경기"); }
   if(e.char&&L.charDelta){ L.charDelta(S,e.char,"이벤트"); }
   if(e.goalbonus&&S.sim&&S.p.pos!=="GK"){ S.sim.my.g++; out.push("골 +1"); }
+  if(e.assbonus&&S.sim&&S.p.pos!=="GK"){ S.sim.my.a++; out.push("도움 +1"); }
+  if(e.csbonus&&S.sim&&S.p.pos==="GK"){ S.sim.my.cs++; out.push("무실점 +1"); }
   if(e.conv){ let [np,ns]=String(e.conv).split(":"); if(ns==="SIDE") ns=S.p.sub==="LB"?"LW":"RW"; if(ns==="SIDEB") ns=S.p.sub==="LW"?"LB":"RB"; if(L.changePosition(S,np,ns)) out.push("포지션 전향: "+(L.POSDEF[np].subs.find(x=>x[0]===ns)||[0,ns])[1]); }
   if(e.goat){ const r=Math.random(); S.goat=true; S.goatCap=r<.04?105:r<.2?103:r<.55?102:101; p.pot=Math.max(p.pot,S.goatCap); out.push("GOAT 각성 · 상한 "+S.goatCap); L.addMoment&&L.addMoment(S,"GOAT 각성","재능","인간의 한계로 여겨지던 99를 넘어섰어요."); }
   if(e.slack){ S.cond=clamp(S.cond-e.slack,0,100); S.slackYears=(S.slackYears||0)+1; out.push("몸 관리 소홀 · 컨디션 -"+e.slack); }
