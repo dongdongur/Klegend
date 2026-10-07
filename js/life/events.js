@@ -233,6 +233,7 @@ L.resolveEvent=function(S,ev,idx,force){
   /* 특수 결과 */
   let ending=null;
   if(o.act){ const a=String(o.act);
+    if(a==="univEarly"&&S.stage==="univ"){ S.stage="pro"; S.phase="draft"; S.sim=null; S.dr=null; S.plan=null; try{ S.offers=L.draftOffers(S); }catch(e){ S.offers=[]; } if(L.addMoment) L.addMoment(S,"조기 입단","대학","대학을 중퇴하고 프로 구단의 부름에 응했어요."); }
     if(a==="quitNow"&&L.maybeQuit) ending={reason:"family",text:"집안 사정으로 운동을 포기하고 학업에 전념하기로 했어요."};
     else if(a==="quitRisk"&&!hit&&!(S.family&&(S.family.id==="rich"||S.family.id==="upper"))&&Math.random()<clamp(.35-.05*((S.points||{}).grit|0),.05,.4)) ending={reason:"family",text:"형편이 어려워 더는 운동을 이어 갈 수 없었어요. 그래도 한때는 누구보다 빛나는 유망주였어요."};
     else if(a==="quitLiving") ending={reason:"living",text:"생계를 꾸리려고 축구화를 벗고 정규직 일자리를 구했어요. 주말이면 동네 구장에서 공을 차며, 그라운드 위의 시간을 오래 기억했어요."};

@@ -190,5 +190,11 @@ window.KL_I18N_EN_XN={
 "한 번 더 뽑을 수 있어요":"You can redraw once more",
 "광고를 끝까지 보지 않아 적용되지 않았어요":"The ad wasn't watched to the end, so nothing was applied",
 "아직 열리지 않았어요":"Not unlocked yet",
-"장착했어요":"equipped"
+"장착했어요":"equipped",
+"프로 스카우터가 찾아왔어요":"A pro scout came to see you",
+"대학 리그에서 눈에 띄는 활약을 하자 프로 구단 스카우터가 경기장에 와서 기다리고 있었어요. 졸업까지 기다리지 않고 지금 입단하자는 제안이에요.":"After standing out in the university league, a pro scout is waiting at the ground. The offer is to turn pro now instead of waiting for graduation.",
+"대학을 중퇴하고 프로 입단 협상에 나선다":"Leave university and negotiate a pro contract",
+"계약서가 오가는 순간이 왔어요. 이제 프로의 세계예요.":"The contract is on the table. Welcome to the pro world.",
+"졸업까지 마치고 정식 드래프트에 나선다":"Finish university and enter the regular draft",
+"학업과 훈련을 모두 챙기기로 했어요. 몸값은 더 오를지도 몰라요.":"You will keep up both studies and training. Your price might even rise."
 };
