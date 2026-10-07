@@ -133,7 +133,7 @@ function homeView(){
    <div class="grid2"><button class="wide" data-act="quiz">⚽ 축구 상식 퀴즈</button><button class="wide" data-act="settings">⚙ 설정 · 구단 이름과 로고</button></div>
    ${CS()?`<button class="wide" data-act="cosgo">🎨 꾸미기 · 도트 선수·액자·은퇴 카드</button>`:""}
    <a class="wide" href="patch-notes.html" style="display:grid;place-items:center;text-decoration:none">📰 패치노트${(()=>{ try{ return window.KL_PATCH_LATEST&&localStorage.getItem("kl-patch-seen")!==window.KL_PATCH_LATEST?" 🔴 NEW":""; }catch(e){ return ""; } })()}</a>
-   <section class="card flat"><h3 class="sec">업데이트 예정</h3><p class="muted">· 차남곤 축구상·황금 신예 시상 연출, 입단 입장 장면<br>· 시즌 하이라이트(낭만 장면)<br>· 이어지는 이야기 더 늘리기<br>· 꾸미기 항목 더 늘리기(유니폼·액자·엠블럼)<br>· 감독판 이야기 늘리기, 선수판 가져오기</p></section>
+   <section class="card flat"><h3 class="sec">업데이트 예정</h3><p class="muted">· 시즌 하이라이트(낭만 장면)<br>· 기록 경쟁 더 늘리기(지역·친구 순위)<br>· 이어지는 이야기 더 늘리기<br>· 꾸미기 항목 더 늘리기(유니폼·액자·엠블럼)<br>· 감독판 이야기 늘리기, 선수판 가져오기</p></section>
    <p class="muted c"><a class="lnk" href="index.html">게임 선택 메뉴로</a>${S?` · <button class="lnk" data-act="wipe">저장 삭제</button>`:""}</p></main>`;
 }
 
@@ -459,7 +459,7 @@ function transferCines(o,flyAbroad,fromLg){
   const arr=[]; const nm=S.p.name, club=o.club.name;
   const fc=CITY[fromLg||"K1"]||CITY.K1, tc=CITY[o.club.lg]||CITY.K1;
   if(flyAbroad&&fc.n!==tc.n) arr.push({t:"cine",o:{kind:"flight",route:{from:fc,to:tc},icon:"✈️",kicker:"FLIGHT · "+S.year,title:"새로운 도전을 향해",sub:nm+", "+club+"(으)로 비행기에 올라요. "+L.lgLabel(o.club.lg)+"에서 새 이야기가 시작돼요.",lines:["연봉 "+money(o.salary)+" · "+o.years+"년"]}});
-  arr.push({t:"cine",o:{kind:"arrive",icon:"🏟️",kicker:"WELCOME · "+club,title:club+" 입단!",sub:"경기장 터널을 지나 그라운드에 들어서자 팬들의 함성이 쏟아져요.",lines:["📣 팬들: \""+nm+"! "+nm+"!\"","🎤 입단 인터뷰 — "+ARRIVE_Q[Math.floor(Math.random()*ARRIVE_Q.length)]]}});
+  arr.push({t:"cine",o:{kind:"arrive",icon:"🏟️",walkerHtml:(()=>{ try{ return L.pixelImg(S,118,{clean:true,back:true}); }catch(e){ return ""; } })(),gate:club,kicker:"WELCOME · "+club,title:club+" 입단!",sub:"경기장 터널을 지나 그라운드에 들어서자 팬들의 함성이 쏟아져요.",lines:["📣 팬들: \""+nm+"! "+nm+"!\"","🎤 입단 인터뷰 — "+ARRIVE_Q[Math.floor(Math.random()*ARRIVE_Q.length)]]}});
   return arr;
 }
 function healCost(){ return Math.max(.1,Math.round((S.sim.out||0)*.12*L.priceScale(S)*10)/10); }
@@ -1051,6 +1051,7 @@ function finishSeason(){
       else if(cup) o={kind:"win",icon:"🏆",kicker:"CUP WINNERS · "+R.year,title:cup.replace(/ 우승$/,"")+" 우승!",sub:club+"의 한 시즌이 트로피로 마무리됐어요.",lines};
       else if((R.records||[]).length) o={kind:"record",icon:"📈",kicker:"NEW RECORD · "+R.year,title:"기록을 새로 썼어요",sub:R.records[0],lines:R.records.slice(1,3)};
       if(o) modals.unshift({t:"cine",o}); }
+    try{ (L.awardCines?L.awardCines(S,R):[]).forEach(x=>modals.push({t:"cine",o:x})); }catch(e){}
     if(R.ballon&&R.ballon.rank===1){ const n=S.ballon.filter(b=>b.rank===1).length; modals.unshift({t:"gold",kick:"BALLON D'OR "+R.year,title:esc0(S.p.name)+", 올해의 황금공",sub:(n>1?n+"번째 ":"")+"세계 최고의 선수로 선정됐어요",club:R.club.name,lines:[R.leagueName+" "+R.rank+"위 · "+R.goals+"골 "+R.assists+"도움 · 평점 "+R.rating,...(R.trophies.length?[R.trophies.join(" · ")]:[])]}); }
     save(); render();
   });

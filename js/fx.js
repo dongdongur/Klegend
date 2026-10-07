@@ -15,7 +15,9 @@ const KINDS={
   retire:{icon:"🎽",ac:"#f3ecd8",conf:[],dur:6400},
   promo:{icon:"🚀",ac:"#86d7c0",conf:["#86d7c0","#f0bd4f","#f3ecd8"],dur:5200},
   flight:{icon:"✈️",ac:"#9ec8ff",conf:[],dur:7600},
-  arrive:{icon:"🏟️",ac:"#f0bd4f",conf:["#f0bd4f","#f3ecd8","#ec6a55"],dur:7800}
+  arrive:{icon:"🏟️",ac:"#f0bd4f",conf:["#f0bd4f","#f3ecd8","#ec6a55"],dur:7800},
+  golden:{icon:"🌟",ac:"#ffd45a",conf:["#ffd45a","#ffffff","#9ec8ff","#f3ecd8"],dur:7000},
+  paper:{icon:"📰",ac:"#d8c79a",conf:[],dur:8600}
 };
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 let busy=false;
@@ -29,19 +31,29 @@ function confetti(cv,colors,ms){
       ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r); ctx.globalAlpha=Math.max(0,Math.min(1,1-(el-ms+900)/900)); ctx.fillStyle=p.c; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h*Math.abs(Math.cos(p.r*1.3)+.2)); ctx.restore(); });
     requestAnimationFrame(tick); })(start);
 }
+/* 신문 기사: 한 장이 빙글 돌며 날아들고, 머리기사·사진·본문이 차례로 나타나요 */
+function paperHtml(o,esc){ const p=o.paper||{};
+  const body=(o.lines||[]).map((s,i)=>'<p style="animation-delay:'+(2.6+i*.55).toFixed(2)+'s">'+esc(s)+'</p>').join("");
+  const head=[...String(o.title||"")].map((ch,i)=>ch===" "?'<span class="sp"> </span>':'<span class="lt" style="animation-delay:'+(1.5+i*.04).toFixed(2)+'s">'+esc(ch)+'</span>').join("");
+  return '<div class="fx-paper"><div class="pp-sheet"><div class="pp-mast"><small>'+esc(p.no||"")+'</small><b>'+esc(p.name||"일간 풋볼 타임즈")+'</b><small>'+esc(p.date||"")+'</small></div><i class="pp-rule"></i>'
+    +'<div class="pp-tag">'+esc(o.kicker||"")+'</div><h2 class="pp-head">'+head+'</h2><p class="pp-sub">'+esc(o.sub||"")+'</p>'
+    +'<div class="pp-cols"><div class="pp-photo">'+(o.photoHtml||'<span>'+esc(o.icon||"📰")+'</span>')+'<em>'+esc(o.cap||"")+'</em></div><div class="pp-text">'+body+'</div></div><div class="pp-stamp">'+esc(p.stamp||"단독")+'</div></div></div>'; }
 function cine(o,done){
   const k=KINDS[o.kind]||KINDS.win; if(busy){ if(done) done(); return; } busy=true;
   const calm=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
   const w=document.createElement("div"); w.className="fx"+(calm?" calm":""); w.style.setProperty("--ac",k.ac);
-  const letters=[...String(o.title||"")].map((ch,i)=>ch===" "?'<span class="sp"> </span>':'<span class="lt" style="animation-delay:'+(1.15+i*.045).toFixed(2)+'s">'+esc(ch)+'</span>').join("");
-  const lines=(o.lines||[]).map((t,i)=>'<li style="animation-delay:'+(2.5+i*.35).toFixed(2)+'s">'+esc(t)+'</li>').join("");
+  const SH=o.walkerHtml?2.3:0;
+  const letters=[...String(o.title||"")].map((ch,i)=>ch===" "?'<span class="sp"> </span>':'<span class="lt" style="animation-delay:'+(1.15+SH+i*.045).toFixed(2)+'s">'+esc(ch)+'</span>').join("");
+  const lines=(o.lines||[]).map((t,i)=>'<li style="animation-delay:'+(2.5+SH+i*.35).toFixed(2)+'s">'+esc(t)+'</li>').join("");
+  const paperCard=o.kind==="paper"?paperHtml(o,esc):"";
   w.innerHTML='<div class="fx-bar t"></div><div class="fx-bar b"></div><div class="fx-beam"></div><div class="fx-flash"></div><canvas class="fx-conf"></canvas>'
-   +'<div class="fx-card"><div class="fx-icon">'+(o.icon||k.icon)+'</div><div class="fx-kick">'+esc(o.kicker||"")+'</div><h2 class="fx-title">'+letters+'</h2><p class="fx-sub">'+esc(o.sub||"")+'</p>'+(lines?'<ul class="fx-lines">'+lines+'</ul>':"")+'</div>'
+   +(paperCard||'<div class="fx-card"><div class="fx-icon">'+(o.iconHtml||o.icon||k.icon)+'</div><div class="fx-kick">'+esc(o.kicker||"")+'</div><h2 class="fx-title">'+letters+'</h2><p class="fx-sub">'+esc(o.sub||"")+'</p>'+(lines?'<ul class="fx-lines">'+lines+'</ul>':"")+'</div>')
    +'<button type="button" class="fx-skip">건너뛰기 ›</button>';
   const sc=o.scene||(o.kind==='flight'?'flight':o.kind==='arrive'?'arrive':'');
   const useMap=sc==='flight'&&o.route&&window.KL_MAP&&!calm;
   if(useMap){ w.classList.add('mapfx'); w.insertAdjacentHTML('afterbegin','<div class="fx-scene"><canvas class="fx-map"></canvas></div>'); }
-  else if(sc){ const sceneHtml=sc==='flight'?'<div class="fx-scene sc-flight"><i class="cl c1">☁️</i><i class="cl c2">☁️</i><i class="cl c3">☁️</i><i class="plane">✈️</i><i class="route"></i></div>':'<div class="fx-scene sc-arrive"><i class="tunnel"></i><i class="crowd">👥👥👥👥👥👥</i><i class="cam c1">📸</i><i class="cam c2">📸</i><i class="cam c3">📸</i></div>'; w.insertAdjacentHTML('afterbegin',sceneHtml); }
+  else if(sc){ const sceneHtml=sc==='flight'?'<div class="fx-scene sc-flight"><i class="cl c1">☁️</i><i class="cl c2">☁️</i><i class="cl c3">☁️</i><i class="plane">✈️</i><i class="route"></i></div>':'<div class="fx-scene sc-arrive"><i class="tunnel"></i><i class="crowd">👥👥👥👥👥👥</i><i class="cam c1">📸</i><i class="cam c2">📸</i><i class="cam c3">📸</i></div>';
+    w.insertAdjacentHTML('afterbegin',sceneHtml); if(o.walkerHtml){ const sc2=w.querySelector('.sc-arrive'); if(sc2){ sc2.insertAdjacentHTML('beforeend','<div class="gate"><i class="gl l"></i><i class="gl r"></i><b>'+esc(o.gate||"")+'</b><i class="dark"></i></div><div class="ground"></div><div class="walker"><div class="wb">'+o.walkerHtml+'</div></div>'); } w.classList.add("walk"); w.style.setProperty("--sh",SH+"s"); } }
   document.body.appendChild(w); document.body.classList.add("fx-on");
   if(useMap){ const cv=w.querySelector('.fx-map'); const sc2=Math.min(1,900/Math.max(innerWidth,innerHeight)); cv.width=Math.round(innerWidth*sc2); cv.height=Math.round(innerHeight*sc2); setTimeout(()=>{ if(cv.isConnected) KL_MAP.flight(cv,o.route,(o.dur||k.dur)-2400); },500); }
   const t0=performance.now(); let closed=false;
@@ -49,7 +61,7 @@ function cine(o,done){
   w.addEventListener("click",e=>{ if(performance.now()-t0>(e.target.closest(".fx-skip")?0:900)) close(); });
   if(!calm){ setTimeout(()=>confetti(w.querySelector(".fx-conf"),k.conf,(o.dur||k.dur)-600),900); }
   try{ if(window.KL_BGM&&KL_BGM.sting) KL_BGM.sting(o.kind); }catch(e){}
-  setTimeout(close,o.dur||k.dur);
+  setTimeout(close,(o.dur||k.dur)+(SH?1800:0));
 }
 /* 계약서 도장: 쾅! 하고 구단 이름이 찍혀요 */
 function stamp(label,done){

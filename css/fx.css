@@ -12,14 +12,14 @@
 @keyframes flash{0%{opacity:0}8%{opacity:.85}18%{opacity:.05}28%{opacity:.5}55%{opacity:0}100%{opacity:0}}
 .fx-conf{position:absolute;inset:0;z-index:2;pointer-events:none}
 .fx-card{position:relative;z-index:5;text-align:center;padding:0 24px;max-width:520px}
-.fx-icon{font-size:62px;line-height:1;filter:drop-shadow(0 8px 24px color-mix(in srgb,var(--ac) 60%,transparent));animation:icon 1s cubic-bezier(.2,1.4,.3,1) .7s both}
+.fx-icon{font-size:62px;line-height:1;filter:drop-shadow(0 8px 24px color-mix(in srgb,var(--ac) 60%,transparent));animation:icon 1s cubic-bezier(.2,1.4,.3,1) calc(.7s + var(--sh,0s)) both}
 @keyframes icon{from{opacity:0;transform:scale(.2) rotate(-25deg)}}
-.fx-kick{margin-top:14px;font:600 12px "Oswald","Noto Sans KR",sans-serif;letter-spacing:.34em;color:var(--ac);text-transform:uppercase;animation:up .7s ease .9s both}
+.fx-kick{margin-top:14px;font:600 12px "Oswald","Noto Sans KR",sans-serif;letter-spacing:.34em;color:var(--ac);text-transform:uppercase;animation:up .7s ease calc(.9s + var(--sh,0s)) both}
 .fx-title{margin:10px 0 0;font:800 clamp(30px,8.5vw,48px)/1.25 "Noto Serif KR",serif;letter-spacing:-.01em;color:#fff6dc;text-shadow:0 4px 30px color-mix(in srgb,var(--ac) 55%,transparent)}
 .fx-title .lt{display:inline-block;animation:lt .55s cubic-bezier(.2,.8,.2,1) both;background:linear-gradient(180deg,#fffbe8,var(--ac));-webkit-background-clip:text;background-clip:text;color:transparent}
 .fx-title .sp{display:inline-block;width:.3em}
 @keyframes lt{from{opacity:0;transform:translateY(22px) scale(.85);filter:blur(6px)}}
-.fx-sub{margin:14px auto 0;color:#d6ceb4;font-size:15.5px;line-height:1.6;max-width:30em;animation:up .8s ease 2s both}
+.fx-sub{margin:14px auto 0;color:#d6ceb4;font-size:15.5px;line-height:1.6;max-width:30em;animation:up .8s ease calc(2s + var(--sh,0s)) both}
 .fx-lines{list-style:none;margin:18px auto 0;padding:0;display:grid;gap:6px;max-width:26em}
 .fx-lines li{padding:8px 14px;border-radius:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);font-size:14px;animation:up .6s ease both}
 @keyframes up{from{opacity:0;transform:translateY(14px)}}
@@ -50,3 +50,43 @@ body.fx-on{overflow:hidden}
 @keyframes paperIn{from{opacity:0;transform:translateY(40px) rotate(2deg)}}@keyframes slam{0%{opacity:0;transform:scale(2.6) rotate(-24deg)}60%{opacity:1;transform:scale(.92) rotate(-12deg)}100%{opacity:.92;transform:scale(1) rotate(-12deg)}}@keyframes shake{25%{transform:translate(-5px,3px)}50%{transform:translate(5px,-3px)}75%{transform:translate(-2px,2px)}}
 
 .fx.mapfx .fx-scene{z-index:0}.fx-map{position:absolute;inset:0;width:100%;height:100%}.fx.mapfx .fx-card{align-self:start;margin-top:calc(12vh + 8px);text-shadow:0 2px 14px rgba(0,0,0,.8)}.fx.mapfx .fx-icon{display:none}.fx.mapfx .fx-lines li{background:rgba(5,20,40,.6)}.fx.mapfx .fx-beam,.fx.mapfx .fx-flash{display:none}
+
+/* 신문 기사 연출 (수상 소식) */
+.fx-paper{position:relative;z-index:5;perspective:900px;padding:0 14px}
+.pp-sheet{position:relative;width:min(92vw,430px);padding:14px 16px 16px;color:#2a2418;background:linear-gradient(180deg,#f3e9cf,#e9dcb9);border:1px solid #b9a877;box-shadow:0 22px 60px rgba(0,0,0,.65),inset 0 0 40px rgba(120,95,40,.22);font-family:"Noto Serif KR","Nanum Myeongjo",serif;transform:rotate(-1.2deg);animation:ppIn 1.15s cubic-bezier(.2,.9,.25,1) .55s both}
+.pp-sheet:before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.025) 0 2px,transparent 2px 4px),radial-gradient(120% 80% at 50% 0,transparent 60%,rgba(90,60,10,.18))}
+@keyframes ppIn{0%{opacity:0;transform:rotate(-620deg) scale(.04)}60%{opacity:1;transform:rotate(14deg) scale(1.06)}100%{opacity:1;transform:rotate(-1.2deg) scale(1)}}
+.pp-mast{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:6px;text-align:center}.pp-mast b{font:900 21px/1 "Noto Serif KR",serif;letter-spacing:.04em}.pp-mast small{font:600 10px/1.2 "Noto Sans KR",sans-serif;opacity:.7}.pp-mast small:first-child{text-align:left}.pp-mast small:last-child{text-align:right}
+.pp-rule{display:block;height:3px;margin:7px 0 8px;border-top:3px double #2a2418}
+.pp-tag{display:inline-block;margin-bottom:6px;padding:2px 8px;background:#2a2418;color:#efe3c2;font:700 10.5px "Noto Sans KR",sans-serif;letter-spacing:.12em;animation:up .5s ease 1.2s both}
+.pp-head{margin:0 0 6px;font:900 clamp(24px,7.2vw,31px)/1.22 "Noto Serif KR",serif;letter-spacing:-.02em;color:#1b160c}
+.pp-head .lt{color:#1b160c;display:inline-block;animation:lt .5s cubic-bezier(.2,.8,.2,1) both}.pp-head .sp{display:inline-block;width:.28em}
+.pp-sub{margin:0 0 10px;padding-bottom:8px;border-bottom:1px solid #b9a877;font:600 13px/1.5 "Noto Sans KR",sans-serif;color:#4a3d22;animation:up .6s ease 2.2s both}
+.pp-cols{display:grid;grid-template-columns:118px 1fr;gap:12px;align-items:start}
+.pp-photo{position:relative;padding:6px 6px 4px;background:#f7efd9;border:1px solid #b9a877;text-align:center;animation:up .6s ease 2s both}
+.pp-photo img{display:block;margin:0 auto;width:96px;height:auto;image-rendering:pixelated;filter:grayscale(.85) contrast(1.15) sepia(.35)}.pp-photo span{font-size:58px;line-height:100px;display:block}
+.pp-photo em{display:block;margin-top:4px;font:500 10px/1.3 "Noto Sans KR",sans-serif;font-style:normal;color:#5a4c2c}
+.pp-text p{margin:0 0 7px;font:500 13px/1.62 "Noto Serif KR",serif;text-align:justify;word-break:keep-all;animation:up .6s ease both}
+.pp-stamp{position:absolute;right:14px;top:62px;padding:3px 10px;border:3px solid #b3261e;border-radius:6px;color:#b3261e;font:900 15px "Noto Sans KR",sans-serif;letter-spacing:.1em;transform:rotate(-12deg) scale(2.2);opacity:0;animation:ppStamp .35s cubic-bezier(.3,1.5,.5,1) 3.4s both}
+@keyframes ppStamp{to{opacity:.85;transform:rotate(-12deg) scale(1)}}
+.fx.calm .pp-sheet,.fx.calm .pp-tag,.fx.calm .pp-sub,.fx.calm .pp-photo,.fx.calm .pp-text p,.fx.calm .pp-head .lt,.fx.calm .pp-stamp{animation:none;opacity:1}
+.fx.calm .pp-stamp{transform:rotate(-12deg)}
+/* 황금 신예: 픽셀 선수가 스포트라이트 아래 서 있어요 */
+.fx-icon .pix{image-rendering:pixelated;filter:drop-shadow(0 8px 24px rgba(255,212,90,.65))}
+
+/* 입단 입장: 도트 선수가 경기장 입구로 걸어 들어가요 */
+.fx.walk .sc-arrive{background:linear-gradient(180deg,#0a1226 0%,#16284a 42%,#12351f 42.2%,#0b2314 100%)}
+.fx.walk .sc-arrive .tunnel{top:44%;width:60px;height:60px;margin:-30px;animation:tunnelw 2.6s ease-in 2.2s both}
+@keyframes tunnelw{0%{transform:scale(.2);opacity:0}40%{opacity:1}100%{transform:scale(26);opacity:.0}}
+.sc-arrive .gate{position:absolute;left:50%;top:22%;width:min(66vw,300px);height:25vh;margin-left:calc(min(66vw,300px) / -2);border-radius:90px 90px 0 0;background:linear-gradient(180deg,#d9d2bd,#a79f86);box-shadow:0 14px 40px rgba(0,0,0,.6);display:grid;justify-items:center;align-content:start;padding-top:10px}
+.sc-arrive .gate b{font:800 15px "Noto Serif KR",serif;color:#2a2418;letter-spacing:.06em;max-width:90%;text-align:center}
+.sc-arrive .gate .dark{position:absolute;left:50%;bottom:0;width:42%;height:62%;margin-left:-21%;border-radius:80px 80px 0 0;background:radial-gradient(circle at 50% 70%,#fff3c4 0%,#f0bd4f 38%,#1a1408 100%);box-shadow:inset 0 0 26px rgba(0,0,0,.7)}
+.sc-arrive .gate .gl{position:absolute;top:-16px;width:10px;height:30px;background:#c8c1aa}.sc-arrive .gate .gl.l{left:10%}.sc-arrive .gate .gl.r{right:10%}
+.sc-arrive .ground{position:absolute;left:0;right:0;top:47%;bottom:0;background:repeating-linear-gradient(90deg,transparent 0 46px,rgba(255,255,255,.04) 46px 92px)}
+.sc-arrive .walker{position:absolute;left:6%;bottom:20vh;width:92px;animation:walkto 2.5s cubic-bezier(.35,.1,.3,1) .5s both;transform-origin:50% 100%}
+.sc-arrive .walker .wb{animation:walkbob .46s steps(2) infinite}
+.sc-arrive .walker img{display:block;width:100%;height:auto;image-rendering:pixelated;filter:drop-shadow(0 6px 8px rgba(0,0,0,.5))}
+@keyframes walkto{0%{transform:translate(0,0) scale(1);opacity:1}82%{opacity:1}100%{transform:translate(calc(44vw - 46px - 6vw + 0px),-25vh) scale(.34);opacity:.0}}
+@keyframes walkbob{0%{transform:translateY(0)}100%{transform:translateY(-6px)}}
+.fx.walk .fx-card{margin-top:22vh}
+.fx.calm .sc-arrive .walker{animation:none;opacity:0}
