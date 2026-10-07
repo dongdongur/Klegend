@@ -1,5 +1,9 @@
 /* 영어 사전 보충 O (대사·가족·각성 훈련 문구) — i18n_left.cjs 점검 결과 */
 window.KL_I18N_EN_XO={
+"스웨덴":"Sweden",
+"웨일스":"Wales",
+"러시아":"Russia",
+"체코":"Czechia",
 "외계인":"The Alien",
 "불멸의 에이스":"Immortal Ace",
 "라 풀가":"La Pulga",

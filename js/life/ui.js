@@ -821,7 +821,7 @@ function natRun(r){
 function legendCard(){
   if(!L.compareLegends) return ""; const cmp=L.compareLegends(S); if(!cmp.list.length) return "";
   return `<section class="card flat"><small class="kick">LEGEND COMPARISON</small><h3 class="sec">역대 레전드와 비교</h3><p class="muted">${esc(cmp.body)} · 내 커리어 점수 <b>${cmp.mine}</b> (역할·체형·주발이 비슷한 레전드를 골랐어요. 수치는 공개 기록 기반 근사치)</p>
-   ${cmp.list.map(x=>`<div class="card" style="gap:6px"><div class="row"><div class="grow"><b>${esc(x.n)}</b><br><small class="muted">${esc(x.tag)} · ${x.h}cm · ${esc(x.foot)}</small><div class="pills">${(x.why||[]).map(w=>`<span class="pill acc">${esc(w)}</span>`).join("")}</div></div><span class="pill ${x.beat?"gold":""}">${x.beat?"넘어섰어요!":x.pct+"%"}</span></div>
+   ${cmp.list.map(x=>`<div class="card" style="gap:6px"><div class="row"><div class="grow"><b>${esc(x.n)}</b> <small class="muted">${x.flag||""} ${esc(x.nat||"")}</small><br><small class="muted">${esc(x.tag)} · ${x.h}cm · ${esc(x.foot)}</small><div class="pills">${(x.why||[]).map(w=>`<span class="pill acc">${esc(w)}</span>`).join("")}</div></div><span class="pill ${x.beat?"gold":""}">${x.beat?"넘어섰어요!":x.pct+"%"}</span></div>
     <div class="bar ${x.beat?"gold":""}"><i style="width:${Math.min(100,x.pct)}%"></i></div>
     <div class="pay">${x.rows.map(r=>`<small>${r[0]}</small><b style="color:${r[1]>=r[2]?"var(--acc)":"var(--muted)"}">${r[1]} <span class="muted">vs</span> ${r[2]}</b>`).join("")}</div></div>`).join("")}</section>`;
 }
