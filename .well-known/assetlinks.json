@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.klegendgame.app",
+    "sha256_cert_fingerprints": ["여기에_Play_Console_앱_서명_SHA-256_지문을_붙여넣으세요"]
+  }
+}]

@@ -1,17 +1,20 @@
 {
+  "id": "/",
   "name": "K-레전드",
   "short_name": "K-레전드",
-  "description": "대한민국 축구의 전설을 만들어라",
-  "start_url": "/",
+  "description": "축구 선수 한 명의 인생을 13살부터 은퇴까지 키우는 도트 게임",
+  "start_url": "/?src=pwa",
   "scope": "/",
   "display": "standalone",
-  "orientation": "any",
+  "orientation": "portrait-primary",
   "background_color": "#8ccbff",
   "theme_color": "#2f93ff",
   "lang": "ko",
+  "dir": "ltr",
+  "categories": ["games", "sports"],
   "icons": [
     { "src": "img/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "img/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "img/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    { "src": "img/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
