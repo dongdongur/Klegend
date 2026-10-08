@@ -711,6 +711,8 @@ function hofSanity(r){
   if(r.years>46) return "커리어 기간이 비정상이라 등록할 수 없어요";
   if(r.apps>y*75||r.goals>r.apps*1.7+5||r.assists>r.apps*1.7+5) return "경기 기록이 비정상이라 등록할 수 없어요";
   if(r.ballon>y||r.trophies>y*9||r.caps>y*30||r.awards>y*14) return "수상 기록이 비정상이라 등록할 수 없어요";
+  { const ss=(r.detail&&r.detail.seasons)||[]; /* 시즌 기록 안쪽도 살펴요: [나이,구단,리그,경기,골,도움,평점,OVR] */
+    if(ss.length){ if(ss[0][7]>90) return "첫 프로 시즌 능력치가 비정상이라 등록할 수 없어요"; for(let i=0;i<ss.length;i++){ const x=ss[i]; if(x[6]>10||x[3]>75||x[4]>x[3]*1.5+3||x[5]>x[3]*1.5+3) return "시즌 기록이 비정상이라 등록할 수 없어요"; if(i&&x[7]-ss[i-1][7]>9) return "능력치 변화가 비정상이라 등록할 수 없어요"; } } }
   return "";
 }
 async function hofPost(row){
