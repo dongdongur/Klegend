@@ -1,5 +1,6 @@
 /* 영어 사전 보충 O (대사·가족·각성 훈련 문구) — i18n_left.cjs 점검 결과 */
 window.KL_I18N_EN_XO={
+"디시 갤러리":"DC Gallery",
 "학창 시절":"School days",
 "계속 키우기":"Keep playing",
 "당시 코치":"Coach at the time",

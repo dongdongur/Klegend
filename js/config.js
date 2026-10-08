@@ -11,7 +11,7 @@ window.KL_SUPPORT = { text: "", link: "", account: "" };
 
 /* 운영자 정보: 약관·개인정보 처리방침·메인 하단에 표시돼요. 비워 두면 해당 줄은 숨겨져요. (이메일은 공개되니 공개해도 되는 주소를 쓰세요) */
 /* 공개 SNS 계정: 인스타그램 아이디(@ 없이) */
-window.KL_SOCIAL = { instagram: "Klegendgame" };
+window.KL_SOCIAL = { instagram: "Klegendgame", dc: "https://gall.dcinside.com/mgallery/board/lists?id=klegend" };
 window.KL_OPERATOR = { name: "동동구리", email: "", note: "개인 운영 팬 프로젝트" };
 
 /* 광고 칸(js/ads.js): enabled 가 false 이거나 슬롯 설정이 없으면 아무것도 보이지 않고 자리도 차지하지 않아요. 사업자 등록·광고 심사 뒤에 아래 값만 채우면 돼요.
