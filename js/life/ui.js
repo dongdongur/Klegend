@@ -432,10 +432,6 @@ function planSummary(){
   const al=plan.alloc||{}; const alTxt=L.INV_CATS.filter(([k])=>al[k]).map(([k,n])=>n+" "+al[k]).join(" · ");
   return `${nm} · ${L.TIERS[plan.tier].name}${plan.invest?" · "+L.INV_SEG[plan.invest].name:""}${alTxt?" · 가정 투자: "+alTxt:""}`;
 }
-function ticketCard(){
-  if(!snapAvail()) return ""; const n=tickets();
-  return `<section class="card flat"><div class="row"><div class="grow"><small class="kick">REFRESH TICKET</small><br><b>🎟 새로고침권 ${n}장</b><br><small class="muted">방금 끝낸 '${esc(snapMeta.label)}'을 한 번 더 돌려요. 부상이나 아쉬운 결과를 다시 시도할 수 있어요.</small></div><button class="ghost" data-act="tkuse" ${n<=0?"disabled":""}>다시 하기</button></div>${n<=0?`<p class="muted">장수가 없어요. <button class="lnk" data-act="tkfree">무료로 받기</button></p>`:""}</section>`;
-}
 function runView(){
   const sim=S.sim, nxt=sim.segs[sim.seg];
   const up=L.upcoming?L.upcoming(S):[];
@@ -443,7 +439,6 @@ function runView(){
    ${seg?segCard(seg):`<section class="card"><p class="muted">훈련 계획이 반영된 채로 시즌이 시작돼요.</p></section>`}
    ${nxt?`<section class="card flat"><div class="row"><div class="grow"><small class="kick">NEXT TRAINING</small><br><b>${esc(nxt.label)} 훈련 설정</b><br><small class="muted">${esc(planSummary())}</small></div><button class="ghost" data-act="planbtn">${planOpen?"접기":"변경"}</button></div></section>${planOpen?planEditor():""}`:""}
    ${tableCard(sim)}
-   ${ticketCard()}
    <div class="cta"><button class="big ${nxt&&!plan.focus?"needs":""}" data-act="next"><span>${nxt?(plan.focus?nxt.label+" 진행":"훈련 방향을 골라 주세요 ↑"):"시즌 결과 보기"}</span><b>→</b></button></div>`;
 }
 /* 1부 2군으로 계약했을 때: 그냥 2군에서 훈련할지, 2부리그에 임대를 가서 주전으로 뛸지 */
@@ -632,10 +627,9 @@ function dexAdd(id){ const d=rd(DEX)||{}; d[id]=(d[id]||0)+1; wr(DEX,d); }
 let qz=null;
 function quizView(){
   if(!qz) return `<main class="body"><div class="brand"><span class="mark">⚽</span><div><small>FOOTBALL QUIZ</small><b>축구 상식 퀴즈</b></div></div>
-   <section class="card flat"><p class="muted">무작위 10문제예요. 맞히면 ${L.QUIZ.length}문제 중에서 계속 새로 나와요. 8개 이상 맞히면 하루 한 번 새로고침권 1장을 받아요(지금은 무료 이벤트).</p>
+   <section class="card flat"><p class="muted">무작위 10문제예요. 맞히면 ${L.QUIZ.length}문제 중에서 계속 새로 나와요.</p>
    <p class="muted">내 최고 기록: <b>${qzBest()}</b></p><button class="big" data-act="qzstart"><span>퀴즈 시작</span><b>→</b></button></section></main>`;
   if(qz.done){ const t=L.quizTitle(qz.score,qz.list.length); return `<main class="body"><section class="card"><small class="kick">RESULT</small><h2>${t[1]} ${esc(t[0])}</h2><div class="four"><div class="stat"><small>정답</small><b>${qz.score}/${qz.list.length}</b></div></div>
-   ${qz.reward?`<p class="note good">🎟 새로고침권 1장을 받았어요!</p>`:qz.score>=8?`<p class="muted">오늘은 이미 보상을 받았어요.</p>`:""}
    <button class="big" data-act="qzstart"><span>다시 도전</span><b>→</b></button><button class="wide" data-act="home">홈으로</button></section></main>`; }
   const q=qz.list[qz.i], ans=qz.picked;
   return `<main class="body"><small class="kick">Q${qz.i+1} / ${qz.list.length} · 정답 ${qz.score}개</small><section class="card"><h3 class="sec" style="font-size:19px;line-height:1.5">${esc(q.q)}</h3>
@@ -674,7 +668,6 @@ function settingsView(){
    <div class="chips setchips">${SET_TABS.map(([k,n])=>`<button class="chip ${k===setTab?"on":""}" data-act="setTab" data-v="${k}">${n}</button>`).join("")}</div>
    <section class="card flat">${setTab.startsWith("K")?`<p class="muted">국내 구단은 화면에 보이는 이름이 바뀌어요(내부 기록은 그대로예요). 비워 두면 원래 이름이에요.</p>`:""}
    ${cl.map(c=>{ const lg=C.logos[c.key]; const nm=(C.names[c.key]||[])[0]||""; return `<div class="setrow">${emblem({id:c.key,name:c.name},40)}<div class="setfields">${c.fixed?`<input class="setname" data-cd="${esc(c.name)}" value="${esc((C.dom||{})[c.name]||"")}" placeholder="${esc(c.name)}" maxlength="20">`:`<input class="setname" data-cn="${esc(c.key)}" value="${esc(nm)}" placeholder="${esc(c.name)}" maxlength="20">`}<label class="setlogo">로고 고르기<input type="file" accept="image/*" data-cl="${esc(c.key)}" hidden></label>${lg?`<button class="lnk" data-act="setLogoDel" data-v="${esc(c.key)}">로고 지우기</button>`:""}</div></div>`; }).join("")}</section>
-   <section class="card flat"><h3 class="sec">🎟 새로고침권 ${tickets()}장</h3><p class="muted">직전에 끝낸 구간을 한 번 더 돌릴 수 있는 권이에요. 지금은 무료예요. 나중에 앱에서는 묶음(1장·10장·100장)으로 판매할 수 있게 준비해 뒀어요.</p><button class="wide" data-act="tkfree">무료로 5장 받기</button></section>
    <section class="card flat"><h3 class="sec">내 인생 백업</h3><p class="muted">기기를 바꾸거나 브라우저 데이터를 지우기 전에 파일로 저장해 두세요. 저장 중인 인생, 도감, 설정이 한 파일에 담겨요.</p>
    <button class="wide" data-act="bkExport">💾 백업 파일 저장</button>
    <label class="wide" style="display:grid;place-items:center;cursor:pointer">📂 백업 파일 불러오기<input type="file" accept=".json,application/json" data-bk="1" hidden></label></section>
@@ -970,6 +963,7 @@ function modalHtml(){
   if(m.t==="ucl") return `<div class="ov center ucl"><div class="sheet uclsheet"><div class="stars">★ ★ ★ ★ ★ ★ ★ ★</div><small class="kick">CHAMPIONS NIGHT</small><h3>유럽 클럽컵 · ${esc(m.label)}</h3>${m.recs.map(r=>`<div class="umatch"><span class="rd">${esc(r.cupRound||"")}</span><b>${esc(r.opp)}</b><em class="${r.res==="W"?"w":r.res==="L"?"l":"d"}">${r.f}:${r.a}${r.pk?" (PK "+r.pk[0]+"-"+r.pk[1]+")":""}</em><small>${r.min>0?(r.g?r.g+"골 ":"")+(r.as?r.as+"도움 ":"")+"평점 "+r.rt:"결장"}</small></div>`).join("")}<button class="big" data-act="mok"><span>계속</span><b>→</b></button></div></div>`;
   if(m.t==="xi") return `<div class="ov center"><div class="sheet"><small class="kick">BEST ELEVEN ${S.lastR.year}</small><h3>${esc(S.lastR.leagueName)} 베스트 11</h3><div class="xi">${m.list.map(x=>`<div class="${x.me?"me":""}"><b>${esc(x.slot)}</b><span>${esc(x.name)}${x.me?" ◀":""}</span><small>${esc(x.club)} · ${x.ovr}</small></div>`).join("")}</div><button class="big" data-act="mok"><span>닫기</span><b>→</b></button></div></div>`;
   if(m.t==="gold") return `<div class="ov center gold"><div class="sheet goldsheet"><div class="rays"></div><small class="kick">${esc(m.kick)}</small><div class="ball">⚽</div><h3>${esc(m.title)}</h3><p class="gsub">${esc(m.sub)}</p><p class="muted c">${esc(m.club)}</p>${m.lines.map(x=>`<p class="muted c">${esc(x)}</p>`).join("")}<button class="big" data-act="mok"><span>트로피 받기</span><b>🏆</b></button></div></div>`;
+  if(m.t==="reroll") return L.rerollHtml(m.n);
   if(m.t==="msg") return`<div class="ov center"><div class="sheet"><small class="kick">${esc(m.kick||"알림")}</small><h3>${esc(m.title)}</h3><p>${esc(m.body)}</p>${m.banner?`<div class="banner"><div class="no">${esc(m.banner)}</div></div>`:""}<button class="big" data-act="mok"><span>확인</span><b>→</b></button></div></div>`;
   return "";
 }
@@ -1001,18 +995,6 @@ function afterSegment(out){
   modals=q; save(); render();
 }
 function startSeason(){ if(!S.history.length) liveLog("new","새로운 인생을 시작했어요 ("+(L.POSDEF[S.p.pos]?{FW:"공격수",MF:"미드필더",DF:"수비수",GK:"골키퍼"}[S.p.pos]:"")+")"); L.beginSeason(S,Object.assign({},plan,{alloc:Object.assign({},plan.alloc)})); save(); }
-/* ===== 새로고침권: 직전에 진행한 구간(전반기·하반기 등)을 한 번 더 돌려요 =====
- * 부상 등으로 구간을 날렸을 때 쓰는 아이템이에요. 지금은 모두 무료로 받을 수 있어요.
- * 나중에 앱에서 묶음 판매(1장 10원 · 10장 100원 · 100장 1,000원 등)를 붙일 수 있게 장수 관리만 먼저 만들어 뒀어요. */
-const TK="klife-tickets", SNAPK="klife-snap";
-const TK_PACKS=[{n:1,price:10},{n:10,price:100},{n:100,price:1000}];   // 판매는 아직 열지 않았어요(준비 중)
-function tickets(){ try{ const v=localStorage.getItem(TK); return v==null?3:Math.max(0,parseInt(v,10)||0); }catch(e){ return 0; } }
-function setTickets(n){ try{ localStorage.setItem(TK,String(Math.max(0,n|0))); }catch(e){} }
-let snapJson=null, snapMeta=null;
-try{ snapJson=localStorage.getItem(SNAPK); snapMeta=JSON.parse(localStorage.getItem(SNAPK+"-meta")||"null"); }catch(e){}
-function snapTake(){ try{ const j=JSON.stringify(S); snapJson=j; snapMeta={year:S.year,seg:S.sim.seg,label:S.sim.segs[S.sim.seg].label,name:S.p.name}; try{ localStorage.setItem(SNAPK,j); localStorage.setItem(SNAPK+"-meta",JSON.stringify(snapMeta)); }catch(e){} }catch(e){ snapJson=null; snapMeta=null; } }
-function snapAvail(){ return !!(snapJson&&snapMeta&&S&&S.sim&&snapMeta.year===S.year&&snapMeta.name===S.p.name&&S.sim.seg===snapMeta.seg+1); }
-function snapRestore(){ if(!snapAvail()||tickets()<=0) return false; try{ const o=JSON.parse(snapJson); Object.keys(S).forEach(k=>{ delete S[k]; }); Object.assign(S,o); setTickets(tickets()-1); snapJson=null; snapMeta=null; try{ localStorage.removeItem(SNAPK); localStorage.removeItem(SNAPK+"-meta"); }catch(e){} modals.length=0; seg=null; save(); return true; }catch(e){ return false; } }
 /* ===== 등번호: 다른 선수가 영구결번으로 만든 번호는 그 구단에서 쓸 수 없어요 ===== */
 let retiredNums=null, retiredLoading=false;
 function loadRetired(force){
@@ -1033,7 +1015,6 @@ function runNext(){
   if(S.sim.seg>=S.sim.segs.length){ finishSeason(); return; }
   const sg=S.sim.segs[S.sim.seg];
   L.setPlan(S,Object.assign({},plan,{alloc:Object.assign({},plan.alloc)}));
-  snapTake();
   runLoading(L.seasonLabel(S)+" 시즌",sg.label+" 진행 중",[sg.months+" 일정 확인","훈련·트레이닝","리그 경기 진행","컵 대회·대표팀 소집","기록 집계"],()=>{ if(!S.sim){ render(); return; } const out=L.playSegment(S); afterSegment(out); });
 }
 function finishSeason(){
@@ -1200,7 +1181,8 @@ document.addEventListener("click",e=>{
     case "continue": view=S.retired?(S.quit?"quit":"retired"):S.phase==="draft"?"draft":"game"; tab="season"; render(); break;
     case "wipe": if(confirm("저장된 선수를 삭제할까요?")){ try{ localStorage.removeItem(KEY); }catch(_){} S=null; render(); } break;
     case "wk": { const W=L.weekly(); S=null; draft=NEWDRAFT(); plan=NEWPLAN(); draft.pos=W.pos; draft.sub=L.POSDEF[W.pos].subs[0][0]; draft.route=W.route; draft.weekly=W; if(W.route==="high"||W.route==="univ") draft.points.mentor=0; view="create"; render(); break; }
-    case "new": S=null; draft=NEWDRAFT(); plan=NEWPLAN(); view="create"; render(); break;
+    case "new": if(S&&!S.retired&&S.stage==="youth"&&L.rerollNote&&L.age(S)<=17&&!modals.length){ modals.push({t:"reroll",n:L.rerollNote(S)}); render(); break; } S=null; draft=NEWDRAFT(); plan=NEWPLAN(); view="create"; render(); break;
+    case "newgo": modals.shift(); S=null; draft=NEWDRAFT(); plan=NEWPLAN(); view="create"; render(); break;
     case "pos": if(draft.weekly){ say("이번 주 도전은 포지션과 시작 시점이 정해져 있어요"); break; } draft.pos=v; draft.sub=L.POSDEF[v].subs[0][0]; keep(render); break;
     case "sub": draft.sub=v; draft.role=""; keep(render); break;
     case "role": draft.role=v; keep(render); break;
@@ -1299,7 +1281,7 @@ document.addEventListener("click",e=>{
     case "quiz": qz=null; view="quiz"; render(); break;
     case "qzstart": qz={list:L.quizPick(10),i:0,score:0,picked:null,done:false,reward:false}; render(); break;
     case "qzpick": { if(!qz||qz.picked!=null) break; qz.picked=+v; if(qz.list[qz.i].opts[qz.picked].ok) qz.score++; render(); break; }
-    case "qznext": { if(!qz) break; if(qz.i+1<qz.list.length){ qz.i++; qz.picked=null; } else { qz.done=true; try{ const b=parseInt(localStorage.getItem("klife-quizbest")||"0",10)||0; if(qz.score>b) localStorage.setItem("klife-quizbest",String(qz.score)); const day=new Date().toISOString().slice(0,10); if(qz.score>=8&&localStorage.getItem("klife-quizday")!==day){ localStorage.setItem("klife-quizday",day); setTickets(tickets()+1); qz.reward=true; } }catch(e){} } render(); break; }
+    case "qznext": { if(!qz) break; if(qz.i+1<qz.list.length){ qz.i++; qz.picked=null; } else { qz.done=true; try{ const b=parseInt(localStorage.getItem("klife-quizbest")||"0",10)||0; if(qz.score>b) localStorage.setItem("klife-quizbest",String(qz.score)); }catch(e){} } render(); break; }
     case "setTab": setTab=v; render(); break;
     case "setMain": setMain=v; render(); break;
     case "cosgo": setMain="cos"; view="settings"; render(); break;
@@ -1319,8 +1301,6 @@ document.addEventListener("click",e=>{
       if(!n||n<1||n>99){ say("1~99 사이의 번호를 적어 주세요"); break; } if(m.banned.includes(n)){ say(n+"번은 영구결번이라 쓸 수 없어요"); break; }
       if(!S.numOrig&&n!==+S.p.number) S.numOrig=+S.p.number; S.p.number=n; S.numByClub=S.numByClub||{}; S.numByClub[m.cid]=n; modals.shift(); L.addMoment(S,"등번호","번호",m.club+"에서 "+n+"번을 달아요."); save(); keep(render); break; }
     case "theme": if(window.KL_THEME){ KL_THEME.toggle(); } render(); break;
-    case "tkuse": { if(confirm("새로고침권 1장을 써서 직전 구간을 다시 돌릴까요?\n(지금까지의 결과는 사라지고 구간 시작 전으로 돌아가요)")){ if(snapRestore()){ say("직전 구간을 되돌렸어요"); } else say("되돌릴 수 없어요"); render(); } break; }
-    case "tkfree": setTickets(tickets()+5); say("새로고침권 5장을 받았어요 (지금은 무료)"); render(); break;
     case "bkExport": { try{ const o={app:"klife",v:1,at:new Date().toISOString(),data:{}}; ["klife-save","klife-hof","klife-dex","klife-nick","klife-cos","klife-ach","klife-weekly","kl-custom","kl-alias","kl-bgm"].forEach(k=>{ const x=localStorage.getItem(k); if(x!=null) o.data[k]=x; }); const bl=new Blob([JSON.stringify(o)],{type:"application/json"}); const a=document.createElement("a"); a.href=URL.createObjectURL(bl); a.download="klife-backup-"+new Date().toISOString().slice(0,10)+".json"; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },500); say("백업 파일을 저장했어요"); }catch(e){ say("백업에 실패했어요"); } break; }
     case "setVirt": try{ localStorage.setItem("kl-virt",(window.KL_VIRT&&KL_VIRT.on)?"0":"1"); }catch(e){} location.reload(); break;
     case "setAlias": KL_CUSTOM.alias(!KL_CUSTOM.aliasOn()); say(KL_CUSTOM.aliasOn()?"앱용 이름 세트를 켰어요. 새로고침하면 적용돼요":"앱용 이름 세트를 껐어요. 새로고침하면 원래대로 돌아와요"); render(); break;
