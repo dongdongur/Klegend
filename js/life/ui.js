@@ -716,6 +716,7 @@ function hofSanity(r){
 async function hofPost(row){
   if(!hofOn) throw new Error("서버 설정이 없어요");
   { const bad=hofSanity(row); if(bad) throw new Error(bad); }
+  if(window.KL_BAD&&(KL_BAD(row.name)||KL_BAD(row.nickname))) throw new Error("이름이나 닉네임에 쓸 수 없는 낱말이 있어 등록할 수 없어요");
   const send=b=>fetch(CFG.SUPABASE_URL+"/rest/v1/life_hof",{method:"POST",headers:Object.assign({Prefer:"return=minimal"},HH),body:JSON.stringify(b)});
   let r=await send(row);
   if(!r.ok&&r.status===400&&row.challenge){ const sc=Object.assign({},row); delete sc.challenge; r=await send(sc); if(r.ok) return; }
@@ -1193,6 +1194,7 @@ document.addEventListener("click",e=>{
     case "create": view="create"; render(); break;
     case "scout":
       if(!draft.name.trim()){ hint("#sec-name","이름을 먼저 적어 주세요"); break; }
+      if(window.KL_BAD&&KL_BAD(draft.name)){ hint("#sec-name","쓸 수 없는 낱말이 들어 있어요. 다른 이름으로 바꿔 주세요"); break; }
       if(ptsLeft()>0){ hint("#sec-pts","포인트 "+ptsLeft()+"개가 남았어요. 모두 나눠 주세요"); break; }
       draft.cands=makeCands(); draft.pick=-1;
       if(FAST){ view="scout"; render(); break; }

@@ -71,7 +71,7 @@ async function saveNick(n){ var tok=await A.token(); if(!tok) return "login"; va
     var mine=await fetch(base+"?user_id=eq."+A.id()+"&select=nick",{headers:authH(tok)}).then(function(x){ return x.json(); }).catch(function(){ return []; });
     var res=(mine&&mine.length)?await fetch(base+"?user_id=eq."+A.id(),{method:"PATCH",headers:Object.assign({Prefer:"return=minimal"},authH(tok)),body:JSON.stringify({nick:n})}):await fetch(base,{method:"POST",headers:Object.assign({Prefer:"return=minimal"},authH(tok)),body:JSON.stringify({nick:n,user_id:A.id()})});
     return res.ok?"ok":(res.status===409?"taken":"fail"); }catch(e){ return "fail"; } }
-async function askNick(force){ var n=nick(); if(n&&!force) return n; var v=prompt("라운지에서 쓸 닉네임을 정해 주세요 (최대 12자, 계정마다 하나예요)",n||""); v=(v||"").trim().slice(0,12); if(!v) return n;
+async function askNick(force){ var n=nick(); if(n&&!force) return n; var v=prompt("라운지에서 쓸 닉네임을 정해 주세요 (최대 12자, 계정마다 하나예요)",n||""); v=(v||"").trim().slice(0,12); if(!v) return n; if(window.KL_BAD&&KL_BAD(v)){ alert("쓸 수 없는 낱말이 들어 있어요. 다른 닉네임으로 해 주세요."); return n; }
   if(v!==n){ var st=await saveNick(v); if(st==="taken"){ err.textContent="이미 다른 친구가 쓰고 있는 닉네임이에요. 다른 이름을 골라 주세요."; err.hidden=false; return n; } if(st!=="ok"){ err.textContent="닉네임을 저장하지 못했어요. 잠시 뒤 다시 해 주세요."; err.hidden=false; return n; } }
   err.hidden=true; try{ localStorage.setItem(nickKey(),v); }catch(e){} document.getElementById("nickBtn").textContent=v||"닉네임"; return v; }
 function clean(s){ return s.replace(/\s+/g," ").trim(); }

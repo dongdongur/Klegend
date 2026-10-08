@@ -1084,6 +1084,7 @@ function careerSummary(){
 async function uploadResult(R,btn){
   const nick=$("nick").value.trim();
   if(!nick){ btn.textContent="닉네임을 먼저 입력하세요"; $("nick").focus(); setTimeout(()=>btn.textContent="친구들 기록에 올리기",2200); return; }
+  if(window.KL_BAD&&KL_BAD(nick)){ btn.textContent="쓸 수 없는 낱말이 있어요"; $("nick").focus(); setTimeout(()=>btn.textContent="친구들 기록에 올리기",2200); return; }
   store.set("kl38-nick",nick);
   const m=R.me; btn.disabled=true; btn.textContent="올리는 중…";
   try{
