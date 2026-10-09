@@ -27,7 +27,7 @@ window.KL_ADS = { enabled: false, provider: "adfit", client: "", hideForSupporte
 /* 부적절한 이름 걸러내기(KL_BAD): 성적·욕설 낱말이 들어간 닉네임·선수 이름은 입력과 등록을 막고, 이미 올라온 기록도 목록에서 숨겨요. 띄어쓰기·점·모양 바꾼 글자로 피해 가도 잡아요. */
 (function(){
   if(window.KL_BAD) return;
-  var SUB=["부랄","불알","정액","좆","좇","씨발","시발","씨팔","시팔","ㅅㅂ","ㅆㅂ","병신","븅신","ㅂㅅ","개새끼","섹스","야동","야설","꼬추","자위","페니스","음순","질싸","딸딸이","대딸","후장","조건만남","창녀","느금","느그엄","니미","애미","지랄","염병","엿먹","쌍년","쌍놈","썅","씹","존나","미친놈","미친년","강간","성폭","몰카","빨통","젖통","음란","포르노","porn","fuck","shit","pussy","penis","vagina","nigg","bitch","asshole","whore","slut","boob","hentai"];
+  var SUB=["짬지","잠지","쨤지","보짓","자짓","보지털","ㅂㅈ","부랄","불알","정액","좆","좇","씨발","시발","씨팔","시팔","ㅅㅂ","ㅆㅂ","병신","븅신","ㅂㅅ","개새끼","섹스","야동","야설","꼬추","자위","페니스","음순","질싸","딸딸이","대딸","후장","조건만남","창녀","느금","느그엄","니미","애미","지랄","염병","엿먹","쌍년","쌍놈","썅","씹","존나","미친놈","미친년","강간","성폭","몰카","빨통","젖통","음란","포르노","porn","fuck","shit","pussy","penis","vagina","nigg","bitch","asshole","whore","slut","boob","hentai"];
   var WORD=["보지","자지","섹","성기","음경","걸레","항문","sex","ass","gay","dick","cock","cunt","rape","cum","anal","jot","jaji","bozi"];
   function norm(s){ s=String(s==null?"":s).toLowerCase(); var m={"0":"o","1":"i","3":"e","4":"a","5":"s","7":"t","@":"a","$":"s","!":"i"}; return s.replace(/[01345 7@$!]/g,function(ch){ return m[ch]||""; }); }
   function bad(s){
@@ -38,6 +38,10 @@ window.KL_ADS = { enabled: false, provider: "adfit", client: "", hideForSupporte
     var toks=s.toLowerCase().split(/[^a-z가-힣]+/);
     for(var j=0;j<toks.length;j++){ if(WORD.indexOf(toks[j])>=0) return true; }
     for(var k=0;k<WORD.length;k++){ if(flat===WORD[k]) return true; }
+    /* 보지·자지는 "보지만"처럼 흔한 말에도 있어서, 이름 앞이나 끝에 붙어 짧게 쓰인 경우만 막아요 */
+    var PT="만는은도를가이의에러";
+    var ST=["보지","자지"];
+    for(var q=0;q<ST.length;q++){ var w=ST[q]; if(flat.length<=6){ if(flat.indexOf(w)===0&&PT.indexOf(flat.charAt(2)||"만")<0) return true; if(flat.length>=3&&flat.lastIndexOf(w)===flat.length-2) return true; } }
     return false; }
   window.KL_BAD=bad;
   /* 서버에서 받은 목록(기록·소식)에서 부적절한 이름의 줄을 뺀다 */
